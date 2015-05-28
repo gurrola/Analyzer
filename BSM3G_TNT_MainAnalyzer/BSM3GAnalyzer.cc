@@ -1,7 +1,8 @@
 ////////////////////////////////////////////////////////////////////////////// 
-// Authors:                Alfredo Gurrola                                  //
+// Authors:	Alfredo Gurrola, Andres Florez                              //
 // contact:                                                                 //
 //   Alfredo.Gurrola@cern.ch       (Vanderbilt University)                  // 
+//   Andres.Florez@cern.ch         (Los Andes University)                   //
 //////////////////////////////////////////////////////////////////////////////
 
 #include "BSM3GAnalyzer.h"
