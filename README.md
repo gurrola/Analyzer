@@ -1,8 +1,6 @@
-####################################################
-
-Code developed by: Alfredo Gurrola (Vanderbilt)
-
-###################################################
+#######################################################################################################
+Code developed by: Alfredo Gurrola (Vanderbilt), Andres Florez (Los Andes), Amandeep Kalsi (Panjab)
+#######################################################################################################
 
 In order to use the checkout and use the code, follow these steps:
 
