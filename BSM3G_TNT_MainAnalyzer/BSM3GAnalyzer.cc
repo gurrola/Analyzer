@@ -23,7 +23,8 @@ BSM3GAnalyzer::BSM3GAnalyzer(TFile* theFile) {
   //std::cout << "Finished grabbing configurable inputs" << std::endl;
 
   //---open input root file and read in the tree information
-  TFile *f = new TFile ("OutTree_9_1_dab.root");
+//  TFile *f = new TFile ("OutTree_9_1_dab.root");
+  TFile *f = new TFile ("OutTree.root");
   f->cd("TNT");
   TTree* BOOM = (TTree*)f->Get("TNT/BOOM");
   int nentries = (int) BOOM->GetEntries();
@@ -113,6 +114,30 @@ void BSM3GAnalyzer::getInputs() {
       _RecoMuon2Nmin = (int)(atof(inputString.c_str())); // minimum number of reco muon2 objects passing cuts
     } else if(inputType == "RecoMuon2Nmax") {
       _RecoMuon2Nmax = (int)(atof(inputString.c_str())); // maximum number of reco muon2 objects passing cuts
+    } else if(inputType == "RecoElectron1Nmin") {
+      _RecoElectron1Nmin = (int)(atof(inputString.c_str())); // minimum number of reco Electron1 objects passing cuts
+    } else if(inputType == "RecoElectron1Nmax") {
+      _RecoElectron1Nmax = (int)(atof(inputString.c_str())); // maximum number of reco Electron1 objects passing cuts
+    } else if(inputType == "RecoElectron2Nmin") {
+      _RecoElectron2Nmin = (int)(atof(inputString.c_str())); // minimum number of reco Electron2 objects passing cuts
+    } else if(inputType == "RecoElectron2Nmax") {
+      _RecoElectron2Nmax = (int)(atof(inputString.c_str())); // maximum number of reco Electron2 objects passing cuts
+    } else if(inputType == "RecoTau1Nmin") {
+      _RecoTau1Nmin = (int)(atof(inputString.c_str())); // minimum number of reco tau1 objects passing cuts
+    } else if(inputType == "RecoTau1Nmax") {
+      _RecoTau1Nmax = (int)(atof(inputString.c_str())); // maximum number of reco tau1 objects passing cuts
+    } else if(inputType == "RecoTau2Nmin") {
+      _RecoTau2Nmin = (int)(atof(inputString.c_str())); // minimum number of reco tau2 objects passing cuts
+    } else if(inputType == "RecoTau2Nmax") {
+      _RecoTau2Nmax = (int)(atof(inputString.c_str())); // maximum number of reco tau2 objects passing cuts
+    } else if(inputType == "RecoJet1Nmin") {
+      _RecoJet1Nmin = (int)(atof(inputString.c_str())); // minimum number of reco jet1 objects passing cuts
+    } else if(inputType == "RecoJet1Nmax") {
+      _RecoJet1Nmax = (int)(atof(inputString.c_str())); // maximum number of reco jet1 objects passing cuts
+    } else if(inputType == "RecoJet2Nmin") {
+      _RecoJet2Nmin = (int)(atof(inputString.c_str())); // minimum number of reco jet2 objects passing cuts
+    } else if(inputType == "RecoJet2Nmax") {
+      _RecoJet2Nmax = (int)(atof(inputString.c_str())); // maximum number of reco jet2 objects passing cuts
     } else if(inputType == "DoRecoMuon1DiscrByTightID") {
       _DoRecoMuon1DiscrByTightID = inputString; // "1" to require the reco muon1 to pass "tight" ID; "0" to disable the "tight" ID cut
     } else if(inputType == "DoRecoMuon1DiscrBySoftID") {
@@ -147,6 +172,210 @@ void BSM3GAnalyzer::getInputs() {
       _RecoMuon2IsoSumPtMinCutValue = atof(inputString.c_str()); // minimum reco muon2 iso requirement
     } else if(inputType == "TreatMuonsAsNeutrinos") {
       _TreatMuonsAsNeutrinos = inputString; // "1" to treat muons as neutrinos and recalculate MET; "0" to disable this functionality
+    } else if(inputType == "RecoElectron1EtaCut") {
+      _RecoElectron1EtaCut = atof(inputString.c_str()); // maximum reco Electron1 eta requirement
+    } else if(inputType == "RecoElectron1PtMinCut") {
+      _RecoElectron1PtMinCut = atof(inputString.c_str()); // minimum reco Electron1 pt requirement
+    } else if(inputType == "RecoElectron1PtMaxCut") {
+      _RecoElectron1PtMaxCut = atof(inputString.c_str()); // maximum reco Electron1 pt requirement
+    } else if(inputType == "DoRecoElectron1DiscrByIsolation") {
+      _DoRecoElectron1DiscrByIsolation = inputString; // "1" to require the reco electron1 to pass isolation; "0" to disable the isolation cut
+    } else if(inputType == "RecoElectron1IsoSumPtMaxCutValue") {
+      _RecoElectron1IsoSumPtMaxCutValue = atof(inputString.c_str()); // maximum reco Electron1 iso requirement
+    } else if(inputType == "RecoElectron1IsoSumPtMinCutValue") {
+      _RecoElectron1IsoSumPtMinCutValue = atof(inputString.c_str()); // minimum reco Electron1 iso requirement
+    } else if(inputType == "DoRecoElectron1DiscrByVetoID") {
+      _DoRecoElectron1DiscrByVetoID = inputString; // "1" to require the reco electron1 to pass "veto" ID; "0" to disable the "veto" ID cut
+    } else if(inputType == "DoRecoElectron1DiscrByLooseID") {
+      _DoRecoElectron1DiscrByLooseID = inputString; // "1" to require the reco electron1 to pass "loose" ID; "0" to disable the "loose" ID cut
+    } else if(inputType == "DoRecoElectron1DiscrByMediumID") {
+      _DoRecoElectron1DiscrByMediumID = inputString; // "1" to require the reco electron1 to pass "medium" ID; "0" to disable the "medium" ID cut
+    } else if(inputType == "DoRecoElectron1DiscrByTightID") {
+      _DoRecoElectron1DiscrByTightID = inputString; // "1" to require the reco electron1 to pass "tight" ID; "0" to disable the "tight" ID cut
+    } else if(inputType == "DoRecoElectron1DiscrByHEEPID") {
+      _DoRecoElectron1DiscrByHEEPID = inputString; // "1" to require the reco electron1 to pass "HEEP" ID; "0" to disable the "HEEP" ID cut
+    } else if(inputType == "RecoElectron2EtaCut") {
+      _RecoElectron2EtaCut = atof(inputString.c_str()); // maximum reco Electron2 eta requirement
+    } else if(inputType == "RecoElectron2PtMinCut") {
+      _RecoElectron2PtMinCut = atof(inputString.c_str()); // minimum reco Electron2 pt requirement
+    } else if(inputType == "RecoElectron2PtMaxCut") {
+      _RecoElectron2PtMaxCut = atof(inputString.c_str()); // maximum reco Electron2 pt requirement
+    } else if(inputType == "DoRecoElectron2DiscrByIsolation") {
+      _DoRecoElectron2DiscrByIsolation = inputString; // "1" to require the reco electron2 to pass isolation; "0" to disable the isolation cut
+    } else if(inputType == "RecoElectron2IsoSumPtMaxCutValue") {
+      _RecoElectron2IsoSumPtMaxCutValue = atof(inputString.c_str()); // maximum reco Electron2 iso requirement
+    } else if(inputType == "RecoElectron2IsoSumPtMinCutValue") {
+      _RecoElectron2IsoSumPtMinCutValue = atof(inputString.c_str()); // minimum reco Electron2 iso requirement
+    } else if(inputType == "DoRecoElectron2DiscrByVetoID") {
+      _DoRecoElectron2DiscrByVetoID = inputString; // "1" to require the reco electron2 to pass "veto" ID; "0" to disable the "veto" ID cut
+    } else if(inputType == "DoRecoElectron2DiscrByLooseID") {
+      _DoRecoElectron2DiscrByLooseID = inputString; // "1" to require the reco electron2 to pass "loose" ID; "0" to disable the "loose" ID cut
+    } else if(inputType == "DoRecoElectron2DiscrByMediumID") {
+      _DoRecoElectron2DiscrByMediumID = inputString; // "1" to require the reco electron2 to pass "medium" ID; "0" to disable the "medium" ID cut
+    } else if(inputType == "DoRecoElectron2DiscrByTightID") {
+      _DoRecoElectron2DiscrByTightID = inputString; // "1" to require the reco electron2 to pass "tight" ID; "0" to disable the "tight" ID cut
+    } else if(inputType == "DoRecoElectron2DiscrByHEEPID") {
+      _DoRecoElectron2DiscrByHEEPID = inputString; // "1" to require the reco electron2 to pass "HEEP" ID; "0" to disable the "HEEP" ID cut
+    } else if(inputType == "RecoTau1EtaCut") {
+      _RecoTau1EtaCut = atof(inputString.c_str()); // maximum reco tau1 eta requirement
+    } else if(inputType == "RecoTau1PtMinCut") {
+      _RecoTau1PtMinCut = atof(inputString.c_str()); // minimum reco tau1 pt requirement
+    } else if(inputType == "RecoTau1PtMaxCut") {
+      _RecoTau1PtMaxCut = atof(inputString.c_str()); // maximum reco tau1 pt requirement
+    } else if(inputType == "DoRecoTau1DiscrByLeadTrack") {
+      _DoRecoTau1DiscrByLeadTrack = inputString; // "1" to require the reco tau1 to pass a lead track pt requirement; "0" to disable it
+    } else if(inputType == "RecoTau1LeadTrackThreshold") {
+      _RecoTau1LeadTrackThreshold = atof(inputString.c_str()); // minimum reco tau1 lead track pt requirement
+    } else if(inputType == "DoRecoTau1DiscrByIsolation") {
+      _DoRecoTau1DiscrByIsolation = inputString; // "1" to require the reco tau1 to pass isolation; "0" to disable it
+    } else if(inputType == "RecoTau1DiscrByMaxIsolation") {
+      _RecoTau1DiscrByMaxIsolation = inputString; // maximum reco tau1 isolation requirement
+    } else if(inputType == "RecoTau1DiscrByMinIsolation") {
+      _RecoTau1DiscrByMinIsolation = inputString; // minimum reco tau1 isolation requirement
+    } else if(inputType == "RecoTau1DiscrByProngType") {
+      _RecoTau1DiscrByProngType = inputString; // "1" 
+    } else if(inputType == "DoRecoTau1DiscrAgainstElectron") {
+      _DoRecoTau1DiscrAgainstElectron = inputString; // "1" to require the reco tau1 to pass the e-veto; "0" to disable it
+    } else if(inputType == "RecoTau1DiscrAgainstElectron") {
+      _RecoTau1DiscrAgainstElectron = inputString; // name of the e-veto discriminator
+    } else if(inputType == "SelectTau1sThatAreElectrons") {
+      _SelectTau1sThatAreElectrons = inputString; // "1" to require the reco tau1 to pass the inverted e-veto (i.e. select "e-like"); "0" to disable it
+    } else if(inputType == "DoRecoTau1DiscrAgainstMuon") {
+      _DoRecoTau1DiscrAgainstMuon = inputString; // "1" to require the reco tau1 to pass the muon-veto; "0" to disable it
+    } else if(inputType == "RecoTau1DiscrAgainstMuon") {
+      _RecoTau1DiscrAgainstMuon = inputString; // name of the muon-veto discriminator
+    } else if(inputType == "SelectTau1sThatAreMuons") {
+      _SelectTau1sThatAreMuons = inputString; // "1" to require the reco tau1 to pass the inverted muon-veto (i.e. select "muon-like"); "0" to disable it
+    } else if(inputType == "DoRecoTau1DiscrByCrackCut") {
+      _DoRecoTau1DiscrByCrackCut = inputString; // "1" to require the reco tau1 to pass the detector crack cut; "0" to disable it
+    } else if(inputType == "RemoveTau1OverlapWithMuon1s") {
+      _RemoveTau1OverlapWithMuon1s = inputString; // "1" to require the reco tau1 to NOT overlap a "good muon1"; "0" to disable this cut
+    } else if(inputType == "RemoveTau1OverlapWithMuon2s") {
+      _RemoveTau1OverlapWithMuon2s = inputString; // "1" to require the reco tau1 to NOT overlap a "good muon2"; "0" to disable this cut
+    } else if(inputType == "Tau1Muon1MatchingDeltaR") {
+      _Tau1Muon1MatchingDeltaR = (double)(atof(inputString.c_str())); // deltaR used for the tau1-muon1 overlap removal cut
+    } else if(inputType == "Tau1Muon2MatchingDeltaR") {
+      _Tau1Muon2MatchingDeltaR = (double)(atof(inputString.c_str())); // deltaR used for the tau1-muon2 overlap removal cut
+    } else if(inputType == "RemoveTau1OverlapWithElectron1s") {
+      _RemoveTau1OverlapWithElectron1s = inputString; // "1" to require the reco tau1 to NOT overlap a "good Electron1"; "0" to disable this cut
+    } else if(inputType == "RemoveTau1OverlapWithElectron2s") {
+      _RemoveTau1OverlapWithElectron2s = inputString; // "1" to require the reco tau1 to NOT overlap a "good Electron2"; "0" to disable this cut
+    } else if(inputType == "Tau1Electron1MatchingDeltaR") {
+      _Tau1Electron1MatchingDeltaR = (double)(atof(inputString.c_str())); // deltaR used for the tau1-Electron1 overlap removal cut
+    } else if(inputType == "Tau1Electron2MatchingDeltaR") {
+      _Tau1Electron2MatchingDeltaR = (double)(atof(inputString.c_str())); // deltaR used for the tau1-Electron2 overlap removal cut
+    } else if(inputType == "RecoTau2EtaCut") {
+      _RecoTau2EtaCut = atof(inputString.c_str()); // maximum reco tau2 eta requirement
+    } else if(inputType == "RecoTau2PtMinCut") {
+      _RecoTau2PtMinCut = atof(inputString.c_str()); // minimum reco tau2 pt requirement
+    } else if(inputType == "RecoTau2PtMaxCut") {
+      _RecoTau2PtMaxCut = atof(inputString.c_str()); // maximum reco Tau2 pt requirement
+    } else if(inputType == "DoRecoTau2DiscrByLeadTrack") {
+      _DoRecoTau2DiscrByLeadTrack = inputString; // "1" to require the reco Tau2 to pass a lead track pt requirement; "0" to disable it
+    } else if(inputType == "RecoTau2LeadTrackThreshold") {
+      _RecoTau2LeadTrackThreshold = atof(inputString.c_str()); // minimum reco Tau2 lead track pt requirement
+    } else if(inputType == "DoRecoTau2DiscrByIsolation") {
+      _DoRecoTau2DiscrByIsolation = inputString; // "1" to require the reco Tau2 to pass isolation; "0" to disable it
+    } else if(inputType == "RecoTau2DiscrByMaxIsolation") {
+      _RecoTau2DiscrByMaxIsolation = inputString; // maximum reco Tau2 isolation requirement
+    } else if(inputType == "RecoTau2DiscrByMinIsolation") {
+      _RecoTau2DiscrByMinIsolation = inputString; // minimum reco Tau2 isolation requirement
+    } else if(inputType == "RecoTau2DiscrByProngType") {
+      _RecoTau2DiscrByProngType = inputString; // "1"
+    } else if(inputType == "DoRecoTau2DiscrAgainstElectron") {
+      _DoRecoTau2DiscrAgainstElectron = inputString; // "1" to require the reco Tau2 to pass the e-veto; "0" to disable it
+    } else if(inputType == "RecoTau2DiscrAgainstElectron") {
+      _RecoTau2DiscrAgainstElectron = inputString; // name of the e-veto discriminator
+    } else if(inputType == "SelectTau2sThatAreElectrons") {
+      _SelectTau2sThatAreElectrons = inputString; // "1" to require the reco Tau2 to pass the inverted e-veto (i.e. select "e-like"); "0" to disable it
+    } else if(inputType == "DoRecoTau2DiscrAgainstMuon") {
+      _DoRecoTau2DiscrAgainstMuon = inputString; // "1" to require the reco Tau2 to pass the muon-veto; "0" to disable it
+    } else if(inputType == "RecoTau2DiscrAgainstMuon") {
+      _RecoTau2DiscrAgainstMuon = inputString; // name of the muon-veto discriminator
+    } else if(inputType == "SelectTau2sThatAreMuons") {
+      _SelectTau2sThatAreMuons = inputString; // "1" to require the reco Tau2 to pass the inverted muon-veto (i.e. select "muon-like"); "0" to disable it
+    } else if(inputType == "DoRecoTau2DiscrByCrackCut") {
+      _DoRecoTau2DiscrByCrackCut = inputString; // "1" to require the reco Tau2 to pass the detector crack cut; "0" to disable it
+    } else if(inputType == "RemoveTau2OverlapWithMuon1s") {
+      _RemoveTau2OverlapWithMuon1s = inputString; // "1" to require the reco Tau2 to NOT overlap a "good muon1"; "0" to disable this cut
+    } else if(inputType == "RemoveTau2OverlapWithMuon2s") {
+      _RemoveTau2OverlapWithMuon2s = inputString; // "1" to require the reco Tau2 to NOT overlap a "good muon2"; "0" to disable this cut
+    } else if(inputType == "Tau2Muon1MatchingDeltaR") {
+      _Tau2Muon1MatchingDeltaR = (double)(atof(inputString.c_str())); // deltaR used for the Tau2-muon1 overlap removal cut
+    } else if(inputType == "Tau2Muon2MatchingDeltaR") {
+      _Tau2Muon2MatchingDeltaR = (double)(atof(inputString.c_str())); // deltaR used for the Tau2-muon2 overlap removal cut
+    } else if(inputType == "RemoveTau2OverlapWithElectron1s") {
+      _RemoveTau2OverlapWithElectron1s = inputString; // "1" to require the reco tau2 to NOT overlap a "good Electron1"; "0" to disable this cut
+    } else if(inputType == "RemoveTau2OverlapWithElectron2s") {
+      _RemoveTau2OverlapWithElectron2s = inputString; // "1" to require the reco tau2 to NOT overlap a "good Electron2"; "0" to disable this cut
+    } else if(inputType == "Tau2Electron1MatchingDeltaR") {
+      _Tau2Electron1MatchingDeltaR = (double)(atof(inputString.c_str())); // deltaR used for the tau2-Electron1 overlap removal cut
+    } else if(inputType == "Tau2Electron2MatchingDeltaR") {
+      _Tau2Electron2MatchingDeltaR = (double)(atof(inputString.c_str())); // deltaR used for the tau2-Electron2 overlap removal cut
+    } else if(inputType == "RecoJet1EtaMaxCut") {
+      _RecoJet1EtaMaxCut = atof(inputString.c_str()); // maximum reco jet1 eta requirement
+    } else if(inputType == "RecoJet1EtaMinCut") {
+      _RecoJet1EtaMinCut = atof(inputString.c_str()); // minimum reco jet1 eta requirement
+    } else if(inputType == "RecoJet1PtCut") {
+      _RecoJet1PtCut = atof(inputString.c_str()); // minimum reco jet1 pt requirement
+    } else if(inputType == "ApplyJet1LooseID") {
+      _ApplyJet1LooseID = inputString; // "1" to require the reco jet1 to pass "loose" jet ID; "0" to disable it
+    } else if(inputType == "RemoveJet1OverlapWithMuon1s") {
+      _RemoveJet1OverlapWithMuon1s = inputString; // "1" to require the reco jet1 to NOT overlap with a muon1; "0" to disable it
+    } else if(inputType == "Jet1Muon1MatchingDeltaR") {
+      _Jet1Muon1MatchingDeltaR = atof(inputString.c_str()); // deltaR used for the jet1-muon1 overlap removal cut
+    } else if(inputType == "RemoveJet1OverlapWithMuon2s") {
+      _RemoveJet1OverlapWithMuon2s = inputString; // "1" to require the reco jet1 to NOT overlap with a muon2; "0" to disable it
+    } else if(inputType == "Jet1Muon2MatchingDeltaR") {
+      _Jet1Muon2MatchingDeltaR = atof(inputString.c_str()); // deltaR used for the jet1-muon2 overlap removal cut
+    } else if(inputType == "RemoveJet1OverlapWithElectron1s") {
+      _RemoveJet1OverlapWithElectron1s = inputString; // "1" to require the reco jet1 to NOT overlap with a Electron1; "0" to disable it
+    } else if(inputType == "Jet1Electron1MatchingDeltaR") {
+      _Jet1Electron1MatchingDeltaR = atof(inputString.c_str()); // deltaR used for the jet1-Electron1 overlap removal cut
+    } else if(inputType == "RemoveJet1OverlapWithElectron2s") {
+      _RemoveJet1OverlapWithElectron2s = inputString; // "1" to require the reco jet1 to NOT overlap with a Electron2; "0" to disable it
+    } else if(inputType == "Jet1Electron2MatchingDeltaR") {
+      _Jet1Electron2MatchingDeltaR = atof(inputString.c_str()); // deltaR used for the jet1-Electron2 overlap removal cut
+    } else if(inputType == "RemoveJet1OverlapWithTau1s") {
+      _RemoveJet1OverlapWithTau1s = inputString; // "1" to require the reco jet1 to NOT overlap with a Tau1; "0" to disable it
+    } else if(inputType == "Jet1Tau1MatchingDeltaR") {
+      _Jet1Tau1MatchingDeltaR = atof(inputString.c_str()); // deltaR used for the jet1-Tau1 overlap removal cut
+    } else if(inputType == "RemoveJet1OverlapWithTau2s") {
+      _RemoveJet1OverlapWithTau2s = inputString; // "1" to require the reco jet1 to NOT overlap with a Tau2; "0" to disable it
+    } else if(inputType == "Jet1Tau2MatchingDeltaR") {
+      _Jet1Tau2MatchingDeltaR = atof(inputString.c_str()); // deltaR used for the jet1-Tau2 overlap removal cut
+    } else if(inputType == "RecoJet2EtaMaxCut") {
+      _RecoJet2EtaMaxCut = atof(inputString.c_str()); // maximum reco jet2 eta requirement
+    } else if(inputType == "RecoJet2EtaMinCut") {
+      _RecoJet2EtaMinCut = atof(inputString.c_str()); // minimum reco jet2 eta requirement
+    } else if(inputType == "RecoJet2PtCut") {
+      _RecoJet2PtCut = atof(inputString.c_str()); // minimum reco jet2 pt requirement
+    } else if(inputType == "ApplyJet2LooseID") {
+      _ApplyJet2LooseID = inputString; // "1" to require the reco jet2 to pass "loose" jet ID; "0" to disable it
+    } else if(inputType == "RemoveJet2OverlapWithMuon1s") {
+      _RemoveJet2OverlapWithMuon1s = inputString; // "1" to require the reco jet2 to NOT overlap with a muon1; "0" to disable it
+    } else if(inputType == "Jet2Muon1MatchingDeltaR") {
+      _Jet2Muon1MatchingDeltaR = atof(inputString.c_str()); // deltaR used for the jet2-muon1 overlap removal cut
+    } else if(inputType == "RemoveJet2OverlapWithMuon2s") {
+      _RemoveJet2OverlapWithMuon2s = inputString; // "1" to require the reco jet2 to NOT overlap with a muon2; "0" to disable it
+    } else if(inputType == "Jet2Muon2MatchingDeltaR") {
+      _Jet2Muon2MatchingDeltaR = atof(inputString.c_str()); // deltaR used for the jet2-muon2 overlap removal cut
+    } else if(inputType == "RemoveJet2OverlapWithElectron1s") {
+      _RemoveJet2OverlapWithElectron1s = inputString; // "1" to require the reco jet2 to NOT overlap with a Electron1; "0" to disable it
+    } else if(inputType == "Jet2Electron1MatchingDeltaR") {
+      _Jet2Electron1MatchingDeltaR = atof(inputString.c_str()); // deltaR used for the jet2-Electron1 overlap removal cut
+    } else if(inputType == "RemoveJet2OverlapWithElectron2s") {
+      _RemoveJet2OverlapWithElectron2s = inputString; // "1" to require the reco jet2 to NOT overlap with a Electron2; "0" to disable it
+    } else if(inputType == "Jet2Electron2MatchingDeltaR") {
+      _Jet2Electron2MatchingDeltaR = atof(inputString.c_str()); // deltaR used for the jet2-Electron2 overlap removal cut
+    } else if(inputType == "RemoveJet2OverlapWithTau1s") {
+      _RemoveJet2OverlapWithTau1s = inputString; // "1" to require the reco jet2 to NOT overlap with a Tau1; "0" to disable it
+    } else if(inputType == "Jet2Tau1MatchingDeltaR") {
+      _Jet2Tau1MatchingDeltaR = atof(inputString.c_str()); // deltaR used for the jet2-Tau1 overlap removal cut
+    } else if(inputType == "RemoveJet2OverlapWithTau2s") {
+      _RemoveJet2OverlapWithTau2s = inputString; // "1" to require the reco jet2 to NOT overlap with a Tau2; "0" to disable it
+    } else if(inputType == "Jet2Tau2MatchingDeltaR") {
+      _Jet2Tau2MatchingDeltaR = atof(inputString.c_str()); // deltaR used for the jet2-Tau2 overlap removal cut
     } else if(inputType == "CalculatePUSystematics") {
       _CalculatePUSystematics = inputString; // "1" to allow pileup re-weighting; "0" to disable pileup weights
     } else if(inputType == "SmearTheMuon") {
@@ -177,6 +406,8 @@ void BSM3GAnalyzer::getInputs() {
       _MuonEnergySigmaOffset = (double)(atof(inputString.c_str())); // factor used to broaden the muon energy resolution
     } else if(inputType == "SmearTheTau") {
       _SmearTheTau = inputString; // "1" to smear the tau momentum; "0" to disable tau momentum smearing
+    } else if(inputType == "MatchTauToGen") {
+      _MatchTauToGen = inputString; // "1" to match the reco had tau to a gen had tau; "0" to disable had tau matching
     } else if(inputType == "TauToGenMatchingDeltaR") {
       _TauToGenMatchingDeltaR = (double)(atof(inputString.c_str())); // deltaR used to match reco taus to gen taus
     } else if(inputType == "TauPtScaleOffset") {
@@ -195,6 +426,48 @@ void BSM3GAnalyzer::getInputs() {
       _TauEnergyScaleOffset = (double)(atof(inputString.c_str())); // factor used to shift the tau energy scale
     } else if(inputType == "TauEnergySigmaOffset") {
       _TauEnergySigmaOffset = (double)(atof(inputString.c_str())); // factor used to broaden the tau energy resolution
+    } else if(inputType == "SmearTheElectron") {
+      _SmearTheElectron = inputString; // "1" to smear the electron momentum; "0" to disable electron momentum smearing
+    } else if(inputType == "MatchElectronToGen") {
+      _MatchElectronToGen = inputString; // "1" to match the reco electron to a gen electron; "0" to disable muon matching
+    } else if(inputType == "UseElectronMotherId") {
+      _UseElectronMotherId = inputString; // "1" to use mother information (pdgID) for Electron gen matching; "0" to disable it
+    } else if(inputType == "ElectronMotherId") {
+      _ElectronMotherId = (int)(atof(inputString.c_str())); // Electron mother pdg id
+    } else if(inputType == "ElectronToGenMatchingDeltaR") {
+      _ElectronToGenMatchingDeltaR = (double)(atof(inputString.c_str())); // deltaR used to match reco Electrons to gen Electrons
+    } else if(inputType == "ElectronPtScaleOffset") {
+      _ElectronPtScaleOffset = (double)(atof(inputString.c_str())); // factor used to shift the Electron pt scale
+    } else if(inputType == "ElectronPtSigmaOffset") {
+      _ElectronPtSigmaOffset = (double)(atof(inputString.c_str())); // factor used to broaden the Electron pt resolution
+    } else if(inputType == "ElectronEtaScaleOffset") {
+      _ElectronEtaScaleOffset = (double)(atof(inputString.c_str())); // factor used to shift the Electron eta scale
+    } else if(inputType == "ElectronEtaSigmaOffset") {
+      _ElectronEtaSigmaOffset = (double)(atof(inputString.c_str())); // factor used to broaden the Electron eta resolution
+    } else if(inputType == "ElectronPhiScaleOffset") {
+      _ElectronPhiScaleOffset = (double)(atof(inputString.c_str())); // factor used to shift the Electron phi scale
+    } else if(inputType == "ElectronPhiSigmaOffset") {
+      _ElectronPhiSigmaOffset = (double)(atof(inputString.c_str())); // factor used to broaden the Electron phi resolution
+    } else if(inputType == "ElectronEnergyScaleOffset") {
+      _ElectronEnergyScaleOffset = (double)(atof(inputString.c_str())); // factor used to shift the Electron energy scale
+    } else if(inputType == "ElectronEnergySigmaOffset") {
+      _ElectronEnergySigmaOffset = (double)(atof(inputString.c_str())); // factor used to broaden the Electron energy resolution
+    } else if(inputType == "SmearTheJet") {
+      _SmearTheJet = inputString; // "1" to smear the jet momentum; "0" to disable jet momentum smearing
+    } else if(inputType == "CentralJetMuon1MatchingDeltaR") {
+      _CentralJetMuon1MatchingDeltaR = atof(inputString.c_str()); // deltaR used to remove central jet overlaps with muon1s
+    } else if(inputType == "CentralJetMuon2MatchingDeltaR") {
+      _CentralJetMuon2MatchingDeltaR = atof(inputString.c_str()); // deltaR used to remove central jet overlaps with muon2s
+    } else if(inputType == "CentralJetElectron1MatchingDeltaR") {
+      _CentralJetElectron1MatchingDeltaR = atof(inputString.c_str()); // deltaR used to remove central jet overlaps with electron1s
+    } else if(inputType == "CentralJetElectron2MatchingDeltaR") {
+      _CentralJetElectron2MatchingDeltaR = atof(inputString.c_str()); // deltaR used to remove central jet overlaps with electron2s
+    } else if(inputType == "CentralJetTau1MatchingDeltaR") {
+      _CentralJetTau1MatchingDeltaR = atof(inputString.c_str()); // deltaR used to remove central jet overlaps with tau1s
+    } else if(inputType == "CentralJetTau2MatchingDeltaR") {
+      _CentralJetTau2MatchingDeltaR = atof(inputString.c_str()); // deltaR used to remove central jet overlaps with tau2s
+    } else if(inputType == "JetEnergyScaleOffset") {
+      _JetEnergyScaleOffset = atof(inputString.c_str()); // k-factor used to smear the jet 4-momentum: smeared = k * default
     } else if(inputType == "DataHistos") {
       _DataHistos = inputString; // pileup root file name for data
     } else if(inputType == "MCHistos") {
@@ -296,6 +569,22 @@ void BSM3GAnalyzer::analyze(TFile *theFile) {
       smearedMuonMomentumVector.push_back(unsmearedMuonMomentum);
     }
   }
+  smearedElectronMomentumVector.clear();
+  if(_SmearTheElectron == "1") {
+    for(int j = 0; j < patElectron_pt->size(); j++) {
+      TLorentzVector unsmearedElectronMomentum;
+      unsmearedElectronMomentum.SetPtEtaPhiE(patElectron_pt->at(j), patElectron_eta->at(j), patElectron_phi->at(j), patElectron_energy->at(j));
+      smearedElectronMomentumVector.push_back(SmearElectron(j));
+      deltaForMEx = deltaForMEx + unsmearedElectronMomentum.Px() - SmearElectron(j).Px();
+      deltaForMEy = deltaForMEy + unsmearedElectronMomentum.Py() - SmearElectron(j).Py();
+    }
+  } else {
+    for(int j = 0; j < patElectron_pt->size(); j++) {
+      TLorentzVector unsmearedElectronMomentum;
+      unsmearedElectronMomentum.SetPtEtaPhiE(patElectron_pt->at(j), patElectron_eta->at(j), patElectron_phi->at(j), patElectron_energy->at(j));
+      smearedElectronMomentumVector.push_back(unsmearedElectronMomentum);
+    }
+  }
   smearedTauMomentumVector.clear();
   if(_SmearTheTau == "1") {
     for(int j = 0; j < Tau_pt->size(); j++) {
@@ -310,6 +599,22 @@ void BSM3GAnalyzer::analyze(TFile *theFile) {
       TLorentzVector unsmearedTauMomentum;
       unsmearedTauMomentum.SetPtEtaPhiE(Tau_pt->at(j), Tau_eta->at(j), Tau_phi->at(j), Tau_energy->at(j));
       smearedTauMomentumVector.push_back(unsmearedTauMomentum);
+    }
+  }
+  smearedJetMomentumVector.clear();
+  if(_SmearTheJet == "1") {
+    for(int j = 0; j < Jet_pt->size(); j++) {
+      TLorentzVector unsmearedJetMomentum;
+      unsmearedJetMomentum.SetPtEtaPhiE(Jet_pt->at(j), Jet_eta->at(j), Jet_phi->at(j), Jet_energy->at(j));
+      smearedJetMomentumVector.push_back(SmearJet(j));
+      deltaForMEx = deltaForMEx + unsmearedJetMomentum.Px() - SmearJet(j).Px();
+      deltaForMEy = deltaForMEy + unsmearedJetMomentum.Py() - SmearJet(j).Py();
+    }
+  } else {
+    for(int j = 0; j < Jet_pt->size(); j++) {
+      TLorentzVector unsmearedJetMomentum;
+      unsmearedJetMomentum.SetPtEtaPhiE(Jet_pt->at(j), Jet_eta->at(j), Jet_phi->at(j), Jet_energy->at(j));
+      smearedJetMomentumVector.push_back(unsmearedJetMomentum);
     }
   }
 
@@ -467,6 +772,42 @@ void BSM3GAnalyzer::getEventFlags() {
   if (nGoodCandidatesMuon2>=_RecoMuon2Nmin) _EventFlag[_mapSelectionAlgoID["RecoMuon2Nmin"]] = true;
   if (nGoodCandidatesMuon2<=_RecoMuon2Nmax) _EventFlag[_mapSelectionAlgoID["RecoMuon2Nmax"]] = true;
 
+  //---Reco level electron1 requirements
+  int nGoodCandidatesElectron1 = 0;
+  for(int j = 0; j < patElectron_pt->size(); j++) {
+    if (!passRecoElectron1Cuts(j)) continue;
+    nGoodCandidatesElectron1++;
+  }
+  if (nGoodCandidatesElectron1>=_RecoElectron1Nmin) _EventFlag[_mapSelectionAlgoID["RecoElectron1Nmin"]] = true;
+  if (nGoodCandidatesElectron1<=_RecoElectron1Nmax) _EventFlag[_mapSelectionAlgoID["RecoElectron1Nmax"]] = true;
+
+  //---Reco level electron2 requirements
+  int nGoodCandidatesElectron2 = 0;
+  for(int j = 0; j < patElectron_pt->size(); j++) {
+    if (!passRecoElectron2Cuts(j)) continue;
+    nGoodCandidatesElectron2++;
+  }
+  if (nGoodCandidatesElectron2>=_RecoElectron2Nmin) _EventFlag[_mapSelectionAlgoID["RecoElectron2Nmin"]] = true;
+  if (nGoodCandidatesElectron2<=_RecoElectron2Nmax) _EventFlag[_mapSelectionAlgoID["RecoElectron2Nmax"]] = true;
+
+  //---Reco level tau1 requirements
+  int nGoodCandidatesTau1 = 0;
+  for(int j = 0; j < Tau_pt->size(); j++) {
+    if (!passRecoTau1Cuts(j)) continue;
+    nGoodCandidatesTau1++;
+  }
+  if (nGoodCandidatesTau1>=_RecoTau1Nmin) _EventFlag[_mapSelectionAlgoID["RecoTau1Nmin"]] = true;
+  if (nGoodCandidatesTau1<=_RecoTau1Nmax) _EventFlag[_mapSelectionAlgoID["RecoTau1Nmax"]] = true;
+
+  //---Reco level tau2 requirements
+  int nGoodCandidatesTau2 = 0;
+  for(int j = 0; j < Tau_pt->size(); j++) {
+    if (!passRecoTau2Cuts(j)) continue;
+    nGoodCandidatesTau2++;
+  }
+  if (nGoodCandidatesTau2>=_RecoTau2Nmin) _EventFlag[_mapSelectionAlgoID["RecoTau2Nmin"]] = true;
+  if (nGoodCandidatesTau2<=_RecoTau2Nmax) _EventFlag[_mapSelectionAlgoID["RecoTau2Nmax"]] = true;
+
   //---recalculate MET
   double temppx = theMETVector.Px() + deltaForMEx;
   double temppy = theMETVector.Py() + deltaForMEy;
@@ -474,6 +815,23 @@ void BSM3GAnalyzer::getEventFlags() {
   double temppt = TMath::Sqrt((temppx*temppx) + (temppy*temppy));
   TLorentzVector theTempMETVector(temppx,temppy,temppz,temppt);
   theMETVector = theTempMETVector;
+
+  // ------Number of Good Jets
+  int nGoodJets = 0;
+  for(int j = 0; j < Jet_pt->size(); j++) {
+    if (!passRecoJet1Cuts(j)) continue;
+    nGoodJets++;
+  }
+  if (nGoodJets>=_RecoJet1Nmin) _EventFlag[_mapSelectionAlgoID["RecoJet1Nmin"]] = true;
+  if (nGoodJets<=_RecoJet1Nmax) _EventFlag[_mapSelectionAlgoID["RecoJet1Nmax"]] = true;
+
+  nGoodJets = 0;
+  for(int j = 0; j < Jet_pt->size(); j++) {
+    if (!passRecoJet2Cuts(j)) continue;
+    nGoodJets++;
+  }
+  if (nGoodJets>=_RecoJet2Nmin) _EventFlag[_mapSelectionAlgoID["RecoJet2Nmin"]] = true;
+  if (nGoodJets<=_RecoJet2Nmax) _EventFlag[_mapSelectionAlgoID["RecoJet2Nmax"]] = true;
 
 }
 
@@ -784,14 +1142,609 @@ bool BSM3GAnalyzer::passRecoMuon2Cuts(int nobj) {
   return true;
 }
 
+// Reco level electron1 requirements
+bool BSM3GAnalyzer::passRecoElectron1Cuts(int nobj) {
+  // ----Matching to gen
+  if((_MatchElectronToGen == "1") && (isData == "0")) {
+    if(!(matchElectronToGen(smearedElectronMomentumVector.at(nobj)).first)) {return false;}
+  }
+
+  // ----Acceptance cuts
+  if (fabs(smearedElectronMomentumVector.at(nobj).Eta())>_RecoElectron1EtaCut) {return false;}
+  if (smearedElectronMomentumVector.at(nobj).Pt()<_RecoElectron1PtMinCut) {return false;}
+  if (smearedElectronMomentumVector.at(nobj).Pt()>_RecoElectron1PtMaxCut) {return false;}
+
+  // ----Isolation requirement
+  if (_DoRecoElectron1DiscrByIsolation == "1") {
+    float relIsoWithDBeta = patElectron_isoChargedHadrons->at(nobj) + std::max(0.0 , patElectron_isoNeutralHadrons->at(nobj) + patElectron_isoPhotons->at(nobj) - 0.5 * patElectron_isoPU->at(nobj) );
+    relIsoWithDBeta = relIsoWithDBeta / smearedElectronMomentumVector.at(nobj).Pt();
+    if(relIsoWithDBeta >= _RecoElectron1IsoSumPtMaxCutValue) {return false;}
+    if(relIsoWithDBeta < _RecoElectron1IsoSumPtMinCutValue) {return false;}
+  }
+
+  //----Require electron to pass ID discriminators
+  if (_DoRecoElectron1DiscrByVetoID == "1") {if (patElectron_isPassVeto->at(nobj) == 0) {return false;}}
+  if (_DoRecoElectron1DiscrByLooseID == "1") {if (patElectron_isPassLoose->at(nobj) == 0) {return false;}}
+  if (_DoRecoElectron1DiscrByMediumID == "1") {if (patElectron_isPassMedium->at(nobj) == 0) {return false;}}
+  if (_DoRecoElectron1DiscrByTightID == "1") {if (patElectron_isPassTight->at(nobj) == 0) {return false;}}
+  if (_DoRecoElectron1DiscrByHEEPID == "1") {if (patElectron_isPassHEEPId->at(nobj) == 0) {return false;}}
+
+  return true;
+}
+
+// Reco level electron2 requirements
+bool BSM3GAnalyzer::passRecoElectron2Cuts(int nobj) {
+  // ----Matching to gen
+  if((_MatchElectronToGen == "1") && (isData == "0")) {
+    if(!(matchElectronToGen(smearedElectronMomentumVector.at(nobj)).first)) {return false;}
+  }
+
+  // ----Acceptance cuts
+  if (fabs(smearedElectronMomentumVector.at(nobj).Eta())>_RecoElectron2EtaCut) {return false;}
+  if (smearedElectronMomentumVector.at(nobj).Pt()<_RecoElectron2PtMinCut) {return false;}
+  if (smearedElectronMomentumVector.at(nobj).Pt()>_RecoElectron2PtMaxCut) {return false;}
+
+  // ----Isolation requirement
+  if (_DoRecoElectron2DiscrByIsolation == "1") {
+    float relIsoWithDBeta = patElectron_isoChargedHadrons->at(nobj) + std::max(0.0 , patElectron_isoNeutralHadrons->at(nobj) + patElectron_isoPhotons->at(nobj) - 0.5 * patElectron_isoPU->at(nobj) );
+    relIsoWithDBeta = relIsoWithDBeta / smearedElectronMomentumVector.at(nobj).Pt();
+    if(relIsoWithDBeta >= _RecoElectron2IsoSumPtMaxCutValue) {return false;}
+    if(relIsoWithDBeta < _RecoElectron2IsoSumPtMinCutValue) {return false;}
+  }
+
+  //----Require electron to pass ID discriminators
+  if (_DoRecoElectron2DiscrByVetoID == "1") {if (patElectron_isPassVeto->at(nobj) == 0) {return false;}}
+  if (_DoRecoElectron2DiscrByLooseID == "1") {if (patElectron_isPassLoose->at(nobj) == 0) {return false;}}
+  if (_DoRecoElectron2DiscrByMediumID == "1") {if (patElectron_isPassMedium->at(nobj) == 0) {return false;}}
+  if (_DoRecoElectron2DiscrByTightID == "1") {if (patElectron_isPassTight->at(nobj) == 0) {return false;}}
+  if (_DoRecoElectron2DiscrByHEEPID == "1") {if (patElectron_isPassHEEPId->at(nobj) == 0) {return false;}}
+
+  return true;
+}
+
+// Reco level tau1 requirements
+bool BSM3GAnalyzer::passRecoTau1Cuts(int nobj) {
+  //----Matching to gen
+  if((_MatchTauToGen == "1") && (isData == "0")) { // if the user wants to apply matching to gen had taus and this is simulation
+    if(!(matchTauToGen(smearedTauMomentumVector.at(nobj)).first)) {return false;} // if there's no match, reco tau fails the matching cut
+  }
+
+  // ----Acceptance cuts
+  if (fabs(smearedTauMomentumVector.at(nobj).Eta())>_RecoTau1EtaCut) {return false;}
+  if (smearedTauMomentumVector.at(nobj).Pt()<_RecoTau1PtMinCut) {return false;}
+  if (smearedTauMomentumVector.at(nobj).Pt()>_RecoTau1PtMaxCut) {return false;}
+
+  // ----Lead track requirement
+  if (_DoRecoTau1DiscrByLeadTrack == "1") {
+    if(Tau_leadChargedCandPt->at(nobj) < _RecoTau1LeadTrackThreshold) {return false;}
+  }
+
+  // ----Isolation requirement
+  if (_DoRecoTau1DiscrByIsolation == "1") {
+
+    //--- max isolation requirement
+    if(_RecoTau1DiscrByMaxIsolation == "byLooseIsolationMVA3newDMwLT") {
+      if (Tau_byLooseIsolationMVA3newDMwLT->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau1DiscrByMaxIsolation == "byMediumIsolationMVA3newDMwLT") {
+      if (Tau_byMediumIsolationMVA3newDMwLT->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau1DiscrByMaxIsolation == "byTightIsolationMVA3newDMwLT") {
+      if (Tau_byTightIsolationMVA3newDMwLT->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau1DiscrByMaxIsolation == "byLooseCombinedIsolationDeltaBetaCorr") {
+      if (Tau_byLooseCombinedIsolationDeltaBetaCorr->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau1DiscrByMaxIsolation == "byMediumCombinedIsolationDeltaBetaCorr") {
+      if (Tau_byMediumCombinedIsolationDeltaBetaCorr->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau1DiscrByMaxIsolation == "byTightCombinedIsolationDeltaBetaCorr") {
+      if (Tau_byTightCombinedIsolationDeltaBetaCorr->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau1DiscrByMaxIsolation == "byLooseCombinedIsolationDeltaBetaCorr3Hits") {
+      if (Tau_byLooseCombinedIsolationDeltaBetaCorr3Hits->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau1DiscrByMaxIsolation == "byMediumCombinedIsolationDeltaBetaCorr3Hits") {
+      if (Tau_byMediumCombinedIsolationDeltaBetaCorr3Hits->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau1DiscrByMaxIsolation == "byTightCombinedIsolationDeltaBetaCorr3Hits") {
+      if (Tau_byTightCombinedIsolationDeltaBetaCorr3Hits->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau1DiscrByMaxIsolation == "byLooseIsolationMVA3newDMwoLT") {
+      if (Tau_byLooseIsolationMVA3newDMwoLT->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau1DiscrByMaxIsolation == "byMediumIsolationMVA3newDMwoLT") {
+      if (Tau_byMediumIsolationMVA3newDMwoLT->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau1DiscrByMaxIsolation == "byTightIsolationMVA3newDMwoLT") {
+      if (Tau_byTightIsolationMVA3newDMwoLT->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau1DiscrByMaxIsolation == "byLooseIsolationMva3oldDMwLT") {
+      if (Tau_byLooseIsolationMva3oldDMwLT->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau1DiscrByMaxIsolation == "byMediumIsolationMva3oldDMwLT") {
+      if (Tau_byMediumIsolationMva3oldDMwLT->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau1DiscrByMaxIsolation == "byTightIsolationMva3oldDMwLT") {
+      if (Tau_byTightIsolationMva3oldDMwLT->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau1DiscrByMaxIsolation == "byLooseIsolationMVA3oldDMwoLT") {
+      if (Tau_byLooseIsolationMVA3oldDMwoLT->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau1DiscrByMaxIsolation == "byMediumIsolationMVA3oldDMwoLT") {
+      if (Tau_byMediumIsolationMVA3oldDMwoLT->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau1DiscrByMaxIsolation == "byTightIsolationMVA3oldDMwoLT") {
+      if (Tau_byTightIsolationMVA3oldDMwoLT->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau1DiscrByMaxIsolation == "byVLooseCombinedIsolationDeltaBetaCorr") {
+      if (Tau_byVLooseCombinedIsolationDeltaBetaCorr->at(nobj) < 0.5) {return false;}
+    } else { }
+
+    //--- min isolation requirement
+    if(_RecoTau1DiscrByMinIsolation == "ZERO") { }
+    else {
+      if(_RecoTau1DiscrByMinIsolation == "byLooseIsolationMVA3newDMwLT") {
+        if (Tau_byLooseIsolationMVA3newDMwLT->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau1DiscrByMinIsolation == "byMediumIsolationMVA3newDMwLT") {
+        if (Tau_byMediumIsolationMVA3newDMwLT->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau1DiscrByMinIsolation == "byTightIsolationMVA3newDMwLT") {
+        if (Tau_byTightIsolationMVA3newDMwLT->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau1DiscrByMinIsolation == "byLooseCombinedIsolationDeltaBetaCorr") {
+        if (Tau_byLooseCombinedIsolationDeltaBetaCorr->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau1DiscrByMinIsolation == "byMediumCombinedIsolationDeltaBetaCorr") {
+        if (Tau_byMediumCombinedIsolationDeltaBetaCorr->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau1DiscrByMinIsolation == "byTightCombinedIsolationDeltaBetaCorr") {
+        if (Tau_byTightCombinedIsolationDeltaBetaCorr->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau1DiscrByMinIsolation == "byLooseCombinedIsolationDeltaBetaCorr3Hits") {
+        if (Tau_byLooseCombinedIsolationDeltaBetaCorr3Hits->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau1DiscrByMinIsolation == "byMediumCombinedIsolationDeltaBetaCorr3Hits") {
+        if (Tau_byMediumCombinedIsolationDeltaBetaCorr3Hits->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau1DiscrByMinIsolation == "byTightCombinedIsolationDeltaBetaCorr3Hits") {
+        if (Tau_byTightCombinedIsolationDeltaBetaCorr3Hits->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau1DiscrByMinIsolation == "byLooseIsolationMVA3newDMwoLT") {
+        if (Tau_byLooseIsolationMVA3newDMwoLT->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau1DiscrByMinIsolation == "byMediumIsolationMVA3newDMwoLT") {
+        if (Tau_byMediumIsolationMVA3newDMwoLT->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau1DiscrByMinIsolation == "byTightIsolationMVA3newDMwoLT") {
+        if (Tau_byTightIsolationMVA3newDMwoLT->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau1DiscrByMinIsolation == "byLooseIsolationMva3oldDMwLT") {
+        if (Tau_byLooseIsolationMva3oldDMwLT->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau1DiscrByMinIsolation == "byMediumIsolationMva3oldDMwLT") {
+        if (Tau_byMediumIsolationMva3oldDMwLT->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau1DiscrByMinIsolation == "byTightIsolationMva3oldDMwLT") {
+        if (Tau_byTightIsolationMva3oldDMwLT->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau1DiscrByMinIsolation == "byLooseIsolationMVA3oldDMwoLT") {
+        if (Tau_byLooseIsolationMVA3oldDMwoLT->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau1DiscrByMinIsolation == "byMediumIsolationMVA3oldDMwoLT") {
+        if (Tau_byMediumIsolationMVA3oldDMwoLT->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau1DiscrByMinIsolation == "byTightIsolationMVA3oldDMwoLT") {
+        if (Tau_byTightIsolationMVA3oldDMwoLT->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau1DiscrByMinIsolation == "byVLooseCombinedIsolationDeltaBetaCorr") {
+        if (Tau_byVLooseCombinedIsolationDeltaBetaCorr->at(nobj) > 0.5) {return false;}
+      } else { }
+    }
+
+  }
+
+  // ----Require 1 or 3 prongs
+  if (_RecoTau1DiscrByProngType == "1or3") {
+    if((Tau_nProngs->at(nobj) == 1) ||(Tau_nProngs->at(nobj) == 3)) {}
+    else {return false;}
+  } else if (_RecoTau1DiscrByProngType == "1") {
+    if(Tau_nProngs->at(nobj) == 1) {}
+    else {return false;}
+  } else if (_RecoTau1DiscrByProngType == "3") {
+    if(Tau_nProngs->at(nobj) == 3) {}
+    else {return false;}
+  } else if (_RecoTau1DiscrByProngType == "1or2or3hps") {
+    if (Tau_decayModeFindingNewDMs->at(nobj)  < 0.5) {return false;}
+  } else if (_RecoTau1DiscrByProngType == "1hps") {
+    if( (Tau_nProngs->at(nobj) == 1) && (Tau_decayModeFindingNewDMs->at(nobj) > 0.5) ) {}
+    else {return false;}
+  } else if (_RecoTau1DiscrByProngType == "2hps") {
+    if( (Tau_nProngs->at(nobj) == 2) && (Tau_decayModeFindingNewDMs->at(nobj) > 0.5) ) {}
+    else {return false;}
+  } else if (_RecoTau1DiscrByProngType == "3hps") {
+    if( (Tau_nProngs->at(nobj) == 3) && (Tau_decayModeFindingNewDMs->at(nobj) > 0.5) ) {}
+    else {return false;}
+  } else {}
+
+  // ----Electron and Muon vetos
+  if ((_DoRecoTau1DiscrAgainstElectron == "1") && (_SelectTau1sThatAreElectrons == "0")) {
+    if(_RecoTau1DiscrAgainstElectron == "againstElectronMVALooseMVA5") {
+      if (Tau_againstElectronMVALooseMVA5->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau1DiscrAgainstElectron == "againstElectronMVAMediumMVA5") {
+      if (Tau_againstElectronMVAMediumMVA5->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau1DiscrAgainstElectron == "againstElectronMVATightMVA5") {
+      if (Tau_againstElectronMVATightMVA5->at(nobj) < 0.5) {return false;}
+    } else { }
+  }
+  if (_SelectTau1sThatAreElectrons == "1") {
+    if(_RecoTau1DiscrAgainstElectron == "againstElectronMVALooseMVA5") {
+      if (Tau_againstElectronMVALooseMVA5->at(nobj) > 0.5) {return false;}
+    } else if(_RecoTau1DiscrAgainstElectron == "againstElectronMVAMediumMVA5") {
+      if (Tau_againstElectronMVAMediumMVA5->at(nobj) > 0.5) {return false;}
+    } else if(_RecoTau1DiscrAgainstElectron == "againstElectronMVATightMVA5") {
+      if (Tau_againstElectronMVATightMVA5->at(nobj) > 0.5) {return false;}
+    } else { }
+  }
+  if (_DoRecoTau1DiscrByCrackCut == "1") { if(isInTheCracks(smearedTauMomentumVector.at(nobj).Eta())) {return false;} }
+  if ((_DoRecoTau1DiscrAgainstMuon == "1") && (_SelectTau1sThatAreMuons == "0")) {
+    if(_RecoTau1DiscrAgainstMuon == "againstMuonLoose2") {
+      if (Tau_againstMuonLoose2->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau1DiscrAgainstMuon == "againstMuonLoose3") {
+      if (Tau_againstMuonLoose3->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau1DiscrAgainstMuon == "againstMuonTight2") {
+      if (Tau_againstMuonTight2->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau1DiscrAgainstMuon == "againstMuonTight3") {
+      if (Tau_againstMuonTight3->at(nobj) < 0.5) {return false;}
+    } else { }
+  }
+  if (_SelectTau1sThatAreMuons == "1") {
+    if(_RecoTau1DiscrAgainstMuon == "againstMuonLoose2") {
+      if (Tau_againstMuonLoose2->at(nobj) > 0.5) {return false;}
+    } else if(_RecoTau1DiscrAgainstMuon == "againstMuonLoose3") {
+      if (Tau_againstMuonLoose3->at(nobj) > 0.5) {return false;}
+    } else if(_RecoTau1DiscrAgainstMuon == "againstMuonTight2") {
+      if (Tau_againstMuonTight2->at(nobj) > 0.5) {return false;}
+    } else if(_RecoTau1DiscrAgainstMuon == "againstMuonTight3") {
+      if (Tau_againstMuonTight3->at(nobj) > 0.5) {return false;}
+    } else { }
+  }
+
+  // ----anti-overlap requirements
+  if (_RemoveTau1OverlapWithMuon1s == "1") {
+    for(int jj = 0; jj < Muon_pt->size(); jj++) {
+      if (passRecoMuon1Cuts(jj)) {
+        if(smearedTauMomentumVector.at(nobj).DeltaR(smearedMuonMomentumVector.at(jj)) < _Tau1Muon1MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  if (_RemoveTau1OverlapWithMuon2s == "1") {
+    for(int jj = 0; jj < Muon_pt->size(); jj++) {
+      if (passRecoMuon2Cuts(jj)) {
+        if(smearedTauMomentumVector.at(nobj).DeltaR(smearedMuonMomentumVector.at(jj)) < _Tau1Muon2MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  if (_RemoveTau1OverlapWithElectron1s == "1") {
+    for(int jj = 0; jj < patElectron_pt->size(); jj++) {
+      if (passRecoElectron1Cuts(jj)) {
+        if(smearedTauMomentumVector.at(nobj).DeltaR(smearedElectronMomentumVector.at(jj)) < _Tau1Electron1MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  if (_RemoveTau1OverlapWithElectron2s == "1") {
+    for(int jj = 0; jj < patElectron_pt->size(); jj++) {
+      if (passRecoElectron2Cuts(jj)) {
+        if(smearedTauMomentumVector.at(nobj).DeltaR(smearedElectronMomentumVector.at(jj)) < _Tau1Electron2MatchingDeltaR) {return false;}
+      }
+    }
+  }
+
+  return true;
+}
+
+// Reco level Tau2 requirements
+bool BSM3GAnalyzer::passRecoTau2Cuts(int nobj) {
+  //----Matching to gen
+  if((_MatchTauToGen == "1") && (isData == "0")) { // if the user wants to apply matching to gen had taus and this is simulation
+    if(!(matchTauToGen(smearedTauMomentumVector.at(nobj)).first)) {return false;} // if there's no match, reco tau fails the matching cut
+  }
+
+  // ----Acceptance cuts
+  if (fabs(smearedTauMomentumVector.at(nobj).Eta())>_RecoTau2EtaCut) {return false;}
+  if (smearedTauMomentumVector.at(nobj).Pt()<_RecoTau2PtMinCut) {return false;}
+  if (smearedTauMomentumVector.at(nobj).Pt()>_RecoTau2PtMaxCut) {return false;}
+
+  // ----Lead track requirement
+  if (_DoRecoTau2DiscrByLeadTrack == "1") {
+    if(Tau_leadChargedCandPt->at(nobj) < _RecoTau2LeadTrackThreshold) {return false;}
+  }
+
+  // ----Isolation requirement
+  if (_DoRecoTau2DiscrByIsolation == "1") {
+
+    //--- max isolation requirement
+    if(_RecoTau2DiscrByMaxIsolation == "byLooseIsolationMVA3newDMwLT") {
+      if (Tau_byLooseIsolationMVA3newDMwLT->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau2DiscrByMaxIsolation == "byMediumIsolationMVA3newDMwLT") {
+      if (Tau_byMediumIsolationMVA3newDMwLT->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau2DiscrByMaxIsolation == "byTightIsolationMVA3newDMwLT") {
+      if (Tau_byTightIsolationMVA3newDMwLT->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau2DiscrByMaxIsolation == "byLooseCombinedIsolationDeltaBetaCorr") {
+      if (Tau_byLooseCombinedIsolationDeltaBetaCorr->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau2DiscrByMaxIsolation == "byMediumCombinedIsolationDeltaBetaCorr") {
+      if (Tau_byMediumCombinedIsolationDeltaBetaCorr->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau2DiscrByMaxIsolation == "byTightCombinedIsolationDeltaBetaCorr") {
+      if (Tau_byTightCombinedIsolationDeltaBetaCorr->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau2DiscrByMaxIsolation == "byLooseCombinedIsolationDeltaBetaCorr3Hits") {
+      if (Tau_byLooseCombinedIsolationDeltaBetaCorr3Hits->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau2DiscrByMaxIsolation == "byMediumCombinedIsolationDeltaBetaCorr3Hits") {
+      if (Tau_byMediumCombinedIsolationDeltaBetaCorr3Hits->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau2DiscrByMaxIsolation == "byTightCombinedIsolationDeltaBetaCorr3Hits") {
+      if (Tau_byTightCombinedIsolationDeltaBetaCorr3Hits->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau2DiscrByMaxIsolation == "byLooseIsolationMVA3newDMwoLT") {
+      if (Tau_byLooseIsolationMVA3newDMwoLT->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau2DiscrByMaxIsolation == "byMediumIsolationMVA3newDMwoLT") {
+      if (Tau_byMediumIsolationMVA3newDMwoLT->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau2DiscrByMaxIsolation == "byTightIsolationMVA3newDMwoLT") {
+      if (Tau_byTightIsolationMVA3newDMwoLT->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau2DiscrByMaxIsolation == "byLooseIsolationMva3oldDMwLT") {
+      if (Tau_byLooseIsolationMva3oldDMwLT->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau2DiscrByMaxIsolation == "byMediumIsolationMva3oldDMwLT") {
+      if (Tau_byMediumIsolationMva3oldDMwLT->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau2DiscrByMaxIsolation == "byTightIsolationMva3oldDMwLT") {
+      if (Tau_byTightIsolationMva3oldDMwLT->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau2DiscrByMaxIsolation == "byLooseIsolationMVA3oldDMwoLT") {
+      if (Tau_byLooseIsolationMVA3oldDMwoLT->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau2DiscrByMaxIsolation == "byMediumIsolationMVA3oldDMwoLT") {
+      if (Tau_byMediumIsolationMVA3oldDMwoLT->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau2DiscrByMaxIsolation == "byTightIsolationMVA3oldDMwoLT") {
+      if (Tau_byTightIsolationMVA3oldDMwoLT->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau2DiscrByMaxIsolation == "byVLooseCombinedIsolationDeltaBetaCorr") {
+      if (Tau_byVLooseCombinedIsolationDeltaBetaCorr->at(nobj) < 0.5) {return false;}
+    } else { }
+
+    //--- min isolation requirement
+    if(_RecoTau2DiscrByMinIsolation == "ZERO") { }
+    else {
+      if(_RecoTau2DiscrByMinIsolation == "byLooseIsolationMVA3newDMwLT") {
+        if (Tau_byLooseIsolationMVA3newDMwLT->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau2DiscrByMinIsolation == "byMediumIsolationMVA3newDMwLT") {
+        if (Tau_byMediumIsolationMVA3newDMwLT->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau2DiscrByMinIsolation == "byTightIsolationMVA3newDMwLT") {
+        if (Tau_byTightIsolationMVA3newDMwLT->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau2DiscrByMinIsolation == "byLooseCombinedIsolationDeltaBetaCorr") {
+        if (Tau_byLooseCombinedIsolationDeltaBetaCorr->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau2DiscrByMinIsolation == "byMediumCombinedIsolationDeltaBetaCorr") {
+        if (Tau_byMediumCombinedIsolationDeltaBetaCorr->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau2DiscrByMinIsolation == "byTightCombinedIsolationDeltaBetaCorr") {
+        if (Tau_byTightCombinedIsolationDeltaBetaCorr->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau2DiscrByMinIsolation == "byLooseCombinedIsolationDeltaBetaCorr3Hits") {
+        if (Tau_byLooseCombinedIsolationDeltaBetaCorr3Hits->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau2DiscrByMinIsolation == "byMediumCombinedIsolationDeltaBetaCorr3Hits") {
+        if (Tau_byMediumCombinedIsolationDeltaBetaCorr3Hits->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau2DiscrByMinIsolation == "byTightCombinedIsolationDeltaBetaCorr3Hits") {
+        if (Tau_byTightCombinedIsolationDeltaBetaCorr3Hits->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau2DiscrByMinIsolation == "byLooseIsolationMVA3newDMwoLT") {
+        if (Tau_byLooseIsolationMVA3newDMwoLT->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau2DiscrByMinIsolation == "byMediumIsolationMVA3newDMwoLT") {
+        if (Tau_byMediumIsolationMVA3newDMwoLT->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau2DiscrByMinIsolation == "byTightIsolationMVA3newDMwoLT") {
+        if (Tau_byTightIsolationMVA3newDMwoLT->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau2DiscrByMinIsolation == "byLooseIsolationMva3oldDMwLT") {
+        if (Tau_byLooseIsolationMva3oldDMwLT->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau2DiscrByMinIsolation == "byMediumIsolationMva3oldDMwLT") {
+        if (Tau_byMediumIsolationMva3oldDMwLT->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau2DiscrByMinIsolation == "byTightIsolationMva3oldDMwLT") {
+        if (Tau_byTightIsolationMva3oldDMwLT->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau2DiscrByMinIsolation == "byLooseIsolationMVA3oldDMwoLT") {
+        if (Tau_byLooseIsolationMVA3oldDMwoLT->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau2DiscrByMinIsolation == "byMediumIsolationMVA3oldDMwoLT") {
+        if (Tau_byMediumIsolationMVA3oldDMwoLT->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau2DiscrByMinIsolation == "byTightIsolationMVA3oldDMwoLT") {
+        if (Tau_byTightIsolationMVA3oldDMwoLT->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau2DiscrByMinIsolation == "byVLooseCombinedIsolationDeltaBetaCorr") {
+        if (Tau_byVLooseCombinedIsolationDeltaBetaCorr->at(nobj) > 0.5) {return false;}
+      } else { }
+    }
+
+  }
+
+  // ----Require 1 or 3 prongs
+  if (_RecoTau2DiscrByProngType == "1or3") {
+    if((Tau_nProngs->at(nobj) == 1) ||(Tau_nProngs->at(nobj) == 3)) {}
+    else {return false;}
+  } else if (_RecoTau2DiscrByProngType == "1") {
+    if(Tau_nProngs->at(nobj) == 1) {}
+    else {return false;}
+  } else if (_RecoTau2DiscrByProngType == "3") {
+    if(Tau_nProngs->at(nobj) == 3) {}
+    else {return false;}
+  } else if (_RecoTau2DiscrByProngType == "1or2or3hps") {
+    if (Tau_decayModeFindingNewDMs->at(nobj)  < 0.5) {return false;}
+  } else if (_RecoTau2DiscrByProngType == "1hps") {
+    if( (Tau_nProngs->at(nobj) == 1) && (Tau_decayModeFindingNewDMs->at(nobj) > 0.5) ) {}
+    else {return false;}
+  } else if (_RecoTau2DiscrByProngType == "2hps") {
+    if( (Tau_nProngs->at(nobj) == 2) && (Tau_decayModeFindingNewDMs->at(nobj) > 0.5) ) {}
+    else {return false;}
+  } else if (_RecoTau2DiscrByProngType == "3hps") {
+    if( (Tau_nProngs->at(nobj) == 3) && (Tau_decayModeFindingNewDMs->at(nobj) > 0.5) ) {}
+    else {return false;}
+  } else {}
+
+  // ----Electron and Muon vetos
+  if ((_DoRecoTau2DiscrAgainstElectron == "1") && (_SelectTau2sThatAreElectrons == "0")) {
+    if(_RecoTau2DiscrAgainstElectron == "againstElectronMVALooseMVA5") {
+      if (Tau_againstElectronMVALooseMVA5->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau2DiscrAgainstElectron == "againstElectronMVAMediumMVA5") {
+      if (Tau_againstElectronMVAMediumMVA5->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau2DiscrAgainstElectron == "againstElectronMVATightMVA5") {
+      if (Tau_againstElectronMVATightMVA5->at(nobj) < 0.5) {return false;}
+    } else { }
+  }
+  if (_SelectTau2sThatAreElectrons == "1") {
+    if(_RecoTau2DiscrAgainstElectron == "againstElectronMVALooseMVA5") {
+      if (Tau_againstElectronMVALooseMVA5->at(nobj) > 0.5) {return false;}
+    } else if(_RecoTau2DiscrAgainstElectron == "againstElectronMVAMediumMVA5") {
+      if (Tau_againstElectronMVAMediumMVA5->at(nobj) > 0.5) {return false;}
+    } else if(_RecoTau2DiscrAgainstElectron == "againstElectronMVATightMVA5") {
+      if (Tau_againstElectronMVATightMVA5->at(nobj) > 0.5) {return false;}
+    } else { }
+  }
+  if (_DoRecoTau2DiscrByCrackCut == "1") { if(isInTheCracks(smearedTauMomentumVector.at(nobj).Eta())) {return false;} }
+  if ((_DoRecoTau2DiscrAgainstMuon == "1") && (_SelectTau2sThatAreMuons == "0")) {
+    if(_RecoTau2DiscrAgainstMuon == "againstMuonLoose2") {
+      if (Tau_againstMuonLoose2->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau2DiscrAgainstMuon == "againstMuonLoose3") {
+      if (Tau_againstMuonLoose3->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau2DiscrAgainstMuon == "againstMuonTight2") {
+      if (Tau_againstMuonTight2->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau2DiscrAgainstMuon == "againstMuonTight3") {
+      if (Tau_againstMuonTight3->at(nobj) < 0.5) {return false;}
+    } else { }
+  }
+  if (_SelectTau2sThatAreMuons == "1") {
+    if(_RecoTau2DiscrAgainstMuon == "againstMuonLoose2") {
+      if (Tau_againstMuonLoose2->at(nobj) > 0.5) {return false;}
+    } else if(_RecoTau2DiscrAgainstMuon == "againstMuonLoose3") {
+      if (Tau_againstMuonLoose3->at(nobj) > 0.5) {return false;}
+    } else if(_RecoTau2DiscrAgainstMuon == "againstMuonTight2") {
+      if (Tau_againstMuonTight2->at(nobj) > 0.5) {return false;}
+    } else if(_RecoTau2DiscrAgainstMuon == "againstMuonTight3") {
+      if (Tau_againstMuonTight3->at(nobj) > 0.5) {return false;}
+    } else { }
+  }
+
+  // ----anti-overlap requirements
+  if (_RemoveTau2OverlapWithMuon1s == "1") {
+    for(int jj = 0; jj < Muon_pt->size(); jj++) {
+      if (passRecoMuon1Cuts(jj)) {
+        if(smearedTauMomentumVector.at(nobj).DeltaR(smearedMuonMomentumVector.at(jj)) < _Tau2Muon1MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  if (_RemoveTau2OverlapWithMuon2s == "1") {
+    for(int jj = 0; jj < Muon_pt->size(); jj++) {
+      if (passRecoMuon2Cuts(jj)) {
+        if(smearedTauMomentumVector.at(nobj).DeltaR(smearedMuonMomentumVector.at(jj)) < _Tau2Muon2MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  if (_RemoveTau2OverlapWithElectron1s == "1") {
+    for(int jj = 0; jj < patElectron_pt->size(); jj++) {
+      if (passRecoElectron1Cuts(jj)) {
+        if(smearedTauMomentumVector.at(nobj).DeltaR(smearedElectronMomentumVector.at(jj)) < _Tau2Electron1MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  if (_RemoveTau2OverlapWithElectron2s == "1") {
+    for(int jj = 0; jj < patElectron_pt->size(); jj++) {
+      if (passRecoElectron2Cuts(jj)) {
+        if(smearedTauMomentumVector.at(nobj).DeltaR(smearedElectronMomentumVector.at(jj)) < _Tau2Electron2MatchingDeltaR) {return false;}
+      }
+    }
+  }
+
+  return true;
+}
+
+// Reco level jet1 requirements
+bool BSM3GAnalyzer::passRecoJet1Cuts(int nobj) {
+  // ----Acceptance cuts
+  if (fabs(smearedJetMomentumVector.at(nobj).Eta())>_RecoJet1EtaMaxCut) {return false;}
+  if (fabs(smearedJetMomentumVector.at(nobj).Eta())<_RecoJet1EtaMinCut) {return false;}
+  if (smearedJetMomentumVector.at(nobj).Pt()<_RecoJet1PtCut) {return false;}
+  if (_ApplyJet1LooseID == "1") {
+    if (!passedLooseJetID(nobj)) {return false;}
+  }
+
+  // ----anti-overlap requirements
+  if (_RemoveJet1OverlapWithMuon1s == "1") {
+    for(int jj = 0; jj < Muon_pt->size(); jj++) {
+      if (passRecoMuon1Cuts(jj)) {
+        if(smearedJetMomentumVector.at(nobj).DeltaR(smearedMuonMomentumVector.at(jj)) < _Jet1Muon1MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  if (_RemoveJet1OverlapWithMuon2s == "1") {
+    for(int jj = 0; jj < Muon_pt->size(); jj++) {
+      if (passRecoMuon2Cuts(jj)) {
+        if(smearedJetMomentumVector.at(nobj).DeltaR(smearedMuonMomentumVector.at(jj)) < _Jet1Muon2MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  if (_RemoveJet1OverlapWithElectron1s == "1") {
+    for(int jj = 0; jj < patElectron_pt->size(); jj++) {
+      if (passRecoElectron1Cuts(jj)) {
+        if(smearedJetMomentumVector.at(nobj).DeltaR(smearedElectronMomentumVector.at(jj)) < _Jet1Electron1MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  if (_RemoveJet1OverlapWithElectron2s == "1") {
+    for(int jj = 0; jj < patElectron_pt->size(); jj++) {
+      if (passRecoElectron2Cuts(jj)) {
+        if(smearedJetMomentumVector.at(nobj).DeltaR(smearedElectronMomentumVector.at(jj)) < _Jet1Electron2MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  if (_RemoveJet1OverlapWithTau1s == "1") {
+    for(int jj = 0; jj < Tau_pt->size(); jj++) {
+      if (passRecoTau1Cuts(jj)) {
+        if(smearedJetMomentumVector.at(nobj).DeltaR(smearedTauMomentumVector.at(jj)) < _Jet1Tau1MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  if (_RemoveJet1OverlapWithTau2s == "1") {
+    for(int jj = 0; jj < Tau_pt->size(); jj++) {
+      if (passRecoTau2Cuts(jj)) {
+        if(smearedJetMomentumVector.at(nobj).DeltaR(smearedTauMomentumVector.at(jj)) < _Jet1Tau2MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  return true;
+}
+
+// Reco level jet2 requirements
+bool BSM3GAnalyzer::passRecoJet2Cuts(int nobj) {
+  // ----Acceptance cuts
+  if (fabs(smearedJetMomentumVector.at(nobj).Eta())>_RecoJet2EtaMaxCut) {return false;}
+  if (fabs(smearedJetMomentumVector.at(nobj).Eta())<_RecoJet2EtaMinCut) {return false;}
+  if (smearedJetMomentumVector.at(nobj).Pt()<_RecoJet2PtCut) {return false;}
+  if (_ApplyJet2LooseID == "1") {
+    if (!passedLooseJetID(nobj)) {return false;}
+  }
+
+  // ----anti-overlap requirements
+  if (_RemoveJet2OverlapWithMuon1s == "1") {
+    for(int jj = 0; jj < Muon_pt->size(); jj++) {
+      if (passRecoMuon1Cuts(jj)) {
+        if(smearedJetMomentumVector.at(nobj).DeltaR(smearedMuonMomentumVector.at(jj)) < _Jet2Muon1MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  if (_RemoveJet2OverlapWithMuon2s == "1") {
+    for(int jj = 0; jj < Muon_pt->size(); jj++) {
+      if (passRecoMuon2Cuts(jj)) {
+        if(smearedJetMomentumVector.at(nobj).DeltaR(smearedMuonMomentumVector.at(jj)) < _Jet2Muon2MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  if (_RemoveJet2OverlapWithElectron1s == "1") {
+    for(int jj = 0; jj < patElectron_pt->size(); jj++) {
+      if (passRecoElectron1Cuts(jj)) {
+        if(smearedJetMomentumVector.at(nobj).DeltaR(smearedElectronMomentumVector.at(jj)) < _Jet2Electron1MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  if (_RemoveJet2OverlapWithElectron2s == "1") {
+    for(int jj = 0; jj < patElectron_pt->size(); jj++) {
+      if (passRecoElectron2Cuts(jj)) {
+        if(smearedJetMomentumVector.at(nobj).DeltaR(smearedElectronMomentumVector.at(jj)) < _Jet2Electron2MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  if (_RemoveJet2OverlapWithTau1s == "1") {
+    for(int jj = 0; jj < Tau_pt->size(); jj++) {
+      if (passRecoTau1Cuts(jj)) {
+        if(smearedJetMomentumVector.at(nobj).DeltaR(smearedTauMomentumVector.at(jj)) < _Jet2Tau1MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  if (_RemoveJet2OverlapWithTau2s == "1") {
+    for(int jj = 0; jj < Tau_pt->size(); jj++) {
+      if (passRecoTau2Cuts(jj)) {
+        if(smearedJetMomentumVector.at(nobj).DeltaR(smearedTauMomentumVector.at(jj)) < _Jet2Tau2MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  return true;
+}
+
+bool BSM3GAnalyzer::passedLooseJetID(int nobj) {
+  if (Jet_neutralHadEnergyFraction->at(nobj) >= 0.99) {return false;}
+  if (Jet_neutralEmEmEnergyFraction->at(nobj) >= 0.99) {return false;}
+  if (Jet_numberOfConstituents->at(nobj) <= 1) {return false;}
+  if (Jet_muonEnergyFraction->at(nobj) >= 0.80) {return false;}
+  if ( (fabs(smearedJetMomentumVector.at(nobj).Eta()) < 2.4) && (Jet_chargedHadronEnergyFraction->at(nobj) <= 0.0) ) {return false;}
+  if ( (fabs(smearedJetMomentumVector.at(nobj).Eta()) < 2.4) && (Jet_chargedMultiplicity->at(nobj) <= 0.0) ) {return false;}
+  if ( (fabs(smearedJetMomentumVector.at(nobj).Eta()) < 2.4) && (Jet_chargedEmEnergyFraction->at(nobj) >= 0.99) ) {return false;}
+  return true;
+}
+
 TLorentzVector BSM3GAnalyzer::SmearMuon(int index) {
+  TLorentzVector smearedMomentum;
+  smearedMomentum.SetPtEtaPhiE(Muon_pt->at(index), Muon_eta->at(index), Muon_phi->at(index), Muon_energy->at(index));
   double smearedPt;
   double smearedEta;
   double smearedPhi;
   double smearedEnergy;
   if(isData == "0") {
-    TLorentzVector smearedMomentum;
-    smearedMomentum.SetPtEtaPhiE(Muon_pt->at(index), Muon_eta->at(index), Muon_phi->at(index), Muon_energy->at(index));
     if(matchMuonToGen(smearedMomentum).first) {
       TLorentzVector unsmearedMomentum = matchMuonToGen(smearedMomentum).second;
       if(_SmearTheMuon == "1") {
@@ -811,8 +1764,6 @@ TLorentzVector BSM3GAnalyzer::SmearMuon(int index) {
       return smearedMomentum;
     }
   } else {
-    TLorentzVector smearedMomentum;
-    smearedMomentum.SetPtEtaPhiE(Muon_pt->at(index), Muon_eta->at(index), Muon_phi->at(index), Muon_energy->at(index));
     return smearedMomentum;
   }
 }
@@ -835,16 +1786,65 @@ pair<bool, TLorentzVector> BSM3GAnalyzer::matchMuonToGen(TLorentzVector p4Vector
   return GenMatchedInformation;
 }
 
-TLorentzVector BSM3GAnalyzer::SmearTau(int index) {
+TLorentzVector BSM3GAnalyzer::SmearElectron(int index) {
+  TLorentzVector smearedMomentum;
+  smearedMomentum.SetPtEtaPhiE(patElectron_pt->at(index), patElectron_eta->at(index), patElectron_phi->at(index), patElectron_energy->at(index));
   double smearedPt;
   double smearedEta;
   double smearedPhi;
   double smearedEnergy;
   if(isData == "0") {
-    TLorentzVector smearedMomentum;
-    smearedMomentum.SetPtEtaPhiE(Tau_pt->at(index), Tau_eta->at(index), Tau_phi->at(index), Tau_energy->at(index));
-    if(matchTauToGen(smearedMomentum).first) {
-      TLorentzVector unsmearedMomentum = matchTauToGen(smearedMomentum).second;
+    if(matchElectronToGen(smearedMomentum).first) {
+      TLorentzVector unsmearedMomentum = matchElectronToGen(smearedMomentum).second;
+      if(_SmearTheElectron == "1") {
+        smearedPt = (unsmearedMomentum.Pt() * _ElectronPtScaleOffset) + ((smearedMomentum.Pt() -  unsmearedMomentum.Pt()) * _ElectronPtSigmaOffset);
+        smearedEta = (unsmearedMomentum.Eta() * _ElectronEtaScaleOffset) + ((smearedMomentum.Eta() -  unsmearedMomentum.Eta()) * _ElectronEtaSigmaOffset);
+        smearedPhi = (unsmearedMomentum.Phi() * _ElectronPhiScaleOffset) + ((smearedMomentum.Phi() -  unsmearedMomentum.Phi()) * _ElectronPhiSigmaOffset);
+        smearedEnergy = (unsmearedMomentum.Energy() * _ElectronEnergyScaleOffset) + ((smearedMomentum.Energy() -  unsmearedMomentum.Energy()) * _ElectronEnergySigmaOffset);
+      } else {
+        smearedPt  = smearedMomentum.Pt();
+        smearedEta  = smearedMomentum.Eta();
+        smearedPhi  = smearedMomentum.Phi();
+        smearedEnergy  = smearedMomentum.Energy();
+      }
+      smearedMomentum.SetPtEtaPhiE(smearedPt, smearedEta, smearedPhi, smearedEnergy);
+      return smearedMomentum;
+    } else {
+      return smearedMomentum;
+    }
+  } else {
+    return smearedMomentum;
+  }
+}
+
+//---Matching Electrons to generator level objects
+pair<bool, TLorentzVector> BSM3GAnalyzer::matchElectronToGen(TLorentzVector p4Vector) {
+  bool isGenMatched = false;
+  TLorentzVector theGenObject(0,0,0,0);
+  for(int jj = 0; jj < Gen_pt->size(); jj++) {
+    if((abs(Gen_pdg_id->at(jj)) == 11) && (Gen_status->at(jj) == 1)) {
+      theGenObject.SetPtEtaPhiE(Gen_pt->at(jj), Gen_eta->at(jj), Gen_phi->at(jj), Gen_energy->at(jj));
+      if(p4Vector.DeltaR(theGenObject) <= _ElectronToGenMatchingDeltaR) {
+        if(_UseElectronMotherId == "1") {
+          if(abs(Gen_motherpdg_id->at(jj)) == _ElectronMotherId) { isGenMatched = true; }
+        } else { isGenMatched = true; }
+      }
+    }
+  }
+  pair<bool, TLorentzVector> GenMatchedInformation(isGenMatched,theGenObject);
+  return GenMatchedInformation;
+}
+
+TLorentzVector BSM3GAnalyzer::SmearTau(int index) {
+  TLorentzVector smearedMomentum;
+  smearedMomentum.SetPtEtaPhiE(Tau_pt->at(index), Tau_eta->at(index), Tau_phi->at(index), Tau_energy->at(index)); // reco level had tau momentum
+  double smearedPt;
+  double smearedEta;
+  double smearedPhi;
+  double smearedEnergy;
+  if(isData == "0") { // it's not real collision data, it's simulation
+    if(matchTauToGen(smearedMomentum).first) { // it's a real had tau
+      TLorentzVector unsmearedMomentum = matchTauToGen(smearedMomentum).second; // gen level vis had tau momentum
       if(_SmearTheTau == "1") {
         smearedPt = (unsmearedMomentum.Pt() * _TauPtScaleOffset) + ((smearedMomentum.Pt() -  unsmearedMomentum.Pt()) * _TauPtSigmaOffset);
         smearedEta = (unsmearedMomentum.Eta() * _TauEtaScaleOffset) + ((smearedMomentum.Eta() -  unsmearedMomentum.Eta()) * _TauEtaSigmaOffset);
@@ -861,9 +1861,7 @@ TLorentzVector BSM3GAnalyzer::SmearTau(int index) {
     } else {
       return smearedMomentum;
     }
-  } else {
-    TLorentzVector smearedMomentum;
-    smearedMomentum.SetPtEtaPhiE(Tau_pt->at(index), Tau_eta->at(index), Tau_phi->at(index), Tau_energy->at(index));
+  } else { // it's real collision data
     return smearedMomentum;
   }
 }
@@ -921,6 +1919,42 @@ pair<bool, TLorentzVector> BSM3GAnalyzer::matchTauToGen(TLorentzVector p4Vector)
   }
 }
 
+TLorentzVector BSM3GAnalyzer::SmearJet(int index) {
+  bool isRealJet = true;
+  TLorentzVector tempJetVector(Jet_pt->at(index), Jet_eta->at(index), Jet_phi->at(index), Jet_energy->at(index));
+  TLorentzVector tempVector;
+  if(isData == "0") {
+    for(int jj = 0; jj < Muon_pt->size(); jj++) {
+      tempVector.SetPtEtaPhiE(Muon_pt->at(jj), Muon_eta->at(jj), Muon_phi->at(jj), Muon_energy->at(jj));
+      if( ((tempJetVector.DeltaR(tempVector) < _CentralJetMuon1MatchingDeltaR) ||
+           (tempJetVector.DeltaR(tempVector) < _CentralJetMuon2MatchingDeltaR))
+          && (matchMuonToGen(tempVector).first) ) {isRealJet = false;}
+    }
+    for(int jj = 0; jj < patElectron_pt->size(); jj++) {
+      tempVector.SetPtEtaPhiE(patElectron_pt->at(jj), patElectron_eta->at(jj), patElectron_phi->at(jj), patElectron_energy->at(jj));
+      if( ((tempJetVector.DeltaR(tempVector) < _CentralJetElectron1MatchingDeltaR) ||
+           (tempJetVector.DeltaR(tempVector) < _CentralJetElectron2MatchingDeltaR))
+          && (matchElectronToGen(tempVector).first) ) {isRealJet = false;}
+    }
+    for(int jj = 0; jj < Tau_pt->size(); jj++) {
+      tempVector.SetPtEtaPhiE(Tau_pt->at(jj), Tau_eta->at(jj), Tau_phi->at(jj), Tau_energy->at(jj));
+      if( ((tempJetVector.DeltaR(tempVector) < _CentralJetTau1MatchingDeltaR) ||
+           (tempJetVector.DeltaR(tempVector) < _CentralJetTau2MatchingDeltaR))
+          && (matchTauToGen(tempVector).first) ) {isRealJet = false;}
+    }
+    if(isRealJet) {
+      TLorentzVector smearedMomentum = _JetEnergyScaleOffset * tempJetVector;
+      return smearedMomentum;
+    } else {
+      TLorentzVector smearedMomentum = tempJetVector;
+      return smearedMomentum;
+    }
+  } else {
+    TLorentzVector smearedMomentum = tempJetVector;
+    return smearedMomentum;
+  }
+}
+
 int BSM3GAnalyzer::getBin(char * cstr, int nVertices) {
   TFile *file1 = new TFile (cstr);
   TH1 *hist = dynamic_cast<TH1*>(file1->Get("analyzeHiMassTau/NVertices_0"));
@@ -929,6 +1963,14 @@ int BSM3GAnalyzer::getBin(char * cstr, int nVertices) {
   int result = hist->GetBin(nVertices+1);
   file1->Close();
   return result;
+}
+
+bool BSM3GAnalyzer::isInTheCracks(float etaValue){
+  return (fabs(etaValue) < 0.018 ||
+          (fabs(etaValue)>0.423 && fabs(etaValue)<0.461) ||
+          (fabs(etaValue)>0.770 && fabs(etaValue)<0.806) ||
+          (fabs(etaValue)>1.127 && fabs(etaValue)<1.163) ||
+          (fabs(etaValue)>1.460 && fabs(etaValue)<1.558));
 }
 
 double BSM3GAnalyzer::getvalue(char * cstr, int bin) {
@@ -966,10 +2008,71 @@ void BSM3GAnalyzer::setBranchAddress(TTree* BOOM) {
   Muon_isoNeutralHadron = 0;
   Muon_isoPhoton = 0;
   Muon_isoPU = 0;
+  patElectron_eta = 0;
+  patElectron_phi = 0;
+  patElectron_pt = 0;
+  patElectron_energy = 0;
+  patElectron_isPassVeto = 0;
+  patElectron_isPassLoose = 0;
+  patElectron_isPassMedium = 0;
+  patElectron_isPassTight = 0;
+  patElectron_isPassHEEPId = 0;
+  patElectron_isoChargedHadrons = 0;
+  patElectron_isoNeutralHadrons = 0;
+  patElectron_isoPhotons = 0;
+  patElectron_isoPU = 0;
   Tau_eta = 0;
   Tau_phi = 0;
   Tau_pt = 0;
   Tau_energy = 0;
+  Tau_charge = 0;
+  Tau_decayModeFinding = 0;
+  Tau_decayModeFindingNewDMs = 0;
+  Tau_chargedIsoPtSum = 0;
+  Tau_neutralIsoPtSum = 0;
+  Tau_againstMuonTight3 = 0;
+  Tau_againstElectronMVATightMVA5 = 0;
+  Tau_nProngs = 0;
+  Tau_puCorrPtSum = 0;
+  Tau_byLooseCombinedIsolationDeltaBetaCorr = 0;
+  Tau_byLooseCombinedIsolationDeltaBetaCorr3Hits = 0;
+  Tau_byMediumCombinedIsolationDeltaBetaCorr = 0;
+  Tau_byMediumCombinedIsolationDeltaBetaCorr3Hits = 0;
+  Tau_byTightCombinedIsolationDeltaBetaCorr = 0;
+  Tau_byTightCombinedIsolationDeltaBetaCorr3Hits = 0;
+  Tau_byLooseIsolationMVA3newDMwLT = 0;
+  Tau_byLooseIsolationMVA3newDMwoLT = 0;
+  Tau_byLooseIsolationMva3oldDMwLT = 0;
+  Tau_byLooseIsolationMVA3oldDMwoLT = 0;
+  Tau_byMediumIsolationMVA3newDMwLT = 0;
+  Tau_byMediumIsolationMVA3newDMwoLT = 0;
+  Tau_byMediumIsolationMva3oldDMwLT = 0;
+  Tau_byMediumIsolationMVA3oldDMwoLT = 0;
+  Tau_byTightIsolationMVA3newDMwLT = 0;
+  Tau_byTightIsolationMVA3newDMwoLT = 0;
+  Tau_byTightIsolationMva3oldDMwLT = 0;
+  Tau_byTightIsolationMVA3oldDMwoLT = 0;
+  Tau_againstMuonLoose2 = 0;
+  Tau_againstMuonLoose3 = 0;
+  Tau_againstMuonTight2 = 0;
+  Tau_againstElectronMVALooseMVA5 = 0;
+  Tau_againstElectronMVAMediumMVA5 = 0;
+  Tau_byVLooseCombinedIsolationDeltaBetaCorr = 0;
+  Tau_leadChargedCandPt = 0;
+  Tau_leadChargedCandCharge = 0;
+  Tau_leadChargedCandEta = 0;
+  Tau_leadChargedCandPhi = 0;
+  Jet_pt = 0;
+  Jet_eta = 0;
+  Jet_phi = 0;
+  Jet_energy = 0;
+  Jet_neutralHadEnergyFraction = 0;
+  Jet_neutralEmEmEnergyFraction = 0;
+  Jet_numberOfConstituents = 0;
+  Jet_muonEnergyFraction = 0;
+  Jet_chargedHadronEnergyFraction = 0;
+  Jet_chargedMultiplicity = 0;
+  Jet_chargedEmEnergyFraction = 0;
   Gen_eta = 0;
   Gen_phi = 0;
   Gen_pt = 0;
@@ -1003,10 +2106,71 @@ void BSM3GAnalyzer::setBranchAddress(TTree* BOOM) {
   BOOM->SetBranchAddress("Muon_isoNeutralHadron", &Muon_isoNeutralHadron, &b_Muon_isoNeutralHadron);
   BOOM->SetBranchAddress("Muon_isoPhoton", &Muon_isoPhoton, &b_Muon_isoPhoton);
   BOOM->SetBranchAddress("Muon_isoPU", &Muon_isoPU, &b_Muon_isoPU);
+  BOOM->SetBranchAddress("patElectron_eta", &patElectron_eta, &b_patElectron_eta);
+  BOOM->SetBranchAddress("patElectron_phi", &patElectron_phi, &b_patElectron_phi);
+  BOOM->SetBranchAddress("patElectron_pt", &patElectron_pt, &b_patElectron_pt);
+  BOOM->SetBranchAddress("patElectron_energy", &patElectron_energy, &b_patElectron_energy);
+  BOOM->SetBranchAddress("patElectron_isPassVeto", &patElectron_isPassVeto, &b_patElectron_isPassVeto);
+  BOOM->SetBranchAddress("patElectron_isPassLoose", &patElectron_isPassLoose, &b_patElectron_isPassLoose);
+  BOOM->SetBranchAddress("patElectron_isPassMedium", &patElectron_isPassMedium, &b_patElectron_isPassMedium);
+  BOOM->SetBranchAddress("patElectron_isPassTight", &patElectron_isPassTight, &b_patElectron_isPassTight);
+  BOOM->SetBranchAddress("patElectron_isPassHEEPId", &patElectron_isPassHEEPId, &b_patElectron_isPassHEEPId);
+  BOOM->SetBranchAddress("patElectron_isoChargedHadrons", &patElectron_isoChargedHadrons, &b_patElectron_isoChargedHadrons);
+  BOOM->SetBranchAddress("patElectron_isoNeutralHadrons", &patElectron_isoNeutralHadrons, &b_patElectron_isoNeutralHadrons);
+  BOOM->SetBranchAddress("patElectron_isoPhotons", &patElectron_isoPhotons, &b_patElectron_isoPhotons);
+  BOOM->SetBranchAddress("patElectron_isoPU", &patElectron_isoPU, &b_patElectron_isoPU);
   BOOM->SetBranchAddress("Tau_eta", &Tau_eta, &b_Tau_eta);
   BOOM->SetBranchAddress("Tau_phi", &Tau_phi, &b_Tau_phi);
   BOOM->SetBranchAddress("Tau_pt", &Tau_pt, &b_Tau_pt);
   BOOM->SetBranchAddress("Tau_energy", &Tau_energy, &b_Tau_energy);
+  BOOM->SetBranchAddress("Tau_charge", &Tau_charge, &b_Tau_charge);
+  BOOM->SetBranchAddress("Tau_decayModeFinding", &Tau_decayModeFinding, &b_Tau_decayModeFinding);
+  BOOM->SetBranchAddress("Tau_decayModeFindingNewDMs", &Tau_decayModeFindingNewDMs, &b_Tau_decayModeFindingNewDMs);
+  BOOM->SetBranchAddress("Tau_chargedIsoPtSum", &Tau_chargedIsoPtSum, &b_Tau_chargedIsoPtSum);
+  BOOM->SetBranchAddress("Tau_neutralIsoPtSum", &Tau_neutralIsoPtSum, &b_Tau_neutralIsoPtSum);
+  BOOM->SetBranchAddress("Tau_againstMuonTight3", &Tau_againstMuonTight3, &b_Tau_againstMuonTight3);
+  BOOM->SetBranchAddress("Tau_againstElectronMVATightMVA5", &Tau_againstElectronMVATightMVA5, &b_Tau_againstElectronMVATightMVA5);
+  BOOM->SetBranchAddress("Tau_nProngs", &Tau_nProngs, &b_Tau_nProngs);
+  BOOM->SetBranchAddress("Tau_puCorrPtSum", &Tau_puCorrPtSum, &b_Tau_puCorrPtSum);
+  BOOM->SetBranchAddress("Tau_byLooseCombinedIsolationDeltaBetaCorr", &Tau_byLooseCombinedIsolationDeltaBetaCorr, &b_Tau_byLooseCombinedIsolationDeltaBetaCorr);
+  BOOM->SetBranchAddress("Tau_byLooseCombinedIsolationDeltaBetaCorr3Hits", &Tau_byLooseCombinedIsolationDeltaBetaCorr3Hits, &b_Tau_byLooseCombinedIsolationDeltaBetaCorr3Hits);
+  BOOM->SetBranchAddress("Tau_byMediumCombinedIsolationDeltaBetaCorr", &Tau_byMediumCombinedIsolationDeltaBetaCorr, &b_Tau_byMediumCombinedIsolationDeltaBetaCorr);
+  BOOM->SetBranchAddress("Tau_byMediumCombinedIsolationDeltaBetaCorr3Hits", &Tau_byMediumCombinedIsolationDeltaBetaCorr3Hits, &b_Tau_byMediumCombinedIsolationDeltaBetaCorr3Hits);
+  BOOM->SetBranchAddress("Tau_byTightCombinedIsolationDeltaBetaCorr", &Tau_byTightCombinedIsolationDeltaBetaCorr, &b_Tau_byTightCombinedIsolationDeltaBetaCorr);
+  BOOM->SetBranchAddress("Tau_byTightCombinedIsolationDeltaBetaCorr3Hits", &Tau_byTightCombinedIsolationDeltaBetaCorr3Hits, &b_Tau_byTightCombinedIsolationDeltaBetaCorr3Hits);
+  BOOM->SetBranchAddress("Tau_byLooseIsolationMVA3newDMwLT", &Tau_byLooseIsolationMVA3newDMwLT, &b_Tau_byLooseIsolationMVA3newDMwLT);
+  BOOM->SetBranchAddress("Tau_byLooseIsolationMVA3newDMwoLT", &Tau_byLooseIsolationMVA3newDMwoLT, &b_Tau_byLooseIsolationMVA3newDMwoLT);
+  BOOM->SetBranchAddress("Tau_byLooseIsolationMva3oldDMwLT", &Tau_byLooseIsolationMva3oldDMwLT, &b_Tau_byLooseIsolationMva3oldDMwLT);
+  BOOM->SetBranchAddress("Tau_byLooseIsolationMVA3oldDMwoLT", &Tau_byLooseIsolationMVA3oldDMwoLT, &b_Tau_byLooseIsolationMVA3oldDMwoLT);
+  BOOM->SetBranchAddress("Tau_byMediumIsolationMVA3newDMwLT", &Tau_byMediumIsolationMVA3newDMwLT, &b_Tau_byMediumIsolationMVA3newDMwLT);
+  BOOM->SetBranchAddress("Tau_byMediumIsolationMVA3newDMwoLT", &Tau_byMediumIsolationMVA3newDMwoLT, &b_Tau_byMediumIsolationMVA3newDMwoLT);
+  BOOM->SetBranchAddress("Tau_byMediumIsolationMva3oldDMwLT", &Tau_byMediumIsolationMva3oldDMwLT, &b_Tau_byMediumIsolationMva3oldDMwLT);
+  BOOM->SetBranchAddress("Tau_byMediumIsolationMVA3oldDMwoLT", &Tau_byMediumIsolationMVA3oldDMwoLT, &b_Tau_byMediumIsolationMVA3oldDMwoLT);
+  BOOM->SetBranchAddress("Tau_byTightIsolationMVA3newDMwLT", &Tau_byTightIsolationMVA3newDMwLT, &b_Tau_byTightIsolationMVA3newDMwLT);
+  BOOM->SetBranchAddress("Tau_byTightIsolationMVA3newDMwoLT", &Tau_byTightIsolationMVA3newDMwoLT, &b_Tau_byTightIsolationMVA3newDMwoLT);
+  BOOM->SetBranchAddress("Tau_byTightIsolationMva3oldDMwLT", &Tau_byTightIsolationMva3oldDMwLT, &b_Tau_byTightIsolationMva3oldDMwLT);
+  BOOM->SetBranchAddress("Tau_byTightIsolationMVA3oldDMwoLT", &Tau_byTightIsolationMVA3oldDMwoLT, &b_Tau_byTightIsolationMVA3oldDMwoLT);
+  BOOM->SetBranchAddress("Tau_againstMuonLoose2", &Tau_againstMuonLoose2, &b_Tau_againstMuonLoose2);
+  BOOM->SetBranchAddress("Tau_againstMuonLoose3", &Tau_againstMuonLoose3, &b_Tau_againstMuonLoose3);
+  BOOM->SetBranchAddress("Tau_againstMuonTight2", &Tau_againstMuonTight2, &b_Tau_againstMuonTight2);
+  BOOM->SetBranchAddress("Tau_againstElectronMVALooseMVA5", &Tau_againstElectronMVALooseMVA5, &b_Tau_againstElectronMVALooseMVA5);
+  BOOM->SetBranchAddress("Tau_againstElectronMVAMediumMVA5", &Tau_againstElectronMVAMediumMVA5, &b_Tau_againstElectronMVAMediumMVA5);
+  BOOM->SetBranchAddress("Tau_byVLooseCombinedIsolationDeltaBetaCorr", &Tau_byVLooseCombinedIsolationDeltaBetaCorr, &b_Tau_byVLooseCombinedIsolationDeltaBetaCorr);
+  BOOM->SetBranchAddress("Tau_leadChargedCandPt", &Tau_leadChargedCandPt, &b_Tau_leadChargedCandPt);
+  BOOM->SetBranchAddress("Tau_leadChargedCandCharge", &Tau_leadChargedCandCharge, &b_Tau_leadChargedCandCharge);
+  BOOM->SetBranchAddress("Tau_leadChargedCandEta", &Tau_leadChargedCandEta, &b_Tau_leadChargedCandEta);
+  BOOM->SetBranchAddress("Tau_leadChargedCandPhi", &Tau_leadChargedCandPhi, &b_Tau_leadChargedCandPhi);
+  BOOM->SetBranchAddress("Jet_pt", &Jet_pt, &b_Jet_pt);
+  BOOM->SetBranchAddress("Jet_eta", &Jet_eta, &b_Jet_eta);
+  BOOM->SetBranchAddress("Jet_phi", &Jet_phi, &b_Jet_phi);
+  BOOM->SetBranchAddress("Jet_energy", &Jet_energy, &b_Jet_energy);
+  BOOM->SetBranchAddress("Jet_neutralHadEnergyFraction", &Jet_neutralHadEnergyFraction, &b_Jet_neutralHadEnergyFraction);
+  BOOM->SetBranchAddress("Jet_neutralEmEmEnergyFraction", &Jet_neutralEmEmEnergyFraction, &b_Jet_neutralEmEmEnergyFraction);
+  BOOM->SetBranchAddress("Jet_numberOfConstituents", &Jet_numberOfConstituents, &b_Jet_numberOfConstituents);
+  BOOM->SetBranchAddress("Jet_muonEnergyFraction", &Jet_muonEnergyFraction, &b_Jet_muonEnergyFraction);
+  BOOM->SetBranchAddress("Jet_chargedHadronEnergyFraction", &Jet_chargedHadronEnergyFraction, &b_Jet_chargedHadronEnergyFraction);
+  BOOM->SetBranchAddress("Jet_chargedMultiplicity", &Jet_chargedMultiplicity, &b_Jet_chargedMultiplicity);
+  BOOM->SetBranchAddress("Jet_chargedEmEnergyFraction", &Jet_chargedEmEnergyFraction, &b_Jet_chargedEmEnergyFraction);
   BOOM->SetBranchAddress("Met_px", &Met_px, &b_Met_px);
   BOOM->SetBranchAddress("Met_py", &Met_py, &b_Met_py);
   BOOM->SetBranchAddress("Met_pz", &Met_pz, &b_Met_pz);

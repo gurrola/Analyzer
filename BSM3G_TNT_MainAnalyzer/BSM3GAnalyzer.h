@@ -69,9 +69,20 @@ private:
   int ExtractNumberOfGoodGenSMHiggs();
   bool passRecoMuon1Cuts(int);
   bool passRecoMuon2Cuts(int);
+  bool passRecoElectron1Cuts(int);
+  bool passRecoElectron2Cuts(int);
+  bool passRecoTau1Cuts(int);
+  bool passRecoTau2Cuts(int);
+  bool passRecoJet1Cuts(int);
+  bool passRecoJet2Cuts(int);
+  bool passedLooseJetID(int);
   TLorentzVector SmearMuon(int);
   TLorentzVector SmearTau(int);
+  TLorentzVector SmearElectron(int);
+  TLorentzVector SmearJet(int);
+  bool isInTheCracks(float);
   pair<bool, TLorentzVector> matchMuonToGen(TLorentzVector);
+  pair<bool, TLorentzVector> matchElectronToGen(TLorentzVector);
   pair<bool, TLorentzVector> matchTauToGen(TLorentzVector);
   double getvalue(char * cstr, int bin);
   double getintegral(char * cstr, int bin);
@@ -84,6 +95,7 @@ private:
   float _GenTauPtMaxCut;
   float _GenTauEtaMaxCut;
   double _MuonToGenMatchingDeltaR;
+  double _ElectronToGenMatchingDeltaR;
   double _TauToGenMatchingDeltaR;
 
   string _DataHistos;
@@ -129,14 +141,30 @@ private:
   int _RecoMuon1Nmax;
   int _RecoMuon2Nmin;
   int _RecoMuon2Nmax;
+  int _RecoElectron1Nmin;
+  int _RecoElectron1Nmax;
+  int _RecoElectron2Nmin;
+  int _RecoElectron2Nmax;
+  int _RecoTau1Nmin;
+  int _RecoTau1Nmax;
+  int _RecoTau2Nmin;
+  int _RecoTau2Nmax;
+  int _RecoJet1Nmin;
+  int _RecoJet1Nmax;
+  int _RecoJet2Nmin;
+  int _RecoJet2Nmax;
   vector<string> _EventSelectionSequence;
   vector<string> _TopologicalSelectionSequence;
 
   //-----string to determine if the sample is real data or simulation
   string isData;
   string _MatchMuonToGen;
+  string _MatchElectronToGen;
+  string _MatchTauToGen;
   string _UseMuonMotherId;
   int _MuonMotherId;
+  string _UseElectronMotherId;
+  int _ElectronMotherId;
 
   //-----Event flags
   vector<bool> _EventFlag;
@@ -156,11 +184,15 @@ private:
   string _CalculatePUSystematics;
   std::vector<TLorentzVector> smearedMuonMomentumVector;
   std::vector<TLorentzVector> smearedTauMomentumVector;
+  std::vector<TLorentzVector> smearedElectronMomentumVector;
+  std::vector<TLorentzVector> smearedJetMomentumVector;
   TLorentzVector theMETVector;
   double deltaForMEx;
   double deltaForMEy;
   string _SmearTheMuon;
   string _SmearTheTau;
+  string _SmearTheElectron;
+  string _SmearTheJet;
   double _MuonPtScaleOffset;
   double _MuonPtSigmaOffset;
   double _MuonEtaScaleOffset;
@@ -177,6 +209,14 @@ private:
   double _TauPhiSigmaOffset;
   double _TauEnergyScaleOffset;
   double _TauEnergySigmaOffset;
+  double _ElectronPtScaleOffset;
+  double _ElectronPtSigmaOffset;
+  double _ElectronEtaScaleOffset;
+  double _ElectronEtaSigmaOffset;
+  double _ElectronPhiScaleOffset;
+  double _ElectronPhiSigmaOffset;
+  double _ElectronEnergyScaleOffset;
+  double _ElectronEnergySigmaOffset;
 
   string _TreatMuonsAsNeutrinos;
   string _DoRecoMuon1DiscrByTightID;
@@ -196,6 +236,117 @@ private:
   float _RecoMuon2IsoSumPtMinCutValue;
   float _RecoMuon2IsoSumPtMaxCutValue;
 
+  float _RecoElectron1EtaCut;
+  float _RecoElectron1PtMinCut;
+  float _RecoElectron1PtMaxCut;
+  float _RecoElectron1IsoSumPtMinCutValue;
+  float _RecoElectron1IsoSumPtMaxCutValue;
+  string _DoRecoElectron1DiscrByIsolation;
+  string _DoRecoElectron1DiscrByVetoID;
+  string _DoRecoElectron1DiscrByLooseID;
+  string _DoRecoElectron1DiscrByMediumID;
+  string _DoRecoElectron1DiscrByTightID;
+  string _DoRecoElectron1DiscrByHEEPID;
+  float _RecoElectron2EtaCut;
+  float _RecoElectron2PtMinCut;
+  float _RecoElectron2PtMaxCut;
+  float _RecoElectron2IsoSumPtMinCutValue;
+  float _RecoElectron2IsoSumPtMaxCutValue;
+  string _DoRecoElectron2DiscrByIsolation;
+  string _DoRecoElectron2DiscrByVetoID;
+  string _DoRecoElectron2DiscrByLooseID;
+  string _DoRecoElectron2DiscrByMediumID;
+  string _DoRecoElectron2DiscrByTightID;
+  string _DoRecoElectron2DiscrByHEEPID;
+
+  float _RecoTau1PtMinCut;
+  float _RecoTau1PtMaxCut;
+  float _RecoTau1EtaCut;
+  string _DoRecoTau1DiscrByLeadTrack;
+  float _RecoTau1LeadTrackThreshold;
+  string _DoRecoTau1DiscrByIsolation;
+  string _RecoTau1DiscrByMaxIsolation;
+  string _RecoTau1DiscrByMinIsolation;
+  string _RecoTau1DiscrByProngType;
+  string _DoRecoTau1DiscrAgainstElectron;
+  string _RecoTau1DiscrAgainstElectron;
+  string _SelectTau1sThatAreElectrons;
+  string _DoRecoTau1DiscrAgainstMuon;
+  string _RecoTau1DiscrAgainstMuon;
+  string _SelectTau1sThatAreMuons;
+  string _DoRecoTau1DiscrByCrackCut;
+  string _RemoveTau1OverlapWithMuon1s;
+  string _RemoveTau1OverlapWithMuon2s;
+  double _Tau1Muon1MatchingDeltaR;
+  double _Tau1Muon2MatchingDeltaR;
+  string _RemoveTau1OverlapWithElectron1s;
+  string _RemoveTau1OverlapWithElectron2s;
+  double _Tau1Electron1MatchingDeltaR;
+  double _Tau1Electron2MatchingDeltaR;
+  float _RecoTau2PtMinCut;
+  float _RecoTau2PtMaxCut;
+  float _RecoTau2EtaCut;
+  string _DoRecoTau2DiscrByLeadTrack;
+  float _RecoTau2LeadTrackThreshold;
+  string _DoRecoTau2DiscrByIsolation;
+  string _RecoTau2DiscrByMaxIsolation;
+  string _RecoTau2DiscrByMinIsolation;
+  string _RecoTau2DiscrByProngType;
+  string _DoRecoTau2DiscrAgainstElectron;
+  string _RecoTau2DiscrAgainstElectron;
+  string _SelectTau2sThatAreElectrons;
+  string _DoRecoTau2DiscrAgainstMuon;
+  string _RecoTau2DiscrAgainstMuon;
+  string _SelectTau2sThatAreMuons;
+  string _DoRecoTau2DiscrByCrackCut;
+  string _RemoveTau2OverlapWithMuon1s;
+  string _RemoveTau2OverlapWithMuon2s;
+  double _Tau2Muon1MatchingDeltaR;
+  double _Tau2Muon2MatchingDeltaR;
+  string _RemoveTau2OverlapWithElectron1s;
+  string _RemoveTau2OverlapWithElectron2s;
+  double _Tau2Electron1MatchingDeltaR;
+  double _Tau2Electron2MatchingDeltaR;
+  float _RecoJet1EtaMaxCut;
+  float _RecoJet1EtaMinCut;
+  float _RecoJet1PtCut;
+  string _ApplyJet1LooseID;
+  string _RemoveJet1OverlapWithMuon1s;
+  float _Jet1Muon1MatchingDeltaR;
+  string _RemoveJet1OverlapWithMuon2s;
+  float _Jet1Muon2MatchingDeltaR;
+  string _RemoveJet1OverlapWithElectron1s;
+  float _Jet1Electron1MatchingDeltaR;
+  string _RemoveJet1OverlapWithElectron2s;
+  float _Jet1Electron2MatchingDeltaR;
+  string _RemoveJet1OverlapWithTau1s;
+  float _Jet1Tau1MatchingDeltaR;
+  string _RemoveJet1OverlapWithTau2s;
+  float _Jet1Tau2MatchingDeltaR;
+  float _RecoJet2EtaMaxCut;
+  float _RecoJet2EtaMinCut;
+  float _RecoJet2PtCut;
+  string _ApplyJet2LooseID;
+  string _RemoveJet2OverlapWithMuon1s;
+  float _Jet2Muon1MatchingDeltaR;
+  string _RemoveJet2OverlapWithMuon2s;
+  float _Jet2Muon2MatchingDeltaR;
+  string _RemoveJet2OverlapWithElectron1s;
+  float _Jet2Electron1MatchingDeltaR;
+  string _RemoveJet2OverlapWithElectron2s;
+  float _Jet2Electron2MatchingDeltaR;
+  string _RemoveJet2OverlapWithTau1s;
+  float _Jet2Tau1MatchingDeltaR;
+  string _RemoveJet2OverlapWithTau2s;
+  float _Jet2Tau2MatchingDeltaR;
+  float _CentralJetMuon1MatchingDeltaR;
+  float _CentralJetMuon2MatchingDeltaR;
+  float _CentralJetElectron1MatchingDeltaR;
+  float _CentralJetElectron2MatchingDeltaR;
+  float _CentralJetTau1MatchingDeltaR;
+  float _CentralJetTau2MatchingDeltaR;
+  float _JetEnergyScaleOffset;
+
   //-----For PDF weights
   vector<double> pdfWeightVector;
 
@@ -211,10 +362,71 @@ private:
   vector<double>  *Muon_isoNeutralHadron;
   vector<double>  *Muon_isoPhoton;
   vector<double>  *Muon_isoPU;
+  vector<double>  *patElectron_pt;
+  vector<double>  *patElectron_eta;
+  vector<double>  *patElectron_phi;
+  vector<double>  *patElectron_energy;
+  vector<int>     *patElectron_isPassVeto;
+  vector<int>     *patElectron_isPassLoose;
+  vector<int>     *patElectron_isPassMedium;
+  vector<int>     *patElectron_isPassTight;
+  vector<int>     *patElectron_isPassHEEPId;
+  vector<double>  *patElectron_isoChargedHadrons;
+  vector<double>  *patElectron_isoNeutralHadrons;
+  vector<double>  *patElectron_isoPhotons;
+  vector<double>  *patElectron_isoPU;
   vector<double>  *Tau_eta;
   vector<double>  *Tau_phi;
   vector<double>  *Tau_pt;
   vector<double>  *Tau_energy;
+  vector<double>  *Tau_charge;
+  vector<int>     *Tau_decayModeFinding;
+  vector<int>     *Tau_decayModeFindingNewDMs;
+  vector<double>  *Tau_chargedIsoPtSum;
+  vector<double>  *Tau_neutralIsoPtSum;
+  vector<int>     *Tau_againstMuonTight3;
+  vector<int>     *Tau_againstElectronMVATightMVA5;
+  vector<double>  *Tau_nProngs;
+  vector<double>  *Tau_puCorrPtSum;
+  vector<int>     *Tau_byLooseCombinedIsolationDeltaBetaCorr;
+  vector<int>     *Tau_byLooseCombinedIsolationDeltaBetaCorr3Hits;
+  vector<int>     *Tau_byMediumCombinedIsolationDeltaBetaCorr;
+  vector<int>     *Tau_byMediumCombinedIsolationDeltaBetaCorr3Hits;
+  vector<int>     *Tau_byTightCombinedIsolationDeltaBetaCorr;
+  vector<int>     *Tau_byTightCombinedIsolationDeltaBetaCorr3Hits;
+  vector<int>     *Tau_byLooseIsolationMVA3newDMwLT;
+  vector<int>     *Tau_byLooseIsolationMVA3newDMwoLT;
+  vector<int>     *Tau_byLooseIsolationMva3oldDMwLT;
+  vector<int>     *Tau_byLooseIsolationMVA3oldDMwoLT;
+  vector<int>     *Tau_byMediumIsolationMVA3newDMwLT;
+  vector<int>     *Tau_byMediumIsolationMVA3newDMwoLT;
+  vector<int>     *Tau_byMediumIsolationMva3oldDMwLT;
+  vector<int>     *Tau_byMediumIsolationMVA3oldDMwoLT;
+  vector<int>     *Tau_byTightIsolationMVA3newDMwLT;
+  vector<int>     *Tau_byTightIsolationMVA3newDMwoLT;
+  vector<int>     *Tau_byTightIsolationMva3oldDMwLT;
+  vector<int>     *Tau_byTightIsolationMVA3oldDMwoLT;
+  vector<int>     *Tau_againstMuonLoose2;
+  vector<int>     *Tau_againstMuonLoose3;
+  vector<int>     *Tau_againstMuonTight2;
+  vector<int>     *Tau_againstElectronMVALooseMVA5;
+  vector<int>     *Tau_againstElectronMVAMediumMVA5;
+  vector<int>     *Tau_byVLooseCombinedIsolationDeltaBetaCorr;
+  vector<double>  *Tau_leadChargedCandPt;
+  vector<double>  *Tau_leadChargedCandCharge;
+  vector<double>  *Tau_leadChargedCandEta;
+  vector<double>  *Tau_leadChargedCandPhi;
+  vector<double>  *Jet_pt;
+  vector<double>  *Jet_eta;
+  vector<double>  *Jet_phi;
+  vector<double>  *Jet_energy;
+  vector<double>  *Jet_neutralHadEnergyFraction;
+  vector<double>  *Jet_neutralEmEmEnergyFraction;
+  vector<double>  *Jet_muonEnergyFraction;
+  vector<double>  *Jet_chargedHadronEnergyFraction;
+  vector<double>  *Jet_chargedEmEnergyFraction;
+  vector<int>     *Jet_numberOfConstituents;
+  vector<int>     *Jet_chargedMultiplicity;
   vector<double>  *Gen_pt;
   vector<double>  *Gen_eta;
   vector<double>  *Gen_phi;
@@ -250,10 +462,71 @@ private:
   TBranch        *b_Muon_isoNeutralHadron;   //!
   TBranch        *b_Muon_isoPhoton;   //!
   TBranch        *b_Muon_isoPU;   //!
+  TBranch        *b_patElectron_pt;   //!
+  TBranch        *b_patElectron_eta;   //!
+  TBranch        *b_patElectron_phi;   //!
+  TBranch        *b_patElectron_energy;   //!
+  TBranch        *b_patElectron_isPassVeto;   //!
+  TBranch        *b_patElectron_isPassLoose;   //!
+  TBranch        *b_patElectron_isPassMedium;   //!
+  TBranch        *b_patElectron_isPassTight;   //!
+  TBranch        *b_patElectron_isPassHEEPId;   //!
+  TBranch        *b_patElectron_isoChargedHadrons;   //!
+  TBranch        *b_patElectron_isoNeutralHadrons;   //!
+  TBranch        *b_patElectron_isoPhotons;   //!
+  TBranch        *b_patElectron_isoPU;   //!
   TBranch        *b_Tau_eta;   //!
   TBranch        *b_Tau_phi;   //!
   TBranch        *b_Tau_pt;   //!
   TBranch        *b_Tau_energy;   //!
+  TBranch        *b_Tau_charge;   //!
+  TBranch        *b_Tau_decayModeFinding;   //!
+  TBranch        *b_Tau_decayModeFindingNewDMs;   //!
+  TBranch        *b_Tau_chargedIsoPtSum;   //!
+  TBranch        *b_Tau_neutralIsoPtSum;   //!
+  TBranch        *b_Tau_againstMuonTight3;   //!
+  TBranch        *b_Tau_againstElectronMVATightMVA5;   //!
+  TBranch        *b_Tau_nProngs;   //!
+  TBranch        *b_Tau_puCorrPtSum;   //!
+  TBranch        *b_Tau_byLooseCombinedIsolationDeltaBetaCorr;   //!
+  TBranch        *b_Tau_byLooseCombinedIsolationDeltaBetaCorr3Hits;   //!
+  TBranch        *b_Tau_byMediumCombinedIsolationDeltaBetaCorr;   //!
+  TBranch        *b_Tau_byMediumCombinedIsolationDeltaBetaCorr3Hits;   //!
+  TBranch        *b_Tau_byTightCombinedIsolationDeltaBetaCorr;   //!
+  TBranch        *b_Tau_byTightCombinedIsolationDeltaBetaCorr3Hits;   //!
+  TBranch        *b_Tau_byLooseIsolationMVA3newDMwLT;   //!
+  TBranch        *b_Tau_byLooseIsolationMVA3newDMwoLT;   //!
+  TBranch        *b_Tau_byLooseIsolationMva3oldDMwLT;   //!
+  TBranch        *b_Tau_byLooseIsolationMVA3oldDMwoLT;   //!
+  TBranch        *b_Tau_byMediumIsolationMVA3newDMwLT;   //!
+  TBranch        *b_Tau_byMediumIsolationMVA3newDMwoLT;   //!
+  TBranch        *b_Tau_byMediumIsolationMva3oldDMwLT;   //!
+  TBranch        *b_Tau_byMediumIsolationMVA3oldDMwoLT;   //!
+  TBranch        *b_Tau_byTightIsolationMVA3newDMwLT;   //!
+  TBranch        *b_Tau_byTightIsolationMVA3newDMwoLT;   //!
+  TBranch        *b_Tau_byTightIsolationMva3oldDMwLT;   //!
+  TBranch        *b_Tau_byTightIsolationMVA3oldDMwoLT;   //!
+  TBranch        *b_Tau_againstMuonLoose2;   //!
+  TBranch        *b_Tau_againstMuonLoose3;   //!
+  TBranch        *b_Tau_againstMuonTight2;   //!
+  TBranch        *b_Tau_againstElectronMVALooseMVA5;   //!
+  TBranch        *b_Tau_againstElectronMVAMediumMVA5;   //!
+  TBranch        *b_Tau_byVLooseCombinedIsolationDeltaBetaCorr;   //!
+  TBranch        *b_Tau_leadChargedCandPt;   //!
+  TBranch        *b_Tau_leadChargedCandCharge;   //!
+  TBranch        *b_Tau_leadChargedCandEta;   //!
+  TBranch        *b_Tau_leadChargedCandPhi;   //!
+  TBranch        *b_Jet_pt;   //!
+  TBranch        *b_Jet_eta;   //!
+  TBranch        *b_Jet_phi;   //!
+  TBranch        *b_Jet_energy;   //!
+  TBranch        *b_Jet_neutralHadEnergyFraction;   //!
+  TBranch        *b_Jet_neutralEmEmEnergyFraction;   //!
+  TBranch        *b_Jet_numberOfConstituents;   //!
+  TBranch        *b_Jet_muonEnergyFraction;   //!
+  TBranch        *b_Jet_chargedHadronEnergyFraction;   //!
+  TBranch        *b_Jet_chargedMultiplicity;   //!
+  TBranch        *b_Jet_chargedEmEnergyFraction;   //!
   TBranch        *b_Met_px;   //!
   TBranch        *b_Met_py;   //!
   TBranch        *b_Met_pz;   //!
