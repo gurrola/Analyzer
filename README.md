@@ -6,21 +6,22 @@ In order to use the checkout and use the code, follow these steps:
 
 1. You need to work at the SLC6 area.
 
-2. set the CMSSW release: cmsrel CMSSW_7_2_0
+2. set the CMSSW release: cmsrel CMSSW_7_4_0
 
-3. cd CMSSW_7_2_0/src
+3. cd CMSSW_7_4_0/src
 
 4. cmsenv
 
 5. Install and compile the code to use the PAT-electron ID:
 
-  5.1 git cms-merge-topic ikrav:egm_id_phys14 <br>
+  5.1 git cms-merge-topic ikrav:egm_id_74X_v0 <br>
   5.2 scram b -j 10
 
 6. Get the NTupleMaker code and compile it:
   
-  6.1 git clone https://github.com/florez/NtupleMaker <br>
-  6.2 scram b -j 10
+  6.1 git clone https://github.com/florez/NtupleMaker_740 <br>
+  6.2 mv NtupleMaker_740 NtupleMaker <br>
+  6.3 scram b -j 10
   
 7. Get the Analyzer code and compile it (code that performs the analysis and produces histograms):
 
@@ -38,7 +39,7 @@ In order to use the checkout and use the code, follow these steps:
 
 10. Copy a test input root file from gurrola's area and compile the code:
 
-  10.1 cp /scratch/gurrola/CMSSW_7_2_0/src/OutTree_9_1_dab.root . <br>
+  10.1 cp /home/gurrola/mini_AODSIM.root . <br>
   10.2 make clean <br>
   10.3 make BSM3GAnalyzer
   
