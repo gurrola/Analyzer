@@ -33,28 +33,40 @@ In order to use the checkout and use the code, follow these steps:
   8.1 git clone https://github.com/gurrola/Plotter <br>
   8.2 scram b -j 10
 
-9. cd into the appropriate Analyzer directory to start running the code:
+9. cd into the appropriate NtupleMaker directory to start running the code:
 
-  9.1 cd Analyzer/BSM3G_TNT_MainAnalyzer/
-
-10. Copy a test input root file from gurrola's area and compile the code:
+  9.1 cd NtupleMaker/BSM3G_TNT_Maker/python
+  
+10. Copy a test input miniAOD root file from gurrola's area (or your own):
 
   10.1 cp /home/gurrola/mini_AODSIM.root . <br>
-  10.2 make clean <br>
-  10.3 make BSM3GAnalyzer
+
+11. Run the NtupleMaker code:
+
+  11.1 cmsRun miniAOD.py <br>
   
-11. Run the analyzer code and inspect the output root file:
+12. cd into the appropriate Analyzer directory to start running the code:
 
-  11.1 ./BSM3GAnalyzer <br>
-  11.2 root -l analysis.root
+  12.1 cd Analyzer/BSM3G_TNT_MainAnalyzer/
+
+13. Copy a test input root file from gurrola's area and compile the code:
+
+  13.1 cp /home/gurrola/mini_AODSIM.root . <br>
+  13.2 make clean <br>
+  13.3 make BSM3GAnalyzer
   
-12. Use the Plotter code and output from running the analyzer to produce plots and a cut flow eff table:
+14. Run the analyzer code and inspect the output root file:
 
-  12.1 cd ../../Plotter/TNTCode/ <br>
-  12.2 cp ../../Analyzer/BSM3G_TNT_MainAnalyzer/analysis.root Data <br>
-  12.3 cp ../../Analyzer/BSM3G_TNT_MainAnalyzer/analysis.root DYMuMu <br>
-  12.4 root -l -b main.C
+  14.1 ./BSM3GAnalyzer <br>
+  14.2 root -l analysis.root
+  
+15. Use the Plotter code and output from running the analyzer to produce plots and a cut flow eff table:
 
-13. Inspect the output root file:
+  15.1 cd ../../Plotter/TNTCode/ <br>
+  15.2 cp ../../Analyzer/BSM3G_TNT_MainAnalyzer/analysis.root Data <br>
+  15.3 cp ../../Analyzer/BSM3G_TNT_MainAnalyzer/analysis.root DYMuMu <br>
+  15.4 root -l -b main.C
 
-  13.1 root -l Plots_Rebin1.root
+16. Inspect the output root file:
+
+  16.1 root -l Plots_Rebin1.root
