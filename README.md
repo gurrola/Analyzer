@@ -49,9 +49,9 @@ In order to use the checkout and use the code, follow these steps:
 
   12.1 cd Analyzer/BSM3G_TNT_MainAnalyzer/
 
-13. Copy a test input root file from gurrola's area and compile the code:
+13. Copy a the Ntuple root file from step 11 and compile the code:
 
-  13.1 cp /home/gurrola/mini_AODSIM.root . <br>
+  13.1 cp $CMSSW_BASE/src/NtupleMaker/BSM3G_TNT_Maker/python/OutTree.root . <br>
   13.2 make clean <br>
   13.3 make BSM3GAnalyzer
   
