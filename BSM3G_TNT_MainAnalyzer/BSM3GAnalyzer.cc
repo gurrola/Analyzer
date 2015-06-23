@@ -10,13 +10,13 @@
 //---main function
 int main (int argc, char *argv[]) {
 
-  TApplication app("App",&argc, argv);
-  TFile * fs = new TFile("analysis.root", "RECREATE");
-  BSM3GAnalyzer BSM3GAnalyzer_(fs);
+  //TApplication app("App",&argc, argv);
+  TFile * fs = new TFile(argv[2], "RECREATE");
+  BSM3GAnalyzer BSM3GAnalyzer_(fs, argv[1]);
 
 }
 
-BSM3GAnalyzer::BSM3GAnalyzer(TFile* theFile) {
+BSM3GAnalyzer::BSM3GAnalyzer(TFile* theFile, char* fname) {
 
   //---obtain the configurable inputs
   getInputs();
@@ -24,7 +24,7 @@ BSM3GAnalyzer::BSM3GAnalyzer(TFile* theFile) {
 
   //---open input root file and read in the tree information
 //  TFile *f = new TFile ("OutTree_9_1_dab.root");
-  TFile *f = new TFile ("OutTree.root");
+  TFile *f = new TFile (fname);
   f->cd("TNT");
   TTree* BOOM = (TTree*)f->Get("TNT/BOOM");
   int nentries = (int) BOOM->GetEntries();

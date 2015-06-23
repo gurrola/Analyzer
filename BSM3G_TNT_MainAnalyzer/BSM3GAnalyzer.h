@@ -40,7 +40,7 @@ using namespace std;
 
 class BSM3GAnalyzer {
 public:
-  BSM3GAnalyzer(TFile*);
+  BSM3GAnalyzer(TFile*, char*);
   ~BSM3GAnalyzer();
 
 private:
