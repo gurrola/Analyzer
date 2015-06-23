@@ -6,6 +6,10 @@ In order to use the checkout and use the code, follow these steps:
 
 1. You need to work at the SLC6 area.
 
+   1.1 If you are working from the LPC cluster, you need to do the following:
+    source /cvmfs/cms.cern.ch/cmsset_default.csh
+    setenv SCRAM_ARCH slc6_amd64_gcc491
+   
 2. set the CMSSW release: cmsrel CMSSW_7_4_0
 
 3. cd CMSSW_7_4_0/src
@@ -39,8 +43,10 @@ In order to use the checkout and use the code, follow these steps:
   
 10. Copy a test input miniAOD root file from gurrola's area (or your own):
 
+  // FROM VANDERBILT:
   10.1 cp /home/gurrola/mini_AODSIM.root . <br>
-
+  // FROM LPC:
+  10.1 cp /uscms/home/florez/mini_AODSIM.root . <br> 
 11. Run the NtupleMaker code:
 
   11.1 cmsRun miniAOD.py <br>
