@@ -43,9 +43,9 @@ In order to use the checkout and use the code, follow these steps:
   
 10. Copy a test input miniAOD root file from gurrola's area (or your own):
 
-  // FROM VANDERBILT:
+  // FROM VANDERBILT:<br>
   10.1 cp /home/gurrola/mini_AODSIM.root . <br>
-  // FROM LPC:
+  // FROM LPC:<br>
   10.1 cp /uscms/home/florez/mini_AODSIM.root . <br> 
 11. Run the NtupleMaker code:
 
