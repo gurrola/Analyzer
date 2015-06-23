@@ -6,8 +6,8 @@ In order to use the checkout and use the code, follow these steps:
 
 1. You need to work at the SLC6 area.
 
-   1.1 If you are working from the LPC cluster, you need to do the following:
-    source /cvmfs/cms.cern.ch/cmsset_default.csh
+   1.1 If you are working from the LPC cluster, you need to do the following:<br>
+    source /cvmfs/cms.cern.ch/cmsset_default.csh <br>
     setenv SCRAM_ARCH slc6_amd64_gcc491
    
 2. set the CMSSW release: cmsrel CMSSW_7_4_0
