@@ -66,7 +66,7 @@ In order to use the checkout and use the code, follow these steps:
   14.1 ./BSM3GAnalyzer OutTree.root analysis.root <br>
   14.2 root -l analysis.root
   
-15 To run multiple files at LPC using CONDOR, please go to this link and follow the instructions: <br>
+15. To run multiple files at LPC using CONDOR, please go to this link and follow the instructions: <br>
     https://github.com/florez/CONDOR <br>
     Please make sure to read carefully the scripts to understand how to configure the code. <br>
     if you have questions, please contact Andres Florez. <br>
