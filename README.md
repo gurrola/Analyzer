@@ -63,16 +63,21 @@ In order to use the checkout and use the code, follow these steps:
   
 14. Run the analyzer code and inspect the output root file:
 
-  14.1 ./BSM3GAnalyzer <br>
+  14.1 ./BSM3GAnalyzer OutTree.root analysis.root <br>
   14.2 root -l analysis.root
   
-15. Use the Plotter code and output from running the analyzer to produce plots and a cut flow eff table:
+15 To run multiple files at LPC using CONDOR, please go to this link and follow the instructions:<br>
+    https://github.com/florez/CONDOR <br>
+    Please make sure to read carefully the scripts to understand how to configure the code.<br>
+    if you have questions, please contact Andres Florez.
 
-  15.1 cd ../../Plotter/TNTCode/ <br>
-  15.2 cp ../../Analyzer/BSM3G_TNT_MainAnalyzer/analysis.root Data <br>
-  15.3 cp ../../Analyzer/BSM3G_TNT_MainAnalyzer/analysis.root DYMuMu <br>
-  15.4 root -l -b main.C
+16. Use the Plotter code and output from running the analyzer to produce plots and a cut flow eff table:
 
-16. Inspect the output root file:
+  16.1 cd ../../Plotter/TNTCode/ <br>
+  16.2 cp ../../Analyzer/BSM3G_TNT_MainAnalyzer/analysis.root Data <br>
+  16.3 cp ../../Analyzer/BSM3G_TNT_MainAnalyzer/analysis.root DYMuMu <br>
+  16.4 root -l -b main.C
 
-  16.1 root -l Plots_Rebin1.root
+17. Inspect the output root file:
+
+  17.1 root -l Plots_Rebin1.root
