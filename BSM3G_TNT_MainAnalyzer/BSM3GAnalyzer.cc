@@ -53,437 +53,215 @@ BSM3GAnalyzer::BSM3GAnalyzer(TFile* theFile, char* fname) {
 //---function used to obtain the configurable inputs from the .in files
 void BSM3GAnalyzer::getInputs() {
 
+  TEnv *params = new TEnv ("config_file");
+  params->ReadFile ("BSM3GAnalyzer_CutParameters.in", kEnvChange);
+  _GenTauPtMinCut    = params->GetValue ("GenTauPtMinCut", 1.0);
+  _GenTauPtMaxCut    = params->GetValue ("GenTauPtMaxCut", 1.0);
+  _GenTauEtaMaxCut   = params->GetValue ("GenTauEtaMaxCut", 1.0);
+  _GenTauNmin        = params->GetValue ("GenTauNmin", 1);
+  _GenTauNmax        = params->GetValue ("GenTauNmax", 1);
+  _GenTopNmin        = params->GetValue ("GenTopNmin", 1);
+  _GenTopNmax        = params->GetValue ("GenTopNmax", 1);
+  _GenElectronNmin   = params->GetValue ("GenElectronNmin", 1);
+  _GenElectronNmax   = params->GetValue ("GenElectronNmax", 1);
+  _GenMuonNmin       = params->GetValue ("GenMuonNmin", 1);
+  _GenMuonNmax       = params->GetValue ("GenMuonNmax", 1);
+  _GenZNmin          = params->GetValue ("GenZNmin", 1);
+  _GenZNmax          = params->GetValue ("GenZNmax", 1);
+  _GenWNmin          = params->GetValue ("GenWNmin", 1);
+  _GenWNmax          = params->GetValue ("GenWNmax", 1);
+  _GenSMHiggsNmin    = params->GetValue ("GenSMHiggsNmin", 1);
+  _GenSMHiggsNmax    = params->GetValue ("GenSMHiggsNmax", 1);
+  _RecoVertexNmin    = params->GetValue ("RecoVertexNmin", 1);
+  _RecoVertexNmax    = params->GetValue ("RecoVertexNmax", 1);
+  _RecoMuon1Nmin     = params->GetValue ("RecoMuon1Nmin", 1);
+  _RecoMuon1Nmax     = params->GetValue ("RecoMuon1Nmax", 1);
+  _RecoMuon2Nmin     = params->GetValue ("RecoMuon2Nmin", 1);
+  _RecoMuon2Nmax     = params->GetValue ("RecoMuon2Nmax", 1);
+  _RecoElectron1Nmin = params->GetValue ("RecoElectron1Nmin", 1);
+  _RecoElectron1Nmax = params->GetValue ("RecoElectron1Nmax", 1);
+  _RecoElectron2Nmin = params->GetValue ("RecoElectron2Nmin", 1);
+  _RecoElectron2Nmax = params->GetValue ("RecoElectron2Nmax", 1);
+  _RecoTau1Nmin      = params->GetValue ("RecoTau1Nmin", 1);
+  _RecoTau1Nmax      = params->GetValue ("RecoTau1Nmax", 1);
+  _RecoTau2Nmin      = params->GetValue ("RecoTau2Nmin", 1);
+  _RecoTau2Nmax      = params->GetValue ("RecoTau2Nmax", 1);
+  _RecoJet1Nmin      = params->GetValue ("RecoJet1Nmin", 1);
+  _RecoJet1Nmax      = params->GetValue ("RecoJet1Nmax", 1);
+  _RecoJet2Nmin      = params->GetValue ("RecoJet2Nmin", 1);
+  _RecoJet2Nmax                      = params->GetValue ("RecoJet2Nmax", 1);
+  _DoRecoMuon1DiscrByTightID         = params->GetValue ("DoRecoMuon1DiscrByTightID", "string");
+  _DoRecoMuon1DiscrBySoftID          = params->GetValue ("DoRecoMuon1DiscrBySoftID", "string");
+  _DoRecoMuon1DiscrByIsolation       = params->GetValue ("DoRecoMuon1DiscrByIsolation", "string");
+  _RecoMuon1EtaCut                   = params->GetValue ("RecoMuon1EtaCut", 1.0);
+  _RecoMuon1PtMinCut                 = params->GetValue ("RecoMuon1PtMinCut", 1.0);
+  _RecoMuon1PtMaxCut                 = params->GetValue ("RecoMuon1PtMaxCut", 1.0);
+  _RecoMuon1IsoSumPtMaxCutValue      = params->GetValue ("RecoMuon1IsoSumPtMaxCutValue", 1.0);
+  _RecoMuon1IsoSumPtMinCutValue      = params->GetValue ("RecoMuon1IsoSumPtMinCutValue", 1.0);
+  _DoRecoMuon2DiscrByTightID         = params->GetValue ("DoRecoMuon2DiscrByTightID", "string");
+  _DoRecoMuon2DiscrBySoftID          = params->GetValue ("DoRecoMuon2DiscrBySoftID", "string");
+  _DoRecoMuon2DiscrByIsolation       = params->GetValue ("DoRecoMuon2DiscrByIsolation", "string");
+  _RecoMuon2EtaCut                   = params->GetValue ("RecoMuon2EtaCut", 1.0);
+  _RecoMuon2PtMinCut                 = params->GetValue ("RecoMuon2PtMinCut", 1.0);
+  _RecoMuon2PtMaxCut                 = params->GetValue ("RecoMuon2PtMaxCut", 1.0);
+  _RecoMuon2IsoSumPtMaxCutValue      = params->GetValue ("RecoMuon2IsoSumPtMaxCutValue", 1.0);
+  _RecoMuon2IsoSumPtMinCutValue      = params->GetValue ("RecoMuon2IsoSumPtMinCutValue", 1.0);
+  _TreatMuonsAsNeutrinos             = params->GetValue ("TreatMuonsAsNeutrinos", "string");
+  _RecoElectron1EtaCut               = params->GetValue ("RecoElectron1EtaCut", 1.0); 
+  _RecoElectron1PtMinCut             = params->GetValue ("RecoElectron1PtMinCut", 1.0);
+  _RecoElectron1PtMaxCut             = params->GetValue ("RecoElectron1PtMaxCut", 1.0);
+  _DoRecoElectron1DiscrByIsolation   = params->GetValue ("DoRecoElectron1DiscrByIsolation", "string");
+  _RecoElectron1IsoSumPtMaxCutValue  = params->GetValue ("RecoElectron1IsoSumPtMaxCutValue", 1.0);
+  _RecoElectron1IsoSumPtMinCutValue  = params->GetValue ("RecoElectron1IsoSumPtMinCutValue", 1.0);
+  _DoRecoElectron1DiscrByVetoID      = params->GetValue ("DoRecoElectron1DiscrByVetoID", "string");
+  _DoRecoElectron1DiscrByLooseID     = params->GetValue ("DoRecoElectron1DiscrByLooseID", "string");
+  _DoRecoElectron1DiscrByMediumID    = params->GetValue ("DoRecoElectron1DiscrByMediumID", "string");
+  _DoRecoElectron1DiscrByTightID     = params->GetValue ("DoRecoElectron1DiscrByTightID", "string");
+  _DoRecoElectron1DiscrByHEEPID      = params->GetValue ("DoRecoElectron1DiscrByHEEPID", "string");
+  _RecoElectron2EtaCut               = params->GetValue ("RecoElectron2EtaCut", 1.0);
+  _RecoElectron2PtMinCut             = params->GetValue ("RecoElectron2PtMinCut", 1.0); 
+  _RecoElectron2PtMaxCut             = params->GetValue ("RecoElectron2PtMaxCut", 1.0);
+  _DoRecoElectron2DiscrByIsolation   = params->GetValue ("DoRecoElectron2DiscrByIsolation", "string");
+  _RecoElectron2IsoSumPtMaxCutValue  = params->GetValue ("RecoElectron2IsoSumPtMaxCutValue", 1.0);
+  _RecoElectron2IsoSumPtMinCutValue  = params->GetValue ("RecoElectron2IsoSumPtMinCutValue", 1.0);
+  _DoRecoElectron2DiscrByVetoID      = params->GetValue ("DoRecoElectron2DiscrByVetoID", "string");
+  _DoRecoElectron2DiscrByLooseID     = params->GetValue ("DoRecoElectron2DiscrByLooseID", "string");
+  _DoRecoElectron2DiscrByMediumID    = params->GetValue ("DoRecoElectron2DiscrByMediumID", "string");
+  _DoRecoElectron2DiscrByTightID     = params->GetValue ("DoRecoElectron2DiscrByTightID", "string");
+  _DoRecoElectron2DiscrByHEEPID      = params->GetValue ("DoRecoElectron2DiscrByHEEPID", "string");
+  _RecoTau1EtaCut                    = params->GetValue ("RecoTau1EtaCut", 1.0);
+  _RecoTau1PtMinCut                  = params->GetValue ("RecoTau1PtMinCut", 1.0);
+  _RecoTau1PtMaxCut                  = params->GetValue ("RecoTau1PtMaxCut", 1.0);
+  _DoRecoTau1DiscrByLeadTrack        = params->GetValue ("DoRecoTau1DiscrByLeadTrack", "string");
+  _RecoTau1LeadTrackThreshold        = params->GetValue ("RecoTau1LeadTrackThreshold", 1.0);
+  _DoRecoTau1DiscrByIsolation        = params->GetValue ("DoRecoTau1DiscrByIsolation", "string");
+  _RecoTau1DiscrByMaxIsolation       = params->GetValue ("RecoTau1DiscrByMaxIsolation", "string");
+  _RecoTau1DiscrByMinIsolation       = params->GetValue ("RecoTau1DiscrByMinIsolation", "string");
+  _RecoTau1DiscrByProngType          = params->GetValue ("RecoTau1DiscrByProngType", "string");
+  _DoRecoTau1DiscrAgainstElectron    = params->GetValue ("DoRecoTau1DiscrAgainstElectron", "string");
+  _RecoTau1DiscrAgainstElectron      = params->GetValue ("RecoTau1DiscrAgainstElectron", "string");
+  _SelectTau1sThatAreElectrons       = params->GetValue ("SelectTau1sThatAreElectrons", "string");
+  _DoRecoTau1DiscrAgainstMuon        = params->GetValue ("DoRecoTau1DiscrAgainstMuon", "string");
+  _RecoTau1DiscrAgainstMuon          = params->GetValue ("RecoTau1DiscrAgainstMuon", "string");
+  _SelectTau1sThatAreMuons           = params->GetValue ("SelectTau1sThatAreMuons", "string");
+  _DoRecoTau1DiscrByCrackCut         = params->GetValue ("DoRecoTau1DiscrByCrackCut", "string");
+  _RemoveTau1OverlapWithMuon1s       = params->GetValue ("RemoveTau1OverlapWithMuon1s", "string");
+  _RemoveTau1OverlapWithMuon2s       = params->GetValue ("RemoveTau1OverlapWithMuon2s", "string");
+  _Tau1Muon1MatchingDeltaR           = params->GetValue ("Tau1Muon1MatchingDeltaR", 1.0);
+  _Tau1Muon2MatchingDeltaR           = params->GetValue ("Tau1Muon2MatchingDeltaR", 1.0);
+  _RemoveTau1OverlapWithElectron1s   = params->GetValue ("RemoveTau1OverlapWithElectron1s", "string");
+  _RemoveTau1OverlapWithElectron2s   = params->GetValue ("RemoveTau1OverlapWithElectron2s", "string");
+  _Tau1Electron1MatchingDeltaR       = params->GetValue ("Tau1Electron1MatchingDeltaR", 1.0);
+  _Tau1Electron2MatchingDeltaR       = params->GetValue ("Tau1Electron2MatchingDeltaR", 1.0);
+  _RecoTau2EtaCut                    = params->GetValue ("RecoTau2EtaCut", 1.0);
+  _RecoTau2PtMinCut                  = params->GetValue ("RecoTau2PtMinCut", 1.0);
+  _RecoTau2PtMaxCut                  = params->GetValue ("RecoTau2PtMaxCut", 1.0);
+  _DoRecoTau2DiscrByLeadTrack        = params->GetValue ("DoRecoTau2DiscrByLeadTrack", "string");
+  _RecoTau2LeadTrackThreshold        = params->GetValue ("RecoTau2LeadTrackThreshold", 1.0);
+  _DoRecoTau2DiscrByIsolation        = params->GetValue ("DoRecoTau2DiscrByIsolation", "string");
+  _RecoTau2DiscrByMaxIsolation       = params->GetValue ("RecoTau2DiscrByMaxIsolation", "string");
+  _RecoTau2DiscrByMinIsolation       = params->GetValue ("RecoTau2DiscrByMinIsolation", "string");
+  _RecoTau2DiscrByProngType          = params->GetValue ("RecoTau2DiscrByProngType", "string");
+  _DoRecoTau2DiscrAgainstElectron    = params->GetValue ("DoRecoTau2DiscrAgainstElectron", "string");
+  _RecoTau2DiscrAgainstElectron      = params->GetValue ("RecoTau2DiscrAgainstElectron", "string");
+  _SelectTau2sThatAreElectrons       = params->GetValue ("SelectTau2sThatAreElectrons", "string");
+  _DoRecoTau2DiscrAgainstMuon        = params->GetValue ("DoRecoTau2DiscrAgainstMuon", "string");
+  _RecoTau2DiscrAgainstMuon          = params->GetValue ("RecoTau2DiscrAgainstMuon", "string");
+  _SelectTau2sThatAreMuons           = params->GetValue ("SelectTau2sThatAreMuons", "string");
+  _DoRecoTau2DiscrByCrackCut         = params->GetValue ("DoRecoTau2DiscrByCrackCut", "string");
+  _RemoveTau2OverlapWithMuon1s       = params->GetValue ("RemoveTau2OverlapWithMuon1s", "string");
+  _RemoveTau2OverlapWithMuon2s       = params->GetValue ("RemoveTau2OverlapWithMuon2s", "string");
+  _Tau2Muon1MatchingDeltaR           = params->GetValue ("Tau2Muon1MatchingDeltaR", 1.0);
+  _Tau2Muon2MatchingDeltaR           = params->GetValue ("Tau2Muon2MatchingDeltaR", 1.0);
+  _RemoveTau2OverlapWithElectron1s   = params->GetValue ("RemoveTau2OverlapWithElectron1s", "string");
+  _RemoveTau2OverlapWithElectron2s   = params->GetValue ("RemoveTau2OverlapWithElectron2s", "string");
+  _Tau2Electron1MatchingDeltaR       = params->GetValue ("Tau2Electron1MatchingDeltaR", 1.0);
+  _Tau2Electron2MatchingDeltaR       = params->GetValue ("Tau2Electron2MatchingDeltaR", 1.0);
+  _RecoJet1EtaMaxCut                 = params->GetValue ("RecoJet1EtaMaxCut", 1.0);
+  _RecoJet1EtaMinCut                 = params->GetValue ("RecoJet1EtaMinCut", 1.0);
+  _RecoJet1PtCut                     = params->GetValue ("RecoJet1PtCut", 1.0);
+  _ApplyJet1LooseID                  = params->GetValue ("ApplyJet1LooseID", "string");
+  _RemoveJet1OverlapWithMuon1s       = params->GetValue ("RemoveJet1OverlapWithMuon1s", "string");
+  _Jet1Muon1MatchingDeltaR           = params->GetValue ("Jet1Muon1MatchingDeltaR", 1.0);
+  _RemoveJet1OverlapWithMuon2s       = params->GetValue ("RemoveJet1OverlapWithMuon2s", "string");
+  _Jet1Muon2MatchingDeltaR           = params->GetValue ("Jet1Muon2MatchingDeltaR", 1.0);
+  _RemoveJet1OverlapWithElectron1s   = params->GetValue ("RemoveJet1OverlapWithElectron1s", "string");
+  _Jet1Electron1MatchingDeltaR       = params->GetValue ("Jet1Electron1MatchingDeltaR", 1.0);
+  _RemoveJet1OverlapWithElectron2s   = params->GetValue ("RemoveJet1OverlapWithElectron2s", "string");
+  _Jet1Electron2MatchingDeltaR       = params->GetValue ("Jet1Electron2MatchingDeltaR", 1.0);
+  _RemoveJet1OverlapWithTau1s        = params->GetValue ("RemoveJet1OverlapWithTau1s", "string");
+  _Jet1Tau1MatchingDeltaR            = params->GetValue ("Jet1Tau1MatchingDeltaR", 1.0);
+  _RemoveJet1OverlapWithTau2s        = params->GetValue ("RemoveJet1OverlapWithTau2s", "string");
+  _Jet1Tau2MatchingDeltaR            = params->GetValue ("Jet1Tau2MatchingDeltaR", 1.0);
+  _RecoJet2EtaMaxCut                 = params->GetValue ("RecoJet2EtaMaxCut", 1.0);
+  _RecoJet2EtaMinCut                 = params->GetValue ("RecoJet2EtaMinCut", 1.0);
+  _RecoJet2PtCut                     = params->GetValue ("RecoJet2PtCut", 1.0);
+  _ApplyJet2LooseID                  = params->GetValue ("ApplyJet2LooseID", "string");
+  _RemoveJet2OverlapWithMuon1s       = params->GetValue ("RemoveJet2OverlapWithMuon1s", "string");
+  _Jet2Muon1MatchingDeltaR           = params->GetValue ("Jet2Muon1MatchingDeltaR", 1.0);
+  _RemoveJet2OverlapWithMuon2s       = params->GetValue ("RemoveJet2OverlapWithMuon2s", "string");
+  _Jet2Muon2MatchingDeltaR           = params->GetValue ("Jet2Muon2MatchingDeltaR", 1.0);
+  _RemoveJet2OverlapWithElectron1s   = params->GetValue ("RemoveJet2OverlapWithElectron1s", "string");
+  _Jet2Electron1MatchingDeltaR       = params->GetValue ("Jet2Electron1MatchingDeltaR", 1.0);
+  _RemoveJet2OverlapWithElectron2s   = params->GetValue ("RemoveJet2OverlapWithElectron2s", "string");
+  _Jet2Electron2MatchingDeltaR       = params->GetValue ("Jet2Electron2MatchingDeltaR", 1.0);
+  _RemoveJet2OverlapWithTau1s        = params->GetValue ("RemoveJet2OverlapWithTau1s", "string");
+  _Jet2Tau1MatchingDeltaR            = params->GetValue ("Jet2Tau1MatchingDeltaR", 1.0);
+  _RemoveJet2OverlapWithTau2s        = params->GetValue ("RemoveJet2OverlapWithTau2s", "string");
+  _Jet2Tau2MatchingDeltaR            = params->GetValue ("Jet2Tau2MatchingDeltaR", 1.0);
+  _CalculatePUSystematics            = params->GetValue ("CalculatePUSystematics", "string");
+  _SmearTheMuon                      = params->GetValue ("SmearTheMuon", "string");
+  _MatchMuonToGen                    = params->GetValue ("MatchMuonToGen", "string");
+  _UseMuonMotherId                   = params->GetValue ("UseMuonMotherId", "string");
+  _MuonMotherId                      = params->GetValue ("MuonMotherId", 1);
+  _MuonToGenMatchingDeltaR           = params->GetValue ("MuonToGenMatchingDeltaR", 1.0);
+  _MuonPtScaleOffset                 = params->GetValue ("MuonPtScaleOffset", 1.0);
+  _MuonPtSigmaOffset                 = params->GetValue ("MuonPtSigmaOffset", 1.0);
+  _MuonEtaScaleOffset                = params->GetValue ("MuonEtaScaleOffset", 1.0);
+  _MuonEtaSigmaOffset                = params->GetValue ("MuonEtaSigmaOffset", 1.0);
+  _MuonPhiScaleOffset                = params->GetValue ("MuonPhiScaleOffset", 1.0);
+  _MuonPhiSigmaOffset                = params->GetValue ("MuonPhiSigmaOffset", 1.0);
+  _MuonEnergyScaleOffset             = params->GetValue ("MuonEnergyScaleOffset", 1.0);
+  _MuonEnergySigmaOffset             = params->GetValue ("MuonEnergySigmaOffset", 1.0);
+  _SmearTheTau                       = params->GetValue ("SmearTheTau", "string");
+  _MatchTauToGen                     = params->GetValue ("MatchTauToGen", "string");
+  _TauToGenMatchingDeltaR            = params->GetValue ("TauToGenMatchingDeltaR", 1.0);
+  _TauPtScaleOffset                  = params->GetValue ("TauPtScaleOffset", 1.0);
+  _TauPtSigmaOffset                  = params->GetValue ("TauPtSigmaOffset", 1.0);
+  _TauEtaScaleOffset                 = params->GetValue ("TauEtaScaleOffset", 1.0);
+  _TauEtaSigmaOffset                 = params->GetValue ("TauEtaSigmaOffset", 1.0);
+  _TauPhiScaleOffset                 = params->GetValue ("TauPhiScaleOffset", 1.0);
+  _TauPhiSigmaOffset                 = params->GetValue ("TauPhiSigmaOffset", 1.0);
+  _TauEnergyScaleOffset              = params->GetValue ("TauEnergyScaleOffset", 1.0);
+  _TauEnergySigmaOffset              = params->GetValue ("TauEnergySigmaOffset", 1.0);
+  _SmearTheElectron                  = params->GetValue ("SmearTheElectron", "string");
+  _MatchElectronToGen                = params->GetValue ("MatchElectronToGen", "string");
+  _UseElectronMotherId               = params->GetValue ("UseElectronMotherId", "string");
+  _ElectronMotherId                  = params->GetValue ("ElectronMotherId", 1);
+  _ElectronToGenMatchingDeltaR       = params->GetValue ("ElectronToGenMatchingDeltaR", 1.0);
+  _ElectronPtScaleOffset             = params->GetValue ("ElectronPtScaleOffset", 1.0);
+  _ElectronPtSigmaOffset             = params->GetValue ("ElectronPtSigmaOffset", 1.0);
+  _ElectronEtaScaleOffset            = params->GetValue ("ElectronEtaScaleOffset", 1.0);
+  _ElectronEtaSigmaOffset            = params->GetValue ("ElectronEtaSigmaOffset", 1.0);
+  _ElectronPhiScaleOffset            = params->GetValue ("ElectronPhiScaleOffset", 1.0);
+  _ElectronPhiSigmaOffset            = params->GetValue ("ElectronPhiSigmaOffset", 1.0);
+  _ElectronEnergyScaleOffset         = params->GetValue ("ElectronEnergyScaleOffset", 1.0);
+  _ElectronEnergySigmaOffset         = params->GetValue ("ElectronEnergySigmaOffset", 1.0);
+  _SmearTheJet                       = params->GetValue ("SmearTheJet", "string");
+  _CentralJetMuon1MatchingDeltaR     = params->GetValue ("CentralJetMuon1MatchingDeltaR", 1.0);
+  _CentralJetMuon2MatchingDeltaR     = params->GetValue ("CentralJetMuon2MatchingDeltaR", 1.0);
+  _CentralJetElectron1MatchingDeltaR = params->GetValue ("CentralJetElectron1MatchingDeltaR", 1.0);
+  _CentralJetElectron2MatchingDeltaR = params->GetValue ("CentralJetElectron2MatchingDeltaR", 1.0);
+  _CentralJetTau1MatchingDeltaR      = params->GetValue ("CentralJetTau1MatchingDeltaR", 1.0);
+  _CentralJetTau2MatchingDeltaR      = params->GetValue ("CentralJetTau2MatchingDeltaR", 1.0);
+  _JetEnergyScaleOffset              = params->GetValue ("JetEnergyScaleOffset", 1.0);
+  _DataHistos                        = params->GetValue ("DataHistos", "string");
+  isData                             = params->GetValue ("isData", "string");
+  _MCHistos                          = params->GetValue ("MCHistos", "string"); 
+  _FillGenHists                      = params->GetValue ("FillGenHists", "string");
+
   string inputString;
   string inputType;
-
-  //---open input file containing all configurable parameters
-  ifstream inCutParametersFile;
-  char inputCutParametersFilename[] = "BSM3GAnalyzer_CutParameters.in";
-  inCutParametersFile.open(inputCutParametersFilename, ios::in);
-  //---if can't open input file, then exit
-  if (!inCutParametersFile) {
-    cerr << "Can't open the input configuration file " << inputCutParametersFilename << endl;
-    exit(1);
-  }
-
-  //---grab all relevant object level cut information from the input file
-  while (inCutParametersFile >> inputType >> inputString) {
-    if(inputType == "GenTauPtMinCut") {
-      _GenTauPtMinCut = atof(inputString.c_str()); // minimum tau pt requirement for gen vis had taus
-    } else if(inputType == "GenTauPtMaxCut") {
-      _GenTauPtMaxCut = atof(inputString.c_str()); // maximum tau pt requirement for gen vis had taus
-    } else if(inputType == "GenTauEtaMaxCut") {
-      _GenTauEtaMaxCut = atof(inputString.c_str()); // maximum eta requirement for gen vis had taus
-    } else if(inputType == "GenTauNmin") {
-      _GenTauNmin = (int)(atof(inputString.c_str())); // minimum number of gen vis had taus passing cuts
-    } else if(inputType == "GenTauNmax") {
-      _GenTauNmax = (int)(atof(inputString.c_str())); // maximum number of gen vis had taus passing cuts
-    } else if(inputType == "GenTopNmin") {
-      _GenTopNmin = (int)(atof(inputString.c_str())); // minimum number of gen top quarks passing cuts
-    } else if(inputType == "GenTopNmax") {
-      _GenTopNmax = (int)(atof(inputString.c_str())); // maximum number of gen top quarks passing cuts
-    } else if(inputType == "GenElectronNmin") {
-      _GenElectronNmin = (int)(atof(inputString.c_str())); // minimum number of gen electrons passing cuts
-    } else if(inputType == "GenElectronNmax") {
-      _GenElectronNmax = (int)(atof(inputString.c_str())); // maximum number of gen electrons passing cuts
-    } else if(inputType == "GenMuonNmin") {
-      _GenMuonNmin = (int)(atof(inputString.c_str())); // minimum number of gen muons passing cuts
-    } else if(inputType == "GenMuonNmax") {
-      _GenMuonNmax = (int)(atof(inputString.c_str())); // maximum number of gen muons passing cuts
-    } else if(inputType == "GenZNmin") {
-      _GenZNmin = (int)(atof(inputString.c_str())); // minimum number of gen Zs passing cuts
-    } else if(inputType == "GenZNmax") {
-      _GenZNmax = (int)(atof(inputString.c_str())); // maximum number of gen Zs passing cuts
-    } else if(inputType == "GenWNmin") {
-      _GenWNmin = (int)(atof(inputString.c_str())); // minimum number of gen Ws passing cuts
-    } else if(inputType == "GenWNmax") {
-      _GenWNmax = (int)(atof(inputString.c_str())); // maximum number of gen Ws passing cuts
-    } else if(inputType == "GenSMHiggsNmin") {
-      _GenSMHiggsNmin = (int)(atof(inputString.c_str())); // minimum number of gen SMHiggs passing cuts
-    } else if(inputType == "GenSMHiggsNmax") {
-      _GenSMHiggsNmax = (int)(atof(inputString.c_str())); // maximum number of gen SMHiggs passing cuts
-    } else if(inputType == "RecoVertexNmin") {
-      _RecoVertexNmin = (int)(atof(inputString.c_str())); // minimum number of primary vertices passing cuts
-    } else if(inputType == "RecoVertexNmax") {
-      _RecoVertexNmax = (int)(atof(inputString.c_str())); // maximum number of primary vertices passing cuts
-    } else if(inputType == "RecoMuon1Nmin") {
-      _RecoMuon1Nmin = (int)(atof(inputString.c_str())); // minimum number of reco muon1 objects passing cuts
-    } else if(inputType == "RecoMuon1Nmax") {
-      _RecoMuon1Nmax = (int)(atof(inputString.c_str())); // maximum number of reco muon1 objects passing cuts
-    } else if(inputType == "RecoMuon2Nmin") {
-      _RecoMuon2Nmin = (int)(atof(inputString.c_str())); // minimum number of reco muon2 objects passing cuts
-    } else if(inputType == "RecoMuon2Nmax") {
-      _RecoMuon2Nmax = (int)(atof(inputString.c_str())); // maximum number of reco muon2 objects passing cuts
-    } else if(inputType == "RecoElectron1Nmin") {
-      _RecoElectron1Nmin = (int)(atof(inputString.c_str())); // minimum number of reco Electron1 objects passing cuts
-    } else if(inputType == "RecoElectron1Nmax") {
-      _RecoElectron1Nmax = (int)(atof(inputString.c_str())); // maximum number of reco Electron1 objects passing cuts
-    } else if(inputType == "RecoElectron2Nmin") {
-      _RecoElectron2Nmin = (int)(atof(inputString.c_str())); // minimum number of reco Electron2 objects passing cuts
-    } else if(inputType == "RecoElectron2Nmax") {
-      _RecoElectron2Nmax = (int)(atof(inputString.c_str())); // maximum number of reco Electron2 objects passing cuts
-    } else if(inputType == "RecoTau1Nmin") {
-      _RecoTau1Nmin = (int)(atof(inputString.c_str())); // minimum number of reco tau1 objects passing cuts
-    } else if(inputType == "RecoTau1Nmax") {
-      _RecoTau1Nmax = (int)(atof(inputString.c_str())); // maximum number of reco tau1 objects passing cuts
-    } else if(inputType == "RecoTau2Nmin") {
-      _RecoTau2Nmin = (int)(atof(inputString.c_str())); // minimum number of reco tau2 objects passing cuts
-    } else if(inputType == "RecoTau2Nmax") {
-      _RecoTau2Nmax = (int)(atof(inputString.c_str())); // maximum number of reco tau2 objects passing cuts
-    } else if(inputType == "RecoJet1Nmin") {
-      _RecoJet1Nmin = (int)(atof(inputString.c_str())); // minimum number of reco jet1 objects passing cuts
-    } else if(inputType == "RecoJet1Nmax") {
-      _RecoJet1Nmax = (int)(atof(inputString.c_str())); // maximum number of reco jet1 objects passing cuts
-    } else if(inputType == "RecoJet2Nmin") {
-      _RecoJet2Nmin = (int)(atof(inputString.c_str())); // minimum number of reco jet2 objects passing cuts
-    } else if(inputType == "RecoJet2Nmax") {
-      _RecoJet2Nmax = (int)(atof(inputString.c_str())); // maximum number of reco jet2 objects passing cuts
-    } else if(inputType == "DoRecoMuon1DiscrByTightID") {
-      _DoRecoMuon1DiscrByTightID = inputString; // "1" to require the reco muon1 to pass "tight" ID; "0" to disable the "tight" ID cut
-    } else if(inputType == "DoRecoMuon1DiscrBySoftID") {
-      _DoRecoMuon1DiscrBySoftID = inputString; // "1" to require the reco muon1 to pass "soft" ID; "0" to disable the "soft" ID cut
-    } else if(inputType == "DoRecoMuon1DiscrByIsolation") {
-      _DoRecoMuon1DiscrByIsolation = inputString; // "1" to require the reco muon1 to pass isolation; "0" to disable the isolation cut
-    } else if(inputType == "RecoMuon1EtaCut") {
-      _RecoMuon1EtaCut = atof(inputString.c_str()); // maximum reco muon1 eta requirement
-    } else if(inputType == "RecoMuon1PtMinCut") {
-      _RecoMuon1PtMinCut = atof(inputString.c_str()); // minimum reco muon1 pt requirement
-    } else if(inputType == "RecoMuon1PtMaxCut") {
-      _RecoMuon1PtMaxCut = atof(inputString.c_str()); // maximum reco muon1 pt requirement
-    } else if(inputType == "RecoMuon1IsoSumPtMaxCutValue") {
-      _RecoMuon1IsoSumPtMaxCutValue = atof(inputString.c_str()); // maximum reco muon1 iso requirement
-    } else if(inputType == "RecoMuon1IsoSumPtMinCutValue") {
-      _RecoMuon1IsoSumPtMinCutValue = atof(inputString.c_str()); // minimum reco muon1 iso requirement
-    } else if(inputType == "DoRecoMuon2DiscrByTightID") {
-      _DoRecoMuon2DiscrByTightID = inputString; // "1" to require the reco muon2 to pass "tight" ID; "0" to disable the "tight" ID cut
-    } else if(inputType == "DoRecoMuon2DiscrBySoftID") {
-      _DoRecoMuon2DiscrBySoftID = inputString; // "1" to require the reco muon2 to pass "soft" ID; "0" to disable the "soft" ID cut
-    } else if(inputType == "DoRecoMuon2DiscrByIsolation") {
-      _DoRecoMuon2DiscrByIsolation = inputString; // "1" to require the reco muon2 to pass isolation; "0" to disable the isolation cut
-    } else if(inputType == "RecoMuon2EtaCut") {
-      _RecoMuon2EtaCut = atof(inputString.c_str()); // maximum reco muon2 eta requirement
-    } else if(inputType == "RecoMuon2PtMinCut") {
-      _RecoMuon2PtMinCut = atof(inputString.c_str()); // minimum reco muon2 pt requirement
-    } else if(inputType == "RecoMuon2PtMaxCut") {
-      _RecoMuon2PtMaxCut = atof(inputString.c_str()); // maximum reco muon2 pt requirement
-    } else if(inputType == "RecoMuon2IsoSumPtMaxCutValue") {
-      _RecoMuon2IsoSumPtMaxCutValue = atof(inputString.c_str()); // maximum reco muon2 iso requirement
-    } else if(inputType == "RecoMuon2IsoSumPtMinCutValue") {
-      _RecoMuon2IsoSumPtMinCutValue = atof(inputString.c_str()); // minimum reco muon2 iso requirement
-    } else if(inputType == "TreatMuonsAsNeutrinos") {
-      _TreatMuonsAsNeutrinos = inputString; // "1" to treat muons as neutrinos and recalculate MET; "0" to disable this functionality
-    } else if(inputType == "RecoElectron1EtaCut") {
-      _RecoElectron1EtaCut = atof(inputString.c_str()); // maximum reco Electron1 eta requirement
-    } else if(inputType == "RecoElectron1PtMinCut") {
-      _RecoElectron1PtMinCut = atof(inputString.c_str()); // minimum reco Electron1 pt requirement
-    } else if(inputType == "RecoElectron1PtMaxCut") {
-      _RecoElectron1PtMaxCut = atof(inputString.c_str()); // maximum reco Electron1 pt requirement
-    } else if(inputType == "DoRecoElectron1DiscrByIsolation") {
-      _DoRecoElectron1DiscrByIsolation = inputString; // "1" to require the reco electron1 to pass isolation; "0" to disable the isolation cut
-    } else if(inputType == "RecoElectron1IsoSumPtMaxCutValue") {
-      _RecoElectron1IsoSumPtMaxCutValue = atof(inputString.c_str()); // maximum reco Electron1 iso requirement
-    } else if(inputType == "RecoElectron1IsoSumPtMinCutValue") {
-      _RecoElectron1IsoSumPtMinCutValue = atof(inputString.c_str()); // minimum reco Electron1 iso requirement
-    } else if(inputType == "DoRecoElectron1DiscrByVetoID") {
-      _DoRecoElectron1DiscrByVetoID = inputString; // "1" to require the reco electron1 to pass "veto" ID; "0" to disable the "veto" ID cut
-    } else if(inputType == "DoRecoElectron1DiscrByLooseID") {
-      _DoRecoElectron1DiscrByLooseID = inputString; // "1" to require the reco electron1 to pass "loose" ID; "0" to disable the "loose" ID cut
-    } else if(inputType == "DoRecoElectron1DiscrByMediumID") {
-      _DoRecoElectron1DiscrByMediumID = inputString; // "1" to require the reco electron1 to pass "medium" ID; "0" to disable the "medium" ID cut
-    } else if(inputType == "DoRecoElectron1DiscrByTightID") {
-      _DoRecoElectron1DiscrByTightID = inputString; // "1" to require the reco electron1 to pass "tight" ID; "0" to disable the "tight" ID cut
-    } else if(inputType == "DoRecoElectron1DiscrByHEEPID") {
-      _DoRecoElectron1DiscrByHEEPID = inputString; // "1" to require the reco electron1 to pass "HEEP" ID; "0" to disable the "HEEP" ID cut
-    } else if(inputType == "RecoElectron2EtaCut") {
-      _RecoElectron2EtaCut = atof(inputString.c_str()); // maximum reco Electron2 eta requirement
-    } else if(inputType == "RecoElectron2PtMinCut") {
-      _RecoElectron2PtMinCut = atof(inputString.c_str()); // minimum reco Electron2 pt requirement
-    } else if(inputType == "RecoElectron2PtMaxCut") {
-      _RecoElectron2PtMaxCut = atof(inputString.c_str()); // maximum reco Electron2 pt requirement
-    } else if(inputType == "DoRecoElectron2DiscrByIsolation") {
-      _DoRecoElectron2DiscrByIsolation = inputString; // "1" to require the reco electron2 to pass isolation; "0" to disable the isolation cut
-    } else if(inputType == "RecoElectron2IsoSumPtMaxCutValue") {
-      _RecoElectron2IsoSumPtMaxCutValue = atof(inputString.c_str()); // maximum reco Electron2 iso requirement
-    } else if(inputType == "RecoElectron2IsoSumPtMinCutValue") {
-      _RecoElectron2IsoSumPtMinCutValue = atof(inputString.c_str()); // minimum reco Electron2 iso requirement
-    } else if(inputType == "DoRecoElectron2DiscrByVetoID") {
-      _DoRecoElectron2DiscrByVetoID = inputString; // "1" to require the reco electron2 to pass "veto" ID; "0" to disable the "veto" ID cut
-    } else if(inputType == "DoRecoElectron2DiscrByLooseID") {
-      _DoRecoElectron2DiscrByLooseID = inputString; // "1" to require the reco electron2 to pass "loose" ID; "0" to disable the "loose" ID cut
-    } else if(inputType == "DoRecoElectron2DiscrByMediumID") {
-      _DoRecoElectron2DiscrByMediumID = inputString; // "1" to require the reco electron2 to pass "medium" ID; "0" to disable the "medium" ID cut
-    } else if(inputType == "DoRecoElectron2DiscrByTightID") {
-      _DoRecoElectron2DiscrByTightID = inputString; // "1" to require the reco electron2 to pass "tight" ID; "0" to disable the "tight" ID cut
-    } else if(inputType == "DoRecoElectron2DiscrByHEEPID") {
-      _DoRecoElectron2DiscrByHEEPID = inputString; // "1" to require the reco electron2 to pass "HEEP" ID; "0" to disable the "HEEP" ID cut
-    } else if(inputType == "RecoTau1EtaCut") {
-      _RecoTau1EtaCut = atof(inputString.c_str()); // maximum reco tau1 eta requirement
-    } else if(inputType == "RecoTau1PtMinCut") {
-      _RecoTau1PtMinCut = atof(inputString.c_str()); // minimum reco tau1 pt requirement
-    } else if(inputType == "RecoTau1PtMaxCut") {
-      _RecoTau1PtMaxCut = atof(inputString.c_str()); // maximum reco tau1 pt requirement
-    } else if(inputType == "DoRecoTau1DiscrByLeadTrack") {
-      _DoRecoTau1DiscrByLeadTrack = inputString; // "1" to require the reco tau1 to pass a lead track pt requirement; "0" to disable it
-    } else if(inputType == "RecoTau1LeadTrackThreshold") {
-      _RecoTau1LeadTrackThreshold = atof(inputString.c_str()); // minimum reco tau1 lead track pt requirement
-    } else if(inputType == "DoRecoTau1DiscrByIsolation") {
-      _DoRecoTau1DiscrByIsolation = inputString; // "1" to require the reco tau1 to pass isolation; "0" to disable it
-    } else if(inputType == "RecoTau1DiscrByMaxIsolation") {
-      _RecoTau1DiscrByMaxIsolation = inputString; // maximum reco tau1 isolation requirement
-    } else if(inputType == "RecoTau1DiscrByMinIsolation") {
-      _RecoTau1DiscrByMinIsolation = inputString; // minimum reco tau1 isolation requirement
-    } else if(inputType == "RecoTau1DiscrByProngType") {
-      _RecoTau1DiscrByProngType = inputString; // "1" 
-    } else if(inputType == "DoRecoTau1DiscrAgainstElectron") {
-      _DoRecoTau1DiscrAgainstElectron = inputString; // "1" to require the reco tau1 to pass the e-veto; "0" to disable it
-    } else if(inputType == "RecoTau1DiscrAgainstElectron") {
-      _RecoTau1DiscrAgainstElectron = inputString; // name of the e-veto discriminator
-    } else if(inputType == "SelectTau1sThatAreElectrons") {
-      _SelectTau1sThatAreElectrons = inputString; // "1" to require the reco tau1 to pass the inverted e-veto (i.e. select "e-like"); "0" to disable it
-    } else if(inputType == "DoRecoTau1DiscrAgainstMuon") {
-      _DoRecoTau1DiscrAgainstMuon = inputString; // "1" to require the reco tau1 to pass the muon-veto; "0" to disable it
-    } else if(inputType == "RecoTau1DiscrAgainstMuon") {
-      _RecoTau1DiscrAgainstMuon = inputString; // name of the muon-veto discriminator
-    } else if(inputType == "SelectTau1sThatAreMuons") {
-      _SelectTau1sThatAreMuons = inputString; // "1" to require the reco tau1 to pass the inverted muon-veto (i.e. select "muon-like"); "0" to disable it
-    } else if(inputType == "DoRecoTau1DiscrByCrackCut") {
-      _DoRecoTau1DiscrByCrackCut = inputString; // "1" to require the reco tau1 to pass the detector crack cut; "0" to disable it
-    } else if(inputType == "RemoveTau1OverlapWithMuon1s") {
-      _RemoveTau1OverlapWithMuon1s = inputString; // "1" to require the reco tau1 to NOT overlap a "good muon1"; "0" to disable this cut
-    } else if(inputType == "RemoveTau1OverlapWithMuon2s") {
-      _RemoveTau1OverlapWithMuon2s = inputString; // "1" to require the reco tau1 to NOT overlap a "good muon2"; "0" to disable this cut
-    } else if(inputType == "Tau1Muon1MatchingDeltaR") {
-      _Tau1Muon1MatchingDeltaR = (double)(atof(inputString.c_str())); // deltaR used for the tau1-muon1 overlap removal cut
-    } else if(inputType == "Tau1Muon2MatchingDeltaR") {
-      _Tau1Muon2MatchingDeltaR = (double)(atof(inputString.c_str())); // deltaR used for the tau1-muon2 overlap removal cut
-    } else if(inputType == "RemoveTau1OverlapWithElectron1s") {
-      _RemoveTau1OverlapWithElectron1s = inputString; // "1" to require the reco tau1 to NOT overlap a "good Electron1"; "0" to disable this cut
-    } else if(inputType == "RemoveTau1OverlapWithElectron2s") {
-      _RemoveTau1OverlapWithElectron2s = inputString; // "1" to require the reco tau1 to NOT overlap a "good Electron2"; "0" to disable this cut
-    } else if(inputType == "Tau1Electron1MatchingDeltaR") {
-      _Tau1Electron1MatchingDeltaR = (double)(atof(inputString.c_str())); // deltaR used for the tau1-Electron1 overlap removal cut
-    } else if(inputType == "Tau1Electron2MatchingDeltaR") {
-      _Tau1Electron2MatchingDeltaR = (double)(atof(inputString.c_str())); // deltaR used for the tau1-Electron2 overlap removal cut
-    } else if(inputType == "RecoTau2EtaCut") {
-      _RecoTau2EtaCut = atof(inputString.c_str()); // maximum reco tau2 eta requirement
-    } else if(inputType == "RecoTau2PtMinCut") {
-      _RecoTau2PtMinCut = atof(inputString.c_str()); // minimum reco tau2 pt requirement
-    } else if(inputType == "RecoTau2PtMaxCut") {
-      _RecoTau2PtMaxCut = atof(inputString.c_str()); // maximum reco Tau2 pt requirement
-    } else if(inputType == "DoRecoTau2DiscrByLeadTrack") {
-      _DoRecoTau2DiscrByLeadTrack = inputString; // "1" to require the reco Tau2 to pass a lead track pt requirement; "0" to disable it
-    } else if(inputType == "RecoTau2LeadTrackThreshold") {
-      _RecoTau2LeadTrackThreshold = atof(inputString.c_str()); // minimum reco Tau2 lead track pt requirement
-    } else if(inputType == "DoRecoTau2DiscrByIsolation") {
-      _DoRecoTau2DiscrByIsolation = inputString; // "1" to require the reco Tau2 to pass isolation; "0" to disable it
-    } else if(inputType == "RecoTau2DiscrByMaxIsolation") {
-      _RecoTau2DiscrByMaxIsolation = inputString; // maximum reco Tau2 isolation requirement
-    } else if(inputType == "RecoTau2DiscrByMinIsolation") {
-      _RecoTau2DiscrByMinIsolation = inputString; // minimum reco Tau2 isolation requirement
-    } else if(inputType == "RecoTau2DiscrByProngType") {
-      _RecoTau2DiscrByProngType = inputString; // "1"
-    } else if(inputType == "DoRecoTau2DiscrAgainstElectron") {
-      _DoRecoTau2DiscrAgainstElectron = inputString; // "1" to require the reco Tau2 to pass the e-veto; "0" to disable it
-    } else if(inputType == "RecoTau2DiscrAgainstElectron") {
-      _RecoTau2DiscrAgainstElectron = inputString; // name of the e-veto discriminator
-    } else if(inputType == "SelectTau2sThatAreElectrons") {
-      _SelectTau2sThatAreElectrons = inputString; // "1" to require the reco Tau2 to pass the inverted e-veto (i.e. select "e-like"); "0" to disable it
-    } else if(inputType == "DoRecoTau2DiscrAgainstMuon") {
-      _DoRecoTau2DiscrAgainstMuon = inputString; // "1" to require the reco Tau2 to pass the muon-veto; "0" to disable it
-    } else if(inputType == "RecoTau2DiscrAgainstMuon") {
-      _RecoTau2DiscrAgainstMuon = inputString; // name of the muon-veto discriminator
-    } else if(inputType == "SelectTau2sThatAreMuons") {
-      _SelectTau2sThatAreMuons = inputString; // "1" to require the reco Tau2 to pass the inverted muon-veto (i.e. select "muon-like"); "0" to disable it
-    } else if(inputType == "DoRecoTau2DiscrByCrackCut") {
-      _DoRecoTau2DiscrByCrackCut = inputString; // "1" to require the reco Tau2 to pass the detector crack cut; "0" to disable it
-    } else if(inputType == "RemoveTau2OverlapWithMuon1s") {
-      _RemoveTau2OverlapWithMuon1s = inputString; // "1" to require the reco Tau2 to NOT overlap a "good muon1"; "0" to disable this cut
-    } else if(inputType == "RemoveTau2OverlapWithMuon2s") {
-      _RemoveTau2OverlapWithMuon2s = inputString; // "1" to require the reco Tau2 to NOT overlap a "good muon2"; "0" to disable this cut
-    } else if(inputType == "Tau2Muon1MatchingDeltaR") {
-      _Tau2Muon1MatchingDeltaR = (double)(atof(inputString.c_str())); // deltaR used for the Tau2-muon1 overlap removal cut
-    } else if(inputType == "Tau2Muon2MatchingDeltaR") {
-      _Tau2Muon2MatchingDeltaR = (double)(atof(inputString.c_str())); // deltaR used for the Tau2-muon2 overlap removal cut
-    } else if(inputType == "RemoveTau2OverlapWithElectron1s") {
-      _RemoveTau2OverlapWithElectron1s = inputString; // "1" to require the reco tau2 to NOT overlap a "good Electron1"; "0" to disable this cut
-    } else if(inputType == "RemoveTau2OverlapWithElectron2s") {
-      _RemoveTau2OverlapWithElectron2s = inputString; // "1" to require the reco tau2 to NOT overlap a "good Electron2"; "0" to disable this cut
-    } else if(inputType == "Tau2Electron1MatchingDeltaR") {
-      _Tau2Electron1MatchingDeltaR = (double)(atof(inputString.c_str())); // deltaR used for the tau2-Electron1 overlap removal cut
-    } else if(inputType == "Tau2Electron2MatchingDeltaR") {
-      _Tau2Electron2MatchingDeltaR = (double)(atof(inputString.c_str())); // deltaR used for the tau2-Electron2 overlap removal cut
-    } else if(inputType == "RecoJet1EtaMaxCut") {
-      _RecoJet1EtaMaxCut = atof(inputString.c_str()); // maximum reco jet1 eta requirement
-    } else if(inputType == "RecoJet1EtaMinCut") {
-      _RecoJet1EtaMinCut = atof(inputString.c_str()); // minimum reco jet1 eta requirement
-    } else if(inputType == "RecoJet1PtCut") {
-      _RecoJet1PtCut = atof(inputString.c_str()); // minimum reco jet1 pt requirement
-    } else if(inputType == "ApplyJet1LooseID") {
-      _ApplyJet1LooseID = inputString; // "1" to require the reco jet1 to pass "loose" jet ID; "0" to disable it
-    } else if(inputType == "RemoveJet1OverlapWithMuon1s") {
-      _RemoveJet1OverlapWithMuon1s = inputString; // "1" to require the reco jet1 to NOT overlap with a muon1; "0" to disable it
-    } else if(inputType == "Jet1Muon1MatchingDeltaR") {
-      _Jet1Muon1MatchingDeltaR = atof(inputString.c_str()); // deltaR used for the jet1-muon1 overlap removal cut
-    } else if(inputType == "RemoveJet1OverlapWithMuon2s") {
-      _RemoveJet1OverlapWithMuon2s = inputString; // "1" to require the reco jet1 to NOT overlap with a muon2; "0" to disable it
-    } else if(inputType == "Jet1Muon2MatchingDeltaR") {
-      _Jet1Muon2MatchingDeltaR = atof(inputString.c_str()); // deltaR used for the jet1-muon2 overlap removal cut
-    } else if(inputType == "RemoveJet1OverlapWithElectron1s") {
-      _RemoveJet1OverlapWithElectron1s = inputString; // "1" to require the reco jet1 to NOT overlap with a Electron1; "0" to disable it
-    } else if(inputType == "Jet1Electron1MatchingDeltaR") {
-      _Jet1Electron1MatchingDeltaR = atof(inputString.c_str()); // deltaR used for the jet1-Electron1 overlap removal cut
-    } else if(inputType == "RemoveJet1OverlapWithElectron2s") {
-      _RemoveJet1OverlapWithElectron2s = inputString; // "1" to require the reco jet1 to NOT overlap with a Electron2; "0" to disable it
-    } else if(inputType == "Jet1Electron2MatchingDeltaR") {
-      _Jet1Electron2MatchingDeltaR = atof(inputString.c_str()); // deltaR used for the jet1-Electron2 overlap removal cut
-    } else if(inputType == "RemoveJet1OverlapWithTau1s") {
-      _RemoveJet1OverlapWithTau1s = inputString; // "1" to require the reco jet1 to NOT overlap with a Tau1; "0" to disable it
-    } else if(inputType == "Jet1Tau1MatchingDeltaR") {
-      _Jet1Tau1MatchingDeltaR = atof(inputString.c_str()); // deltaR used for the jet1-Tau1 overlap removal cut
-    } else if(inputType == "RemoveJet1OverlapWithTau2s") {
-      _RemoveJet1OverlapWithTau2s = inputString; // "1" to require the reco jet1 to NOT overlap with a Tau2; "0" to disable it
-    } else if(inputType == "Jet1Tau2MatchingDeltaR") {
-      _Jet1Tau2MatchingDeltaR = atof(inputString.c_str()); // deltaR used for the jet1-Tau2 overlap removal cut
-    } else if(inputType == "RecoJet2EtaMaxCut") {
-      _RecoJet2EtaMaxCut = atof(inputString.c_str()); // maximum reco jet2 eta requirement
-    } else if(inputType == "RecoJet2EtaMinCut") {
-      _RecoJet2EtaMinCut = atof(inputString.c_str()); // minimum reco jet2 eta requirement
-    } else if(inputType == "RecoJet2PtCut") {
-      _RecoJet2PtCut = atof(inputString.c_str()); // minimum reco jet2 pt requirement
-    } else if(inputType == "ApplyJet2LooseID") {
-      _ApplyJet2LooseID = inputString; // "1" to require the reco jet2 to pass "loose" jet ID; "0" to disable it
-    } else if(inputType == "RemoveJet2OverlapWithMuon1s") {
-      _RemoveJet2OverlapWithMuon1s = inputString; // "1" to require the reco jet2 to NOT overlap with a muon1; "0" to disable it
-    } else if(inputType == "Jet2Muon1MatchingDeltaR") {
-      _Jet2Muon1MatchingDeltaR = atof(inputString.c_str()); // deltaR used for the jet2-muon1 overlap removal cut
-    } else if(inputType == "RemoveJet2OverlapWithMuon2s") {
-      _RemoveJet2OverlapWithMuon2s = inputString; // "1" to require the reco jet2 to NOT overlap with a muon2; "0" to disable it
-    } else if(inputType == "Jet2Muon2MatchingDeltaR") {
-      _Jet2Muon2MatchingDeltaR = atof(inputString.c_str()); // deltaR used for the jet2-muon2 overlap removal cut
-    } else if(inputType == "RemoveJet2OverlapWithElectron1s") {
-      _RemoveJet2OverlapWithElectron1s = inputString; // "1" to require the reco jet2 to NOT overlap with a Electron1; "0" to disable it
-    } else if(inputType == "Jet2Electron1MatchingDeltaR") {
-      _Jet2Electron1MatchingDeltaR = atof(inputString.c_str()); // deltaR used for the jet2-Electron1 overlap removal cut
-    } else if(inputType == "RemoveJet2OverlapWithElectron2s") {
-      _RemoveJet2OverlapWithElectron2s = inputString; // "1" to require the reco jet2 to NOT overlap with a Electron2; "0" to disable it
-    } else if(inputType == "Jet2Electron2MatchingDeltaR") {
-      _Jet2Electron2MatchingDeltaR = atof(inputString.c_str()); // deltaR used for the jet2-Electron2 overlap removal cut
-    } else if(inputType == "RemoveJet2OverlapWithTau1s") {
-      _RemoveJet2OverlapWithTau1s = inputString; // "1" to require the reco jet2 to NOT overlap with a Tau1; "0" to disable it
-    } else if(inputType == "Jet2Tau1MatchingDeltaR") {
-      _Jet2Tau1MatchingDeltaR = atof(inputString.c_str()); // deltaR used for the jet2-Tau1 overlap removal cut
-    } else if(inputType == "RemoveJet2OverlapWithTau2s") {
-      _RemoveJet2OverlapWithTau2s = inputString; // "1" to require the reco jet2 to NOT overlap with a Tau2; "0" to disable it
-    } else if(inputType == "Jet2Tau2MatchingDeltaR") {
-      _Jet2Tau2MatchingDeltaR = atof(inputString.c_str()); // deltaR used for the jet2-Tau2 overlap removal cut
-    } else if(inputType == "CalculatePUSystematics") {
-      _CalculatePUSystematics = inputString; // "1" to allow pileup re-weighting; "0" to disable pileup weights
-    } else if(inputType == "SmearTheMuon") {
-      _SmearTheMuon = inputString; // "1" to smear the muon momentum; "0" to disable muon momentum smearing
-    } else if(inputType == "MatchMuonToGen") {
-      _MatchMuonToGen = inputString; // "1" to match the reco muon to a gen muon; "0" to disable muon matching
-    } else if(inputType == "UseMuonMotherId") {
-      _UseMuonMotherId = inputString; // "1" to use mother information (pdgID) for muon gen matching; "0" to disable it
-    } else if(inputType == "MuonMotherId") {
-      _MuonMotherId = (int)(atof(inputString.c_str())); // muon mother pdg id
-    } else if(inputType == "MuonToGenMatchingDeltaR") {
-      _MuonToGenMatchingDeltaR = (double)(atof(inputString.c_str())); // deltaR used to match reco muons to gen muons
-    } else if(inputType == "MuonPtScaleOffset") {
-      _MuonPtScaleOffset = (double)(atof(inputString.c_str())); // factor used to shift the muon pt scale
-    } else if(inputType == "MuonPtSigmaOffset") {
-      _MuonPtSigmaOffset = (double)(atof(inputString.c_str())); // factor used to broaden the muon pt resolution
-    } else if(inputType == "MuonEtaScaleOffset") {
-      _MuonEtaScaleOffset = (double)(atof(inputString.c_str())); // factor used to shift the muon eta scale
-    } else if(inputType == "MuonEtaSigmaOffset") {
-      _MuonEtaSigmaOffset = (double)(atof(inputString.c_str())); // factor used to broaden the muon eta resolution
-    } else if(inputType == "MuonPhiScaleOffset") {
-      _MuonPhiScaleOffset = (double)(atof(inputString.c_str())); // factor used to shift the muon phi scale
-    } else if(inputType == "MuonPhiSigmaOffset") {
-      _MuonPhiSigmaOffset = (double)(atof(inputString.c_str())); // factor used to broaden the muon phi resolution
-    } else if(inputType == "MuonEnergyScaleOffset") {
-      _MuonEnergyScaleOffset = (double)(atof(inputString.c_str())); // factor used to shift the muon energy scale
-    } else if(inputType == "MuonEnergySigmaOffset") {
-      _MuonEnergySigmaOffset = (double)(atof(inputString.c_str())); // factor used to broaden the muon energy resolution
-    } else if(inputType == "SmearTheTau") {
-      _SmearTheTau = inputString; // "1" to smear the tau momentum; "0" to disable tau momentum smearing
-    } else if(inputType == "MatchTauToGen") {
-      _MatchTauToGen = inputString; // "1" to match the reco had tau to a gen had tau; "0" to disable had tau matching
-    } else if(inputType == "TauToGenMatchingDeltaR") {
-      _TauToGenMatchingDeltaR = (double)(atof(inputString.c_str())); // deltaR used to match reco taus to gen taus
-    } else if(inputType == "TauPtScaleOffset") {
-      _TauPtScaleOffset = (double)(atof(inputString.c_str())); // factor used to shift the tau pt scale
-    } else if(inputType == "TauPtSigmaOffset") {
-      _TauPtSigmaOffset = (double)(atof(inputString.c_str())); // factor used to broaden the tau pt resolution
-    } else if(inputType == "TauEtaScaleOffset") {
-      _TauEtaScaleOffset = (double)(atof(inputString.c_str())); // factor used to shift the tau eta scale
-    } else if(inputType == "TauEtaSigmaOffset") {
-      _TauEtaSigmaOffset = (double)(atof(inputString.c_str())); // factor used to broaden the tau eta resolution
-    } else if(inputType == "TauPhiScaleOffset") {
-      _TauPhiScaleOffset = (double)(atof(inputString.c_str())); // factor used to shift the tau phi scale
-    } else if(inputType == "TauPhiSigmaOffset") {
-      _TauPhiSigmaOffset = (double)(atof(inputString.c_str())); // factor used to broaden the tau phi resolution
-    } else if(inputType == "TauEnergyScaleOffset") {
-      _TauEnergyScaleOffset = (double)(atof(inputString.c_str())); // factor used to shift the tau energy scale
-    } else if(inputType == "TauEnergySigmaOffset") {
-      _TauEnergySigmaOffset = (double)(atof(inputString.c_str())); // factor used to broaden the tau energy resolution
-    } else if(inputType == "SmearTheElectron") {
-      _SmearTheElectron = inputString; // "1" to smear the electron momentum; "0" to disable electron momentum smearing
-    } else if(inputType == "MatchElectronToGen") {
-      _MatchElectronToGen = inputString; // "1" to match the reco electron to a gen electron; "0" to disable muon matching
-    } else if(inputType == "UseElectronMotherId") {
-      _UseElectronMotherId = inputString; // "1" to use mother information (pdgID) for Electron gen matching; "0" to disable it
-    } else if(inputType == "ElectronMotherId") {
-      _ElectronMotherId = (int)(atof(inputString.c_str())); // Electron mother pdg id
-    } else if(inputType == "ElectronToGenMatchingDeltaR") {
-      _ElectronToGenMatchingDeltaR = (double)(atof(inputString.c_str())); // deltaR used to match reco Electrons to gen Electrons
-    } else if(inputType == "ElectronPtScaleOffset") {
-      _ElectronPtScaleOffset = (double)(atof(inputString.c_str())); // factor used to shift the Electron pt scale
-    } else if(inputType == "ElectronPtSigmaOffset") {
-      _ElectronPtSigmaOffset = (double)(atof(inputString.c_str())); // factor used to broaden the Electron pt resolution
-    } else if(inputType == "ElectronEtaScaleOffset") {
-      _ElectronEtaScaleOffset = (double)(atof(inputString.c_str())); // factor used to shift the Electron eta scale
-    } else if(inputType == "ElectronEtaSigmaOffset") {
-      _ElectronEtaSigmaOffset = (double)(atof(inputString.c_str())); // factor used to broaden the Electron eta resolution
-    } else if(inputType == "ElectronPhiScaleOffset") {
-      _ElectronPhiScaleOffset = (double)(atof(inputString.c_str())); // factor used to shift the Electron phi scale
-    } else if(inputType == "ElectronPhiSigmaOffset") {
-      _ElectronPhiSigmaOffset = (double)(atof(inputString.c_str())); // factor used to broaden the Electron phi resolution
-    } else if(inputType == "ElectronEnergyScaleOffset") {
-      _ElectronEnergyScaleOffset = (double)(atof(inputString.c_str())); // factor used to shift the Electron energy scale
-    } else if(inputType == "ElectronEnergySigmaOffset") {
-      _ElectronEnergySigmaOffset = (double)(atof(inputString.c_str())); // factor used to broaden the Electron energy resolution
-    } else if(inputType == "SmearTheJet") {
-      _SmearTheJet = inputString; // "1" to smear the jet momentum; "0" to disable jet momentum smearing
-    } else if(inputType == "CentralJetMuon1MatchingDeltaR") {
-      _CentralJetMuon1MatchingDeltaR = atof(inputString.c_str()); // deltaR used to remove central jet overlaps with muon1s
-    } else if(inputType == "CentralJetMuon2MatchingDeltaR") {
-      _CentralJetMuon2MatchingDeltaR = atof(inputString.c_str()); // deltaR used to remove central jet overlaps with muon2s
-    } else if(inputType == "CentralJetElectron1MatchingDeltaR") {
-      _CentralJetElectron1MatchingDeltaR = atof(inputString.c_str()); // deltaR used to remove central jet overlaps with electron1s
-    } else if(inputType == "CentralJetElectron2MatchingDeltaR") {
-      _CentralJetElectron2MatchingDeltaR = atof(inputString.c_str()); // deltaR used to remove central jet overlaps with electron2s
-    } else if(inputType == "CentralJetTau1MatchingDeltaR") {
-      _CentralJetTau1MatchingDeltaR = atof(inputString.c_str()); // deltaR used to remove central jet overlaps with tau1s
-    } else if(inputType == "CentralJetTau2MatchingDeltaR") {
-      _CentralJetTau2MatchingDeltaR = atof(inputString.c_str()); // deltaR used to remove central jet overlaps with tau2s
-    } else if(inputType == "JetEnergyScaleOffset") {
-      _JetEnergyScaleOffset = atof(inputString.c_str()); // k-factor used to smear the jet 4-momentum: smeared = k * default
-    } else if(inputType == "DataHistos") {
-      _DataHistos = inputString; // pileup root file name for data
-    } else if(inputType == "MCHistos") {
-      _MCHistos = inputString; // pileup root file name for MC
-    } else if(inputType == "isData") {
-      isData = inputString; // are you running over data? "1" for "yes", "0" for "no"
-    } else if(inputType == "FillGenHists") {
-      _FillGenHists = inputString; // do you want to fill the gen tau histograms? "1" for "yes", "0" for "no"
-    } else {
-      cerr << "Incorrect input type " << inputType << endl; // exit code if unwanted input is specified
-      exit(1);
-    }
-  }
-
-  //---close the .in file
-  inCutParametersFile.close();
 
   //---open theinput file containing all event level selection requirements
   ifstream inEventRequirementsFile;
@@ -860,9 +638,7 @@ bool BSM3GAnalyzer::pass_i_EventSelectionSequence(unsigned cut) {
 
 // ---------------Fill Histograms
 void BSM3GAnalyzer::fillHistograms(unsigned int i) {
-  
   for(unsigned int NpdfID = 0; NpdfID < pdfWeightVector.size();  NpdfID++){
-    
     // ------Generated Taus
     if ( (_FillGenHists == "1") && (isData == "0") ) {
       int nGenTaus = 0;
@@ -919,16 +695,16 @@ void BSM3GAnalyzer::bookHistograms(TFile * theOutFile, string mydirectory , unsi
     
     //--- book generator level histograms
     if (_FillGenHists == "1") {
-      _hNGenTau[i][NpdfCounter]                         = new TH1F(("NGenTau_"+j.str()).c_str(),                        ("NGenTau_"+j.str()).c_str(),      20, 0., 20.);
-      _hGenTauEnergy[i][NpdfCounter]                    = new TH1F(("GenTauEnergy_"+j.str()).c_str(),                   ("GenTauEnergy_"+j.str()).c_str(), 200, 0., 500.);
-      _hGenTauPt[i][NpdfCounter]                        = new TH1F(("GenTauPt_"+j.str()).c_str(),                       ("GenTauPt_"+j.str()).c_str(),     200, 0., 500.);
-      _hGenTauEta[i][NpdfCounter]                       = new TH1F(("GenTauEta_"+j.str()).c_str(),                      ("GenTauEta_"+j.str()).c_str(), 72, -3.6, +3.6);
-      _hGenTauPhi[i][NpdfCounter]                       = new TH1F(("GenTauPhi_"+j.str()).c_str(),                      ("GenTauPhi_"+j.str()).c_str(), 36, -TMath::Pi(), +TMath::Pi());
-      _hNGenMuon[i][NpdfCounter]                         = new TH1F(("NGenMuon_"+j.str()).c_str(),                        ("NGenMuon_"+j.str()).c_str(),      20, 0., 20.);
-      _hGenMuonEnergy[i][NpdfCounter]                    = new TH1F(("GenMuonEnergy_"+j.str()).c_str(),                   ("GenMuonEnergy_"+j.str()).c_str(), 200, 0., 500.);
-      _hGenMuonPt[i][NpdfCounter]                        = new TH1F(("GenMuonPt_"+j.str()).c_str(),                       ("GenMuonPt_"+j.str()).c_str(),     200, 0., 500.);
-      _hGenMuonEta[i][NpdfCounter]                       = new TH1F(("GenMuonEta_"+j.str()).c_str(),                      ("GenMuonEta_"+j.str()).c_str(), 72, -3.6, +3.6);
-      _hGenMuonPhi[i][NpdfCounter]                       = new TH1F(("GenMuonPhi_"+j.str()).c_str(),                      ("GenMuonPhi_"+j.str()).c_str(), 36, -TMath::Pi(), +TMath::Pi());
+      _hNGenTau[i][NpdfCounter]                         = new TH1F(("NGenTau_"+j.str()).c_str(),                       ("NGenTau_"+j.str()).c_str(),     20, 0., 20.);
+      _hGenTauEnergy[i][NpdfCounter]                    = new TH1F(("GenTauEnergy_"+j.str()).c_str(),                  ("GenTauEnergy_"+j.str()).c_str(), 200, 0., 500.);
+      _hGenTauPt[i][NpdfCounter]                        = new TH1F(("GenTauPt_"+j.str()).c_str(),                      ("GenTauPt_"+j.str()).c_str(),    200, 0., 500.);
+      _hGenTauEta[i][NpdfCounter]                       = new TH1F(("GenTauEta_"+j.str()).c_str(),                     ("GenTauEta_"+j.str()).c_str(), 72, -3.6, +3.6);
+      _hGenTauPhi[i][NpdfCounter]                       = new TH1F(("GenTauPhi_"+j.str()).c_str(),                     ("GenTauPhi_"+j.str()).c_str(), 36, -TMath::Pi(), +TMath::Pi());
+      _hNGenMuon[i][NpdfCounter]                         = new TH1F(("NGenMuon_"+j.str()).c_str(),                       ("NGenMuon_"+j.str()).c_str(),     20, 0., 20.);
+      _hGenMuonEnergy[i][NpdfCounter]                    = new TH1F(("GenMuonEnergy_"+j.str()).c_str(),                  ("GenMuonEnergy_"+j.str()).c_str(), 200, 0., 500.);
+      _hGenMuonPt[i][NpdfCounter]                        = new TH1F(("GenMuonPt_"+j.str()).c_str(),                      ("GenMuonPt_"+j.str()).c_str(),    200, 0., 500.);
+      _hGenMuonEta[i][NpdfCounter]                       = new TH1F(("GenMuonEta_"+j.str()).c_str(),                     ("GenMuonEta_"+j.str()).c_str(), 72, -3.6, +3.6);
+      _hGenMuonPhi[i][NpdfCounter]                       = new TH1F(("GenMuonPhi_"+j.str()).c_str(),                     ("GenMuonPhi_"+j.str()).c_str(), 36, -TMath::Pi(), +TMath::Pi());
     }
     
     j.str("");
