@@ -75,7 +75,13 @@ private:
   bool passRecoTau2Cuts(int);
   bool passRecoJet1Cuts(int);
   bool passRecoJet2Cuts(int);
+  bool passRecoCentralJetCuts(int);
+  bool passRecoFirstLeadingJetCuts(int);
+  bool passRecoSecondLeadingJetCuts(int);
+  bool passRecoBJetCuts(int);
   bool passedLooseJetID(int);
+  bool passSusyTopologyCuts(int, int);
+  std::pair<bool, TLorentzVector> CalculateTheDiJet4Momentum(int, int);
   TLorentzVector SmearMuon(int);
   TLorentzVector SmearTau(int);
   TLorentzVector SmearElectron(int);
@@ -87,6 +93,7 @@ private:
   double getvalue(char * cstr, int bin);
   double getintegral(char * cstr, int bin);
   double getPileupWeight(float);
+  double normalizedPhi(double);
 
   // ----------member data ---------------------------
 
@@ -153,6 +160,13 @@ private:
   int _RecoJet1Nmax;
   int _RecoJet2Nmin;
   int _RecoJet2Nmax;
+  int _RecoCentralJetNmin;
+  int _RecoCentralJetNmax;
+  int _RecoFirstLeadingJetNmin;
+  int _RecoSecondLeadingJetNmin;
+  int _RecoBJetNmin;
+  int _RecoBJetNmax;
+  int _SusyCombinationsNmin;
   vector<string> _EventSelectionSequence;
   vector<string> _TopologicalSelectionSequence;
 
@@ -165,6 +179,7 @@ private:
   int _MuonMotherId;
   string _UseElectronMotherId;
   int _ElectronMotherId;
+  string _MatchBToGen;
 
   //-----Event flags
   vector<bool> _EventFlag;
@@ -189,6 +204,16 @@ private:
   TLorentzVector theMETVector;
   double deltaForMEx;
   double deltaForMEy;
+  double sumpxForMht;
+  double sumpyForMht;
+  double sumptForHt;
+  double phiForMht;
+  double leadingjetpt;
+  double leadingjeteta;
+  int theLeadingJetIndex;
+  double secondleadingjetpt;
+  double secondleadingjeteta;
+  int theSecondLeadingJetIndex;
   string _SmearTheMuon;
   string _SmearTheTau;
   string _SmearTheElectron;
@@ -339,13 +364,97 @@ private:
   float _Jet2Tau1MatchingDeltaR;
   string _RemoveJet2OverlapWithTau2s;
   float _Jet2Tau2MatchingDeltaR;
+  float _RecoCentralJetPtCut;
   float _CentralJetMuon1MatchingDeltaR;
   float _CentralJetMuon2MatchingDeltaR;
   float _CentralJetElectron1MatchingDeltaR;
   float _CentralJetElectron2MatchingDeltaR;
   float _CentralJetTau1MatchingDeltaR;
   float _CentralJetTau2MatchingDeltaR;
+
+  string _ApplyLeadingJetsLooseID;
+  float _FirstLeadingJetMuon1MatchingDeltaR;
+  float _FirstLeadingJetElectron1MatchingDeltaR;
+  float _FirstLeadingJetTau1MatchingDeltaR;
+  float _FirstLeadingJetMuon2MatchingDeltaR;
+  float _FirstLeadingJetElectron2MatchingDeltaR;
+  float _FirstLeadingJetTau2MatchingDeltaR;
+  float _RecoFirstLeadingJetPt;
+  float _RecoFirstLeadingJetEtaMinCut;
+  float _RecoFirstLeadingJetEtaMaxCut;
+  string _DoDiscrByFirstLeadingJet;
+  string _RemoveFirstLeadingJetOverlapWithMuon1s;
+  string _RemoveFirstLeadingJetOverlapWithMuon2s;
+  string _RemoveFirstLeadingJetOverlapWithElectron1s;
+  string _RemoveFirstLeadingJetOverlapWithElectron2s;
+  string _RemoveFirstLeadingJetOverlapWithTau1s;
+  string _RemoveFirstLeadingJetOverlapWithTau2s;
+  float _SecondLeadingJetMuon1MatchingDeltaR;
+  float _SecondLeadingJetElectron1MatchingDeltaR;
+  float _SecondLeadingJetTau1MatchingDeltaR;
+  float _SecondLeadingJetMuon2MatchingDeltaR;
+  float _SecondLeadingJetElectron2MatchingDeltaR;
+  float _SecondLeadingJetTau2MatchingDeltaR;
+  float _RecoSecondLeadingJetPt;
+  float _RecoSecondLeadingJetEtaMinCut;
+  float _RecoSecondLeadingJetEtaMaxCut;
+  string _DoDiscrBySecondLeadingJet;
+  string _RemoveSecondLeadingJetOverlapWithMuon1s;
+  string _RemoveSecondLeadingJetOverlapWithMuon2s;
+  string _RemoveSecondLeadingJetOverlapWithElectron1s;
+  string _RemoveSecondLeadingJetOverlapWithElectron2s;
+  string _RemoveSecondLeadingJetOverlapWithTau1s;
+  string _RemoveSecondLeadingJetOverlapWithTau2s;
+  string _ApplyCentralJetLooseID;
+  string _RemoveCentralJetOverlapWithMuon1s;
+  string _RemoveCentralJetOverlapWithMuon2s;
+  string _RemoveCentralJetOverlapWithElectron1s;
+  string _RemoveCentralJetOverlapWithElectron2s;
+  string _RemoveCentralJetOverlapWithTau1s;
+  string _RemoveCentralJetOverlapWithTau2s;
   float _JetEnergyScaleOffset;
+  float _RecoBJetEtaMaxCut;
+  float _RecoBJetEtaMinCut;
+  float _RecoBJetPtCut;
+  float _BJetMuon1MatchingDeltaR;
+  float _BJetMuon2MatchingDeltaR;
+  float _BJetElectron1MatchingDeltaR;
+  float _BJetElectron2MatchingDeltaR;
+  float _BJetTau1MatchingDeltaR;
+  float _BJetTau2MatchingDeltaR;
+  string _RemoveBJetOverlapWithMuon1s;
+  string _RemoveBJetOverlapWithMuon2s;
+  string _RemoveBJetOverlapWithElectron1s;
+  string _RemoveBJetOverlapWithElectron2s;
+  string _RemoveBJetOverlapWithTau1s;
+  string _RemoveBJetOverlapWithTau2s;
+  string _ApplyJetBTagging;
+  float _JetBTaggingCut;
+
+  string _ApplyJetLooseIDforMhtAndHt;
+  float _JetPtForMhtAndHt;
+  float _JetEtaForMhtAndHt;
+
+  string _DoSUSYDiscrByLeadDiJetMass;
+  float _LeadDiJetMinMassCut;
+  float _LeadDiJetMaxMassCut;
+  string _DoSUSYDiscrByLeadDiJetPt;
+  float _LeadDiJetMinPtCut;
+  float _LeadDiJetMaxPtCut;
+  string _DoSUSYDiscrByLeadDiJetDeltaEta;
+  float _LeadDiJetMinDeltaEtaCut;
+  float _LeadDiJetMaxDeltaEtaCut;
+  string _DoSUSYDiscrByLeadDiJetDeltaPhi;
+  float _LeadDiJetMinDeltaPhiCut;
+  float _LeadDiJetMaxDeltaPhiCut;
+  string _DoSUSYDiscrByLeadDiJetOSEta;
+  string _DoDiscrByMet;
+  float _RecoMetMinCut;
+  float _RecoMetMaxCut;
+  string _DoSUSYDiscrByMHT;
+  float _MhtCut;
+  string _DoSUSYDiscrByHT;
+  float _HtCut;
 
   //-----For PDF weights
   vector<double> pdfWeightVector;
@@ -425,8 +534,10 @@ private:
   vector<double>  *Jet_muonEnergyFraction;
   vector<double>  *Jet_chargedHadronEnergyFraction;
   vector<double>  *Jet_chargedEmEnergyFraction;
+  vector<double>  *Jet_bDiscriminator;
   vector<int>     *Jet_numberOfConstituents;
   vector<int>     *Jet_chargedMultiplicity;
+  vector<int>     *Jet_partonFlavour;
   vector<double>  *Gen_pt;
   vector<double>  *Gen_eta;
   vector<double>  *Gen_phi;
@@ -527,6 +638,8 @@ private:
   TBranch        *b_Jet_chargedHadronEnergyFraction;   //!
   TBranch        *b_Jet_chargedMultiplicity;   //!
   TBranch        *b_Jet_chargedEmEnergyFraction;   //!
+  TBranch        *b_Jet_partonFlavour;   //!
+  TBranch        *b_Jet_bDiscriminator;   //!
   TBranch        *b_Met_px;   //!
   TBranch        *b_Met_py;   //!
   TBranch        *b_Met_pz;   //!
