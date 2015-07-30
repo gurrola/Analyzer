@@ -90,6 +90,13 @@ void BSM3GAnalyzer::getInputs() {
   _RecoJet1Nmax      = params->GetValue ("RecoJet1Nmax", 1);
   _RecoJet2Nmin      = params->GetValue ("RecoJet2Nmin", 1);
   _RecoJet2Nmax                      = params->GetValue ("RecoJet2Nmax", 1);
+  _RecoCentralJetNmin                = params->GetValue ("RecoCentralJetNmin", 1);
+  _RecoCentralJetNmax                = params->GetValue ("RecoCentralJetNmax", 1);
+  _RecoFirstLeadingJetNmin           = params->GetValue ("RecoFirstLeadingJetNmin", 1);
+  _RecoSecondLeadingJetNmin          = params->GetValue ("RecoSecondLeadingJetNmin", 1);
+  _RecoBJetNmin                      = params->GetValue ("RecoBJetNmin", 1);
+  _RecoBJetNmax                      = params->GetValue ("RecoBJetNmax", 1);
+  _SusyCombinationsNmin              = params->GetValue ("SusyCombinationsNmin", 1);
   _DoRecoMuon1DiscrByTightID         = params->GetValue ("DoRecoMuon1DiscrByTightID", "string");
   _DoRecoMuon1DiscrBySoftID          = params->GetValue ("DoRecoMuon1DiscrBySoftID", "string");
   _DoRecoMuon1DiscrByIsolation       = params->GetValue ("DoRecoMuon1DiscrByIsolation", "string");
@@ -209,6 +216,93 @@ void BSM3GAnalyzer::getInputs() {
   _Jet2Tau1MatchingDeltaR            = params->GetValue ("Jet2Tau1MatchingDeltaR", 1.0);
   _RemoveJet2OverlapWithTau2s        = params->GetValue ("RemoveJet2OverlapWithTau2s", "string");
   _Jet2Tau2MatchingDeltaR            = params->GetValue ("Jet2Tau2MatchingDeltaR", 1.0);
+  _JetPtForMhtAndHt                  = params->GetValue ("JetPtForMhtAndHt", 1.0);
+  _JetEtaForMhtAndHt                 = params->GetValue ("JetEtaForMhtAndHt", 1.0);
+  _ApplyJetLooseIDforMhtAndHt        = params->GetValue ("ApplyJetLooseIDforMhtAndHt", "string");
+  _ApplyCentralJetLooseID            = params->GetValue ("ApplyCentralJetLooseID", "string");
+  _RecoCentralJetPtCut               = params->GetValue ("RecoCentralJetPtCut", 1.0);
+  _RemoveCentralJetOverlapWithMuon1s = params->GetValue ("RemoveCentralJetOverlapWithMuon1s", "string");
+  _RemoveCentralJetOverlapWithMuon2s = params->GetValue ("RemoveCentralJetOverlapWithMuon2s", "string");
+  _RemoveCentralJetOverlapWithElectron1s = params->GetValue ("RemoveCentralJetOverlapWithElectron1s", "string");
+  _RemoveCentralJetOverlapWithElectron2s = params->GetValue ("RemoveCentralJetOverlapWithElectron2s", "string");
+  _RemoveCentralJetOverlapWithTau1s = params->GetValue ("RemoveCentralJetOverlapWithTau1s", "string");
+  _RemoveCentralJetOverlapWithTau2s = params->GetValue ("RemoveCentralJetOverlapWithTau2s", "string");
+  _CentralJetMuon1MatchingDeltaR             = params->GetValue ("CentralJetMuon1MatchingDeltaR", 1.0);
+  _CentralJetMuon2MatchingDeltaR             = params->GetValue ("CentralJetMuon2MatchingDeltaR", 1.0);
+  _CentralJetElectron1MatchingDeltaR         = params->GetValue ("CentralJetElectron1MatchingDeltaR", 1.0);
+  _CentralJetElectron2MatchingDeltaR         = params->GetValue ("CentralJetElectron2MatchingDeltaR", 1.0);
+  _CentralJetTau1MatchingDeltaR              = params->GetValue ("CentralJetTau1MatchingDeltaR", 1.0);
+  _CentralJetTau2MatchingDeltaR              = params->GetValue ("CentralJetTau2MatchingDeltaR", 1.0);
+  _ApplyLeadingJetsLooseID           = params->GetValue ("ApplyLeadingJetsLooseID", "string");
+  _DoDiscrByFirstLeadingJet          = params->GetValue ("DoDiscrByFirstLeadingJet", "string");
+  _RecoFirstLeadingJetEtaMaxCut      = params->GetValue ("RecoFirstLeadingJetEtaMaxCut", 1.0);
+  _RecoFirstLeadingJetEtaMinCut      = params->GetValue ("RecoFirstLeadingJetEtaMinCut", 1.0);
+  _RecoFirstLeadingJetPt             = params->GetValue ("RecoFirstLeadingJetPt", 1.0);
+  _RemoveFirstLeadingJetOverlapWithMuon1s = params->GetValue ("RemoveFirstLeadingJetOverlapWithMuon1s", "string");
+  _RemoveFirstLeadingJetOverlapWithMuon2s = params->GetValue ("RemoveFirstLeadingJetOverlapWithMuon2s", "string");
+  _RemoveFirstLeadingJetOverlapWithElectron1s = params->GetValue ("RemoveFirstLeadingJetOverlapWithElectron1s", "string");
+  _RemoveFirstLeadingJetOverlapWithElectron2s = params->GetValue ("RemoveFirstLeadingJetOverlapWithElectron2s", "string");
+  _RemoveFirstLeadingJetOverlapWithTau1s = params->GetValue ("RemoveFirstLeadingJetOverlapWithTau1s", "string");
+  _RemoveFirstLeadingJetOverlapWithTau2s = params->GetValue ("RemoveFirstLeadingJetOverlapWithTau2s", "string");
+  _FirstLeadingJetMuon1MatchingDeltaR             = params->GetValue ("FirstLeadingJetMuon1MatchingDeltaR", 1.0);
+  _FirstLeadingJetMuon2MatchingDeltaR             = params->GetValue ("FirstLeadingJetMuon2MatchingDeltaR", 1.0);
+  _FirstLeadingJetElectron1MatchingDeltaR         = params->GetValue ("FirstLeadingJetElectron1MatchingDeltaR", 1.0);
+  _FirstLeadingJetElectron2MatchingDeltaR         = params->GetValue ("FirstLeadingJetElectron2MatchingDeltaR", 1.0);
+  _FirstLeadingJetTau1MatchingDeltaR              = params->GetValue ("FirstLeadingJetTau1MatchingDeltaR", 1.0);
+  _FirstLeadingJetTau2MatchingDeltaR              = params->GetValue ("FirstLeadingJetTau2MatchingDeltaR", 1.0);
+  _DoDiscrBySecondLeadingJet          = params->GetValue ("DoDiscrBySecondLeadingJet", "string");
+  _RecoSecondLeadingJetEtaMaxCut      = params->GetValue ("RecoSecondLeadingJetEtaMaxCut", 1.0);
+  _RecoSecondLeadingJetEtaMinCut      = params->GetValue ("RecoSecondLeadingJetEtaMinCut", 1.0);
+  _RecoSecondLeadingJetPt             = params->GetValue ("RecoSecondLeadingJetPt", 1.0);
+  _RemoveSecondLeadingJetOverlapWithMuon1s = params->GetValue ("RemoveSecondLeadingJetOverlapWithMuon1s", "string");
+  _RemoveSecondLeadingJetOverlapWithMuon2s = params->GetValue ("RemoveSecondLeadingJetOverlapWithMuon2s", "string");
+  _RemoveSecondLeadingJetOverlapWithElectron1s = params->GetValue ("RemoveSecondLeadingJetOverlapWithElectron1s", "string");
+  _RemoveSecondLeadingJetOverlapWithElectron2s = params->GetValue ("RemoveSecondLeadingJetOverlapWithElectron2s", "string");
+  _RemoveSecondLeadingJetOverlapWithTau1s = params->GetValue ("RemoveSecondLeadingJetOverlapWithTau1s", "string");
+  _RemoveSecondLeadingJetOverlapWithTau2s = params->GetValue ("RemoveSecondLeadingJetOverlapWithTau2s", "string");
+  _SecondLeadingJetMuon1MatchingDeltaR             = params->GetValue ("SecondLeadingJetMuon1MatchingDeltaR", 1.0);
+  _SecondLeadingJetMuon2MatchingDeltaR             = params->GetValue ("SecondLeadingJetMuon2MatchingDeltaR", 1.0);
+  _SecondLeadingJetElectron1MatchingDeltaR         = params->GetValue ("SecondLeadingJetElectron1MatchingDeltaR", 1.0);
+  _SecondLeadingJetElectron2MatchingDeltaR         = params->GetValue ("SecondLeadingJetElectron2MatchingDeltaR", 1.0);
+  _SecondLeadingJetTau1MatchingDeltaR              = params->GetValue ("SecondLeadingJetTau1MatchingDeltaR", 1.0);
+  _SecondLeadingJetTau2MatchingDeltaR              = params->GetValue ("SecondLeadingJetTau2MatchingDeltaR", 1.0);
+  _RecoBJetEtaMaxCut                 = params->GetValue ("RecoBJetEtaMaxCut", 1.0);
+  _RecoBJetEtaMinCut                 = params->GetValue ("RecoBJetEtaMinCut", 1.0);
+  _RecoBJetPtCut                     = params->GetValue ("RecoBJetPtCut", 1.0);
+  _RemoveBJetOverlapWithMuon1s = params->GetValue ("RemoveBJetOverlapWithMuon1s", "string");
+  _RemoveBJetOverlapWithMuon2s = params->GetValue ("RemoveBJetOverlapWithMuon2s", "string");
+  _RemoveBJetOverlapWithElectron1s = params->GetValue ("RemoveBJetOverlapWithElectron1s", "string");
+  _RemoveBJetOverlapWithElectron2s = params->GetValue ("RemoveBJetOverlapWithElectron2s", "string");
+  _RemoveBJetOverlapWithTau1s = params->GetValue ("RemoveBJetOverlapWithTau1s", "string");
+  _RemoveBJetOverlapWithTau2s = params->GetValue ("RemoveBJetOverlapWithTau2s", "string");
+  _BJetMuon1MatchingDeltaR             = params->GetValue ("BJetMuon1MatchingDeltaR", 1.0);
+  _BJetMuon2MatchingDeltaR             = params->GetValue ("BJetMuon2MatchingDeltaR", 1.0);
+  _BJetElectron1MatchingDeltaR         = params->GetValue ("BJetElectron1MatchingDeltaR", 1.0);
+  _BJetElectron2MatchingDeltaR         = params->GetValue ("BJetElectron2MatchingDeltaR", 1.0);
+  _BJetTau1MatchingDeltaR              = params->GetValue ("BJetTau1MatchingDeltaR", 1.0);
+  _BJetTau2MatchingDeltaR              = params->GetValue ("BJetTau2MatchingDeltaR", 1.0);
+  _ApplyJetBTagging                    = params->GetValue ("ApplyJetBTagging", "string");
+  _JetBTaggingCut                      = params->GetValue ("JetBTaggingCut", 1.0);
+  _DoSUSYDiscrByLeadDiJetMass        = params->GetValue ("DoSUSYDiscrByLeadDiJetMass", "string");
+  _LeadDiJetMinMassCut               = params->GetValue ("LeadDiJetMinMassCut", 1.0);
+  _LeadDiJetMaxMassCut               = params->GetValue ("LeadDiJetMaxMassCut", 1.0);
+  _DoSUSYDiscrByLeadDiJetPt          = params->GetValue ("DoSUSYDiscrByLeadDiJetPt", "string");
+  _LeadDiJetMinPtCut                 = params->GetValue ("LeadDiJetMinPtCut", 1.0);
+  _LeadDiJetMaxPtCut                 = params->GetValue ("LeadDiJetMaxPtCut", 1.0);
+  _DoSUSYDiscrByLeadDiJetDeltaEta    = params->GetValue ("DoSUSYDiscrByLeadDiJetDeltaEta", "string");
+  _LeadDiJetMinDeltaEtaCut           = params->GetValue ("LeadDiJetMinDeltaEtaCut", 1.0);
+  _LeadDiJetMaxDeltaEtaCut           = params->GetValue ("LeadDiJetMaxDeltaEtaCut", 1.0);
+  _DoSUSYDiscrByLeadDiJetDeltaPhi    = params->GetValue ("DoSUSYDiscrByLeadDiJetDeltaPhi", "string");
+  _LeadDiJetMinDeltaPhiCut           = params->GetValue ("LeadDiJetMinDeltaPhiCut", 1.0);
+  _LeadDiJetMaxDeltaPhiCut           = params->GetValue ("LeadDiJetMaxDeltaPhiCut", 1.0);
+  _DoSUSYDiscrByLeadDiJetOSEta       = params->GetValue ("DoSUSYDiscrByLeadDiJetOSEta", "string");
+  _DoDiscrByMet                      = params->GetValue ("DoDiscrByMet", "string");
+  _RecoMetMinCut                     = params->GetValue ("RecoMetMinCut", 1.0);
+  _RecoMetMaxCut                     = params->GetValue ("RecoMetMaxCut", 1.0);
+  _DoSUSYDiscrByMHT                  = params->GetValue ("DoSUSYDiscrByMHT", "string");
+  _MhtCut                            = params->GetValue ("MhtCut", 1.0);
+  _DoSUSYDiscrByHT                   = params->GetValue ("DoSUSYDiscrByHT", "string");
+  _HtCut                             = params->GetValue ("HtCut", 1.0);
   _CalculatePUSystematics            = params->GetValue ("CalculatePUSystematics", "string");
   _SmearTheMuon                      = params->GetValue ("SmearTheMuon", "string");
   _MatchMuonToGen                    = params->GetValue ("MatchMuonToGen", "string");
@@ -248,13 +342,8 @@ void BSM3GAnalyzer::getInputs() {
   _ElectronEnergyScaleOffset         = params->GetValue ("ElectronEnergyScaleOffset", 1.0);
   _ElectronEnergySigmaOffset         = params->GetValue ("ElectronEnergySigmaOffset", 1.0);
   _SmearTheJet                       = params->GetValue ("SmearTheJet", "string");
-  _CentralJetMuon1MatchingDeltaR     = params->GetValue ("CentralJetMuon1MatchingDeltaR", 1.0);
-  _CentralJetMuon2MatchingDeltaR     = params->GetValue ("CentralJetMuon2MatchingDeltaR", 1.0);
-  _CentralJetElectron1MatchingDeltaR = params->GetValue ("CentralJetElectron1MatchingDeltaR", 1.0);
-  _CentralJetElectron2MatchingDeltaR = params->GetValue ("CentralJetElectron2MatchingDeltaR", 1.0);
-  _CentralJetTau1MatchingDeltaR      = params->GetValue ("CentralJetTau1MatchingDeltaR", 1.0);
-  _CentralJetTau2MatchingDeltaR      = params->GetValue ("CentralJetTau2MatchingDeltaR", 1.0);
   _JetEnergyScaleOffset              = params->GetValue ("JetEnergyScaleOffset", 1.0);
+  _MatchBToGen                       = params->GetValue ("MatchBToGen", "string");
   _DataHistos                        = params->GetValue ("DataHistos", "string");
   isData                             = params->GetValue ("isData", "string");
   _MCHistos                          = params->GetValue ("MCHistos", "string"); 
@@ -527,6 +616,28 @@ void BSM3GAnalyzer::getEventFlags() {
   //---deltas for recalculation of MET (used when studying systematics or treating muons as neutrinos/taus)
   deltaForMEx = 0;
   deltaForMEy = 0;
+  sumpxForMht = 0.0;
+  sumpyForMht = 0.0;
+  sumptForHt  = 0.0;
+  for(int j = 0; j < Jet_pt->size(); j++) {
+    if( (smearedJetMomentumVector.at(j).Pt() > _JetPtForMhtAndHt) &&
+        (fabs(smearedJetMomentumVector.at(j).Eta()) < _JetEtaForMhtAndHt) ) {
+      if(_ApplyJetLooseIDforMhtAndHt == "1") {
+        if(passedLooseJetID(j)) {
+          sumpxForMht = sumpxForMht - smearedJetMomentumVector.at(j).Px();
+          sumpyForMht = sumpyForMht - smearedJetMomentumVector.at(j).Py();
+          sumptForHt  = sumptForHt  + smearedJetMomentumVector.at(j).Pt();
+        }
+      } else {
+        sumpxForMht = sumpxForMht - smearedJetMomentumVector.at(j).Px();
+        sumpyForMht = sumpyForMht - smearedJetMomentumVector.at(j).Py();
+        sumptForHt  = sumptForHt  + smearedJetMomentumVector.at(j).Pt();
+      }
+    }
+  }
+  if (sumpxForMht >= 0) {phiForMht = atan(sumpyForMht/sumpxForMht);}
+  if (sumpxForMht < 0 && sumpyForMht >= 0) {phiForMht = atan(sumpyForMht/sumpxForMht) + TMath::Pi();}
+  if (sumpxForMht < 0 && sumpyForMht < 0) {phiForMht = atan(sumpyForMht/sumpxForMht) - TMath::Pi();}
 
   //---Reco level muon1 requirements
   int nGoodCandidatesMuon1 = 0;
@@ -610,6 +721,66 @@ void BSM3GAnalyzer::getEventFlags() {
   }
   if (nGoodJets>=_RecoJet2Nmin) _EventFlag[_mapSelectionAlgoID["RecoJet2Nmin"]] = true;
   if (nGoodJets<=_RecoJet2Nmax) _EventFlag[_mapSelectionAlgoID["RecoJet2Nmax"]] = true;
+
+  nGoodJets = 0;
+  for(int j = 0; j < Jet_pt->size(); j++) {
+    if (!passRecoCentralJetCuts(j)) continue;
+    nGoodJets++;
+  }
+  if (nGoodJets>=_RecoCentralJetNmin) _EventFlag[_mapSelectionAlgoID["RecoCentralJetNmin"]] = true;
+  if (nGoodJets<=_RecoCentralJetNmax) _EventFlag[_mapSelectionAlgoID["RecoCentralJetNmax"]] = true;
+
+  // ------Number of Good Leading Jets
+  leadingjetpt = 0;
+  leadingjeteta = -100;
+  theLeadingJetIndex = -1;
+  for(int j = 0; j < Jet_pt->size(); j++) {
+    if (!passRecoFirstLeadingJetCuts(j)) continue;
+    if(smearedJetMomentumVector.at(j).Pt() > leadingjetpt) {
+      leadingjetpt = smearedJetMomentumVector.at(j).Pt();
+      leadingjeteta = smearedJetMomentumVector.at(j).Eta();
+      theLeadingJetIndex = j;
+    }
+  }
+  int nGoodFirstLeadingJets = 0;
+  for(int j = 0; j < Jet_pt->size(); j++) {
+    if (j != theLeadingJetIndex) continue;
+    nGoodFirstLeadingJets++;
+  }
+  if (nGoodFirstLeadingJets>=_RecoFirstLeadingJetNmin) _EventFlag[_mapSelectionAlgoID["RecoFirstLeadingJetNmin"]] = true;
+
+  // ------Number of Good Second Leading Jets
+  secondleadingjetpt = 0;
+  secondleadingjeteta = -100;
+  theSecondLeadingJetIndex = -1;
+  for(int j = 0; j < Jet_pt->size(); j++) {
+    if (!passRecoSecondLeadingJetCuts(j)) continue;
+    if((smearedJetMomentumVector.at(j).Pt() > secondleadingjetpt) && (j != theLeadingJetIndex)) {
+      secondleadingjetpt = smearedJetMomentumVector.at(j).Pt();
+      secondleadingjeteta = smearedJetMomentumVector.at(j).Eta();
+      theSecondLeadingJetIndex = j;
+    }
+  }
+  int nGoodSecondLeadingJets = 0;
+  for(int j = 0; j < Jet_pt->size(); j++) {
+    if (j != theSecondLeadingJetIndex) continue;
+    nGoodSecondLeadingJets++;
+  }
+  if (nGoodSecondLeadingJets>=_RecoSecondLeadingJetNmin) _EventFlag[_mapSelectionAlgoID["RecoSecondLeadingJetNmin"]] = true;
+
+  // ------Number of Good b-Jets
+  int nGoodBJets = 0;
+  for(int j = 0; j < Jet_pt->size(); j++) {
+    if (!passRecoBJetCuts(j)) continue;
+    nGoodBJets++;
+  }
+  if (nGoodBJets>=_RecoBJetNmin) _EventFlag[_mapSelectionAlgoID["RecoBJetNmin"]] = true;
+  if (nGoodBJets<=_RecoBJetNmax) _EventFlag[_mapSelectionAlgoID["RecoBJetNmax"]] = true;
+
+  // ------Number of Good Susy Combinations (jet1+jet2+met combinations)
+  int nGoodSusyCombinations = 0;
+  if(passSusyTopologyCuts(theLeadingJetIndex,theSecondLeadingJetIndex)) {nGoodSusyCombinations++;}
+  if (nGoodSusyCombinations>=_SusyCombinationsNmin) _EventFlag[_mapSelectionAlgoID["SusyCombinationsNmin"]] = true;
 
 }
 
@@ -1502,6 +1673,230 @@ bool BSM3GAnalyzer::passRecoJet2Cuts(int nobj) {
   return true;
 }
 
+bool BSM3GAnalyzer::passRecoCentralJetCuts(int nobj) {
+  // ----Acceptance cuts
+  if (fabs(smearedJetMomentumVector.at(nobj).Eta()) > 2.5) {return false;}
+  if (smearedJetMomentumVector.at(nobj).Pt()<_RecoCentralJetPtCut) {return false;}
+  if (_ApplyCentralJetLooseID == "1") {
+    if (!passedLooseJetID(nobj)) {return false;}
+  }
+  // ----anti-overlap requirements
+  if (_RemoveCentralJetOverlapWithMuon1s == "1") {
+    for(int jj = 0; jj < Muon_pt->size(); jj++) {
+      if (passRecoMuon1Cuts(jj)) {
+        if(smearedJetMomentumVector.at(nobj).DeltaR(smearedMuonMomentumVector.at(jj)) < _CentralJetMuon1MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  if (_RemoveCentralJetOverlapWithMuon2s == "1") {
+    for(int jj = 0; jj < Muon_pt->size(); jj++) {
+      if (passRecoMuon2Cuts(jj)) {
+        if(smearedJetMomentumVector.at(nobj).DeltaR(smearedMuonMomentumVector.at(jj)) < _CentralJetMuon2MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  if (_RemoveCentralJetOverlapWithElectron1s == "1") {
+    for(int jj = 0; jj < patElectron_pt->size(); jj++) {
+      if (passRecoElectron1Cuts(jj)) {
+        if(smearedJetMomentumVector.at(nobj).DeltaR(smearedElectronMomentumVector.at(jj)) < _CentralJetElectron1MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  if (_RemoveCentralJetOverlapWithElectron2s == "1") {
+    for(int jj = 0; jj < patElectron_pt->size(); jj++) {
+      if (passRecoElectron2Cuts(jj)) {
+        if(smearedJetMomentumVector.at(nobj).DeltaR(smearedElectronMomentumVector.at(jj)) < _CentralJetElectron2MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  if (_RemoveCentralJetOverlapWithTau1s == "1") {
+    for(int jj = 0; jj < Tau_pt->size(); jj++) {
+      if (passRecoTau1Cuts(jj)) {
+        if(smearedJetMomentumVector.at(nobj).DeltaR(smearedTauMomentumVector.at(jj)) < _CentralJetTau1MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  if (_RemoveCentralJetOverlapWithTau2s == "1") {
+    for(int jj = 0; jj < Tau_pt->size(); jj++) {
+      if (passRecoTau2Cuts(jj)) {
+        if(smearedJetMomentumVector.at(nobj).DeltaR(smearedTauMomentumVector.at(jj)) < _CentralJetTau2MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  return true;
+}
+
+//--------------Apply Leading Jet Cuts
+bool BSM3GAnalyzer::passRecoFirstLeadingJetCuts(int nobj) {
+  if(_DoDiscrByFirstLeadingJet == "1") {
+    // ----Acceptance cuts
+    if (fabs(smearedJetMomentumVector.at(nobj).Eta())>_RecoFirstLeadingJetEtaMaxCut) {return false;}
+    if (fabs(smearedJetMomentumVector.at(nobj).Eta())<_RecoFirstLeadingJetEtaMinCut) {return false;}
+    if (smearedJetMomentumVector.at(nobj).Pt()<_RecoFirstLeadingJetPt) {return false;}
+    if (_ApplyLeadingJetsLooseID == "1") {
+      if (!passedLooseJetID(nobj)) {return false;}
+    }
+    if (_RemoveFirstLeadingJetOverlapWithMuon1s == "1") {
+      for(int jj = 0; jj < Muon_pt->size(); jj++) {
+        if (passRecoMuon1Cuts(jj)) {
+          if(smearedJetMomentumVector.at(nobj).DeltaR(smearedMuonMomentumVector.at(jj)) < _FirstLeadingJetMuon1MatchingDeltaR) {return false;}
+        }
+      }
+    }
+    if (_RemoveFirstLeadingJetOverlapWithMuon2s == "1") {
+      for(int jj = 0; jj < Muon_pt->size(); jj++) {
+        if (passRecoMuon2Cuts(jj)) {
+          if(smearedJetMomentumVector.at(nobj).DeltaR(smearedMuonMomentumVector.at(jj)) < _FirstLeadingJetMuon2MatchingDeltaR) {return false;}
+        }
+      }
+    }
+    if (_RemoveFirstLeadingJetOverlapWithElectron1s == "1") {
+      for(int jj = 0; jj < patElectron_pt->size(); jj++) {
+        if (passRecoElectron1Cuts(jj)) {
+          if(smearedJetMomentumVector.at(nobj).DeltaR(smearedElectronMomentumVector.at(jj)) < _FirstLeadingJetElectron1MatchingDeltaR) {return false;}
+        }
+      }
+    }
+    if (_RemoveFirstLeadingJetOverlapWithElectron2s == "1") {
+      for(int jj = 0; jj < patElectron_pt->size(); jj++) {
+        if (passRecoElectron2Cuts(jj)) {
+          if(smearedJetMomentumVector.at(nobj).DeltaR(smearedElectronMomentumVector.at(jj)) < _FirstLeadingJetElectron2MatchingDeltaR) {return false;}
+        }
+      }
+    }
+    if (_RemoveFirstLeadingJetOverlapWithTau1s == "1") {
+      for(int jj = 0; jj < Tau_pt->size(); jj++) {
+        if (passRecoTau1Cuts(jj)) {
+          if(smearedJetMomentumVector.at(nobj).DeltaR(smearedTauMomentumVector.at(jj)) < _FirstLeadingJetTau1MatchingDeltaR) {return false;}
+        }
+      }
+    }
+    if (_RemoveFirstLeadingJetOverlapWithTau2s == "1") {
+      for(int jj = 0; jj < Tau_pt->size(); jj++) {
+        if (passRecoTau2Cuts(jj)) {
+          if(smearedJetMomentumVector.at(nobj).DeltaR(smearedTauMomentumVector.at(jj)) < _FirstLeadingJetTau2MatchingDeltaR) {return false;}
+        }
+      }
+    }
+  }
+  return true;
+}
+
+//--------------Apply Second Leading Jet Cuts
+bool BSM3GAnalyzer::passRecoSecondLeadingJetCuts(int nobj) {
+  if(_DoDiscrBySecondLeadingJet == "1") {
+    // ----Acceptance cuts
+    if (fabs(smearedJetMomentumVector.at(nobj).Eta())>_RecoSecondLeadingJetEtaMaxCut) {return false;}
+    if (fabs(smearedJetMomentumVector.at(nobj).Eta())<_RecoSecondLeadingJetEtaMinCut) {return false;}
+    if (smearedJetMomentumVector.at(nobj).Pt()<_RecoSecondLeadingJetPt) {return false;}
+    if (_ApplyLeadingJetsLooseID == "1") {
+      if (!passedLooseJetID(nobj)) {return false;}
+    }
+    if (_RemoveSecondLeadingJetOverlapWithMuon1s == "1") {
+      for(int jj = 0; jj < Muon_pt->size(); jj++) {
+        if (passRecoMuon1Cuts(jj)) {
+          if(smearedJetMomentumVector.at(nobj).DeltaR(smearedMuonMomentumVector.at(jj)) < _SecondLeadingJetMuon1MatchingDeltaR) {return false;}
+        }
+      }
+    }
+    if (_RemoveSecondLeadingJetOverlapWithMuon2s == "1") {
+      for(int jj = 0; jj < Muon_pt->size(); jj++) {
+        if (passRecoMuon2Cuts(jj)) {
+          if(smearedJetMomentumVector.at(nobj).DeltaR(smearedMuonMomentumVector.at(jj)) < _SecondLeadingJetMuon2MatchingDeltaR) {return false;}
+        }
+      }
+    }
+    if (_RemoveSecondLeadingJetOverlapWithElectron1s == "1") {
+      for(int jj = 0; jj < patElectron_pt->size(); jj++) {
+        if (passRecoElectron1Cuts(jj)) {
+          if(smearedJetMomentumVector.at(nobj).DeltaR(smearedElectronMomentumVector.at(jj)) < _SecondLeadingJetElectron1MatchingDeltaR) {return false;}
+        }
+      }
+    }
+    if (_RemoveSecondLeadingJetOverlapWithElectron2s == "1") {
+      for(int jj = 0; jj < patElectron_pt->size(); jj++) {
+        if (passRecoElectron2Cuts(jj)) {
+          if(smearedJetMomentumVector.at(nobj).DeltaR(smearedElectronMomentumVector.at(jj)) < _SecondLeadingJetElectron2MatchingDeltaR) {return false;}
+        }
+      }
+    }
+    if (_RemoveSecondLeadingJetOverlapWithTau1s == "1") {
+      for(int jj = 0; jj < Tau_pt->size(); jj++) {
+        if (passRecoTau1Cuts(jj)) {
+          if(smearedJetMomentumVector.at(nobj).DeltaR(smearedTauMomentumVector.at(jj)) < _SecondLeadingJetTau1MatchingDeltaR) {return false;}
+        }
+      }
+    }
+    if (_RemoveSecondLeadingJetOverlapWithTau2s == "1") {
+      for(int jj = 0; jj < Tau_pt->size(); jj++) {
+        if (passRecoTau2Cuts(jj)) {
+          if(smearedJetMomentumVector.at(nobj).DeltaR(smearedTauMomentumVector.at(jj)) < _SecondLeadingJetTau2MatchingDeltaR) {return false;}
+        }
+      }
+    }
+  }
+  return true;
+}
+
+//--------------Apply b-Jet Cuts
+bool BSM3GAnalyzer::passRecoBJetCuts(int nobj) {
+  // ----Matching
+  if((_MatchBToGen == "1") && (isData == "0")) {
+    if(abs(Jet_partonFlavour->at(nobj)) != 5) {return false;}
+  }
+
+  // ----Acceptance cuts
+  if (fabs(smearedJetMomentumVector.at(nobj).Eta())>_RecoBJetEtaMaxCut) {return false;}
+  if (fabs(smearedJetMomentumVector.at(nobj).Eta())<_RecoBJetEtaMinCut) {return false;}
+  if (smearedJetMomentumVector.at(nobj).Pt()<_RecoBJetPtCut) {return false;}
+
+  // ----anti-overlap requirements
+  if (_RemoveBJetOverlapWithMuon1s == "1") {
+    for(int jj = 0; jj < Muon_pt->size(); jj++) {
+      if (passRecoMuon1Cuts(jj)) {
+        if(smearedJetMomentumVector.at(nobj).DeltaR(smearedMuonMomentumVector.at(jj)) < _BJetMuon1MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  if (_RemoveBJetOverlapWithMuon2s == "1") {
+    for(int jj = 0; jj < Muon_pt->size(); jj++) {
+      if (passRecoMuon2Cuts(jj)) {
+        if(smearedJetMomentumVector.at(nobj).DeltaR(smearedMuonMomentumVector.at(jj)) < _BJetMuon2MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  if (_RemoveBJetOverlapWithElectron1s == "1") {
+    for(int jj = 0; jj < patElectron_pt->size(); jj++) {
+      if (passRecoElectron1Cuts(jj)) {
+        if(smearedJetMomentumVector.at(nobj).DeltaR(smearedElectronMomentumVector.at(jj)) < _BJetElectron1MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  if (_RemoveBJetOverlapWithElectron2s == "1") {
+    for(int jj = 0; jj < patElectron_pt->size(); jj++) {
+      if (passRecoElectron2Cuts(jj)) {
+        if(smearedJetMomentumVector.at(nobj).DeltaR(smearedElectronMomentumVector.at(jj)) < _BJetElectron2MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  if (_RemoveBJetOverlapWithTau1s == "1") {
+    for(int jj = 0; jj < Tau_pt->size(); jj++) {
+      if (passRecoTau1Cuts(jj)) {
+        if(smearedJetMomentumVector.at(nobj).DeltaR(smearedTauMomentumVector.at(jj)) < _BJetTau1MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  if (_RemoveBJetOverlapWithTau2s == "1") {
+    for(int jj = 0; jj < Tau_pt->size(); jj++) {
+      if (passRecoTau2Cuts(jj)) {
+        if(smearedJetMomentumVector.at(nobj).DeltaR(smearedTauMomentumVector.at(jj)) < _BJetTau2MatchingDeltaR) {return false;}
+      }
+    }
+  }
+  if (_ApplyJetBTagging == "1") {if(Jet_bDiscriminator->at(nobj) <= _JetBTaggingCut) {return false;}}
+  return true;
+}
+
 bool BSM3GAnalyzer::passedLooseJetID(int nobj) {
   if (Jet_neutralHadEnergyFraction->at(nobj) >= 0.99) {return false;}
   if (Jet_neutralEmEmEnergyFraction->at(nobj) >= 0.99) {return false;}
@@ -1511,6 +1906,84 @@ bool BSM3GAnalyzer::passedLooseJetID(int nobj) {
   if ( (fabs(smearedJetMomentumVector.at(nobj).Eta()) < 2.4) && (Jet_chargedMultiplicity->at(nobj) <= 0.0) ) {return false;}
   if ( (fabs(smearedJetMomentumVector.at(nobj).Eta()) < 2.4) && (Jet_chargedEmEnergyFraction->at(nobj) >= 0.99) ) {return false;}
   return true;
+}
+
+bool BSM3GAnalyzer::passSusyTopologyCuts(int nobj1, int nobj2) {
+  if(_DoSUSYDiscrByLeadDiJetMass == "1") {
+    if((nobj1 < 0) || (nobj2 < 0)) {return false;}
+    else {
+      for(int jj = 0; jj < Jet_pt->size(); jj++) {
+        for(int jjj = 0; jjj < Jet_pt->size(); jjj++) {
+          if ((jj == nobj1) && (jjj == nobj2)) {
+            if(CalculateTheDiJet4Momentum(jj,jjj).second.M() < _LeadDiJetMinMassCut) {return false;}
+            if(CalculateTheDiJet4Momentum(jj,jjj).second.M() > _LeadDiJetMaxMassCut) {return false;}
+          }
+        }
+      }
+    }
+  }
+  if(_DoSUSYDiscrByLeadDiJetPt == "1") {
+    if((nobj1 < 0) || (nobj2 < 0)) {return false;}
+    else {
+      for(int jj = 0; jj < Jet_pt->size(); jj++) {
+        for(int jjj = 0; jjj < Jet_pt->size(); jjj++) {
+          if ((jj == nobj1) && (jjj == nobj2)) {
+            if(CalculateTheDiJet4Momentum(jj,jjj).second.Pt() < _LeadDiJetMinPtCut) {return false;}
+            if(CalculateTheDiJet4Momentum(jj,jjj).second.Pt() > _LeadDiJetMaxPtCut) {return false;}
+          }
+        }
+      }
+    }
+  }
+  if(_DoSUSYDiscrByLeadDiJetDeltaEta == "1") {
+    if((nobj1 < 0) || (nobj2 < 0)) {return false;}
+    else {
+      for(int jj = 0; jj < Jet_pt->size(); jj++) {
+        for(int jjj = 0; jjj < Jet_pt->size(); jjj++) {
+          if ((jj == nobj1) && (jjj == nobj2)) {
+            if(fabs(smearedJetMomentumVector.at(nobj1).Eta() - smearedJetMomentumVector.at(nobj2).Eta()) < _LeadDiJetMinDeltaEtaCut) {return false;}
+            if(fabs(smearedJetMomentumVector.at(nobj1).Eta() - smearedJetMomentumVector.at(nobj2).Eta()) > _LeadDiJetMaxDeltaEtaCut) {return false;}
+          }
+        }
+      }
+    }
+  }
+  if(_DoSUSYDiscrByLeadDiJetDeltaPhi == "1") {
+    if((nobj1 < 0) || (nobj2 < 0)) {return false;}
+    else {
+      for(int jj = 0; jj < Jet_pt->size(); jj++) {
+        for(int jjj = 0; jjj < Jet_pt->size(); jjj++) {
+          if ((jj == nobj1) && (jjj == nobj2)) {
+            if(abs(normalizedPhi(smearedJetMomentumVector.at(nobj1).Phi() - smearedJetMomentumVector.at(nobj2).Phi())) < _LeadDiJetMinDeltaPhiCut) {return false;}
+            if(abs(normalizedPhi(smearedJetMomentumVector.at(nobj1).Phi() - smearedJetMomentumVector.at(nobj2).Phi())) > _LeadDiJetMaxDeltaPhiCut) {return false;}
+          }
+        }
+      }
+    }
+  }
+  if(_DoSUSYDiscrByLeadDiJetOSEta == "1") {
+    if((smearedJetMomentumVector.at(nobj1).Eta() * smearedJetMomentumVector.at(nobj2).Eta()) >= 0) {return false;}
+  }
+  if(_DoDiscrByMet == "1") {
+    if(theMETVector.Pt() < _RecoMetMinCut) {return false;}
+    if(theMETVector.Pt() > _RecoMetMaxCut) {return false;}
+  }
+  if(_DoSUSYDiscrByMHT == "1") { if(sqrt((sumpxForMht * sumpxForMht) + (sumpyForMht * sumpyForMht)) < _MhtCut) {return false;} }
+  if(_DoSUSYDiscrByHT == "1") { if(sumptForHt < _HtCut) {return false;} }
+  return true;
+}
+
+pair<bool, TLorentzVector> BSM3GAnalyzer::CalculateTheDiJet4Momentum(int nobj1, int nobj2) {
+  TLorentzVector The_LorentzVect = smearedJetMomentumVector.at(nobj1) + smearedJetMomentumVector.at(nobj2);
+  pair<bool, TLorentzVector> MassRecoInformation(true,The_LorentzVect);
+  return MassRecoInformation;
+}
+
+double BSM3GAnalyzer::normalizedPhi(double phi) {
+  static double const TWO_PI = TMath::Pi() * 2;
+  while ( phi < -TMath::Pi() ) phi += TWO_PI;
+  while ( phi >  TMath::Pi() ) phi -= TWO_PI;
+  return phi;
 }
 
 TLorentzVector BSM3GAnalyzer::SmearMuon(int index) {
@@ -1849,6 +2322,8 @@ void BSM3GAnalyzer::setBranchAddress(TTree* BOOM) {
   Jet_chargedHadronEnergyFraction = 0;
   Jet_chargedMultiplicity = 0;
   Jet_chargedEmEnergyFraction = 0;
+  Jet_partonFlavour = 0;
+  Jet_bDiscriminator = 0;
   Gen_eta = 0;
   Gen_phi = 0;
   Gen_pt = 0;
@@ -1947,6 +2422,8 @@ void BSM3GAnalyzer::setBranchAddress(TTree* BOOM) {
   BOOM->SetBranchAddress("Jet_chargedHadronEnergyFraction", &Jet_chargedHadronEnergyFraction, &b_Jet_chargedHadronEnergyFraction);
   BOOM->SetBranchAddress("Jet_chargedMultiplicity", &Jet_chargedMultiplicity, &b_Jet_chargedMultiplicity);
   BOOM->SetBranchAddress("Jet_chargedEmEnergyFraction", &Jet_chargedEmEnergyFraction, &b_Jet_chargedEmEnergyFraction);
+  BOOM->SetBranchAddress("Jet_partonFlavour", &Jet_partonFlavour, &b_Jet_partonFlavour);
+  BOOM->SetBranchAddress("Jet_bDiscriminator", &Jet_bDiscriminator, &b_Jet_bDiscriminator);
   BOOM->SetBranchAddress("Met_px", &Met_px, &b_Met_px);
   BOOM->SetBranchAddress("Met_py", &Met_py, &b_Met_py);
   BOOM->SetBranchAddress("Met_pz", &Met_pz, &b_Met_pz);
