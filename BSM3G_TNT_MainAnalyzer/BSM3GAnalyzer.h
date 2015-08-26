@@ -815,11 +815,8 @@ private:
   vector<int>     *Tau_againstElectronMVATightMVA5;
   vector<double>  *Tau_nProngs;
   vector<double>  *Tau_puCorrPtSum;
-  vector<int>     *Tau_byLooseCombinedIsolationDeltaBetaCorr;
   vector<int>     *Tau_byLooseCombinedIsolationDeltaBetaCorr3Hits;
-  vector<int>     *Tau_byMediumCombinedIsolationDeltaBetaCorr;
   vector<int>     *Tau_byMediumCombinedIsolationDeltaBetaCorr3Hits;
-  vector<int>     *Tau_byTightCombinedIsolationDeltaBetaCorr;
   vector<int>     *Tau_byTightCombinedIsolationDeltaBetaCorr3Hits;
   vector<int>     *Tau_byLooseIsolationMVA3newDMwLT;
   vector<int>     *Tau_byLooseIsolationMVA3newDMwoLT;
@@ -838,7 +835,6 @@ private:
   vector<int>     *Tau_againstMuonTight2;
   vector<int>     *Tau_againstElectronMVALooseMVA5;
   vector<int>     *Tau_againstElectronMVAMediumMVA5;
-  vector<int>     *Tau_byVLooseCombinedIsolationDeltaBetaCorr;
   vector<double>  *Tau_leadChargedCandPt;
   vector<double>  *Tau_leadChargedCandCharge;
   vector<double>  *Tau_leadChargedCandEta;
@@ -866,9 +862,9 @@ private:
   vector<int>  *Gen_BmotherIndex;
   Float_t         trueInteractions;
   Int_t           bestVertices;
-  Double_t        Met_px;
-  Double_t        Met_py;
-  Double_t        Met_pz;
+  Double_t        Met_type1PF_px;
+  Double_t        Met_type1PF_py;
+  Double_t        Met_type1PF_pz;
 
   // List of branches
   TBranch        *b_Gen_pt;   //!
@@ -919,11 +915,8 @@ private:
   TBranch        *b_Tau_againstElectronMVATightMVA5;   //!
   TBranch        *b_Tau_nProngs;   //!
   TBranch        *b_Tau_puCorrPtSum;   //!
-  TBranch        *b_Tau_byLooseCombinedIsolationDeltaBetaCorr;   //!
   TBranch        *b_Tau_byLooseCombinedIsolationDeltaBetaCorr3Hits;   //!
-  TBranch        *b_Tau_byMediumCombinedIsolationDeltaBetaCorr;   //!
   TBranch        *b_Tau_byMediumCombinedIsolationDeltaBetaCorr3Hits;   //!
-  TBranch        *b_Tau_byTightCombinedIsolationDeltaBetaCorr;   //!
   TBranch        *b_Tau_byTightCombinedIsolationDeltaBetaCorr3Hits;   //!
   TBranch        *b_Tau_byLooseIsolationMVA3newDMwLT;   //!
   TBranch        *b_Tau_byLooseIsolationMVA3newDMwoLT;   //!
@@ -942,7 +935,6 @@ private:
   TBranch        *b_Tau_againstMuonTight2;   //!
   TBranch        *b_Tau_againstElectronMVALooseMVA5;   //!
   TBranch        *b_Tau_againstElectronMVAMediumMVA5;   //!
-  TBranch        *b_Tau_byVLooseCombinedIsolationDeltaBetaCorr;   //!
   TBranch        *b_Tau_leadChargedCandPt;   //!
   TBranch        *b_Tau_leadChargedCandCharge;   //!
   TBranch        *b_Tau_leadChargedCandEta;   //!
@@ -960,9 +952,9 @@ private:
   TBranch        *b_Jet_chargedEmEnergyFraction;   //!
   TBranch        *b_Jet_partonFlavour;   //!
   TBranch        *b_Jet_bDiscriminator;   //!
-  TBranch        *b_Met_px;   //!
-  TBranch        *b_Met_py;   //!
-  TBranch        *b_Met_pz;   //!
+  TBranch        *b_Met_type1PF_px;   //!
+  TBranch        *b_Met_type1PF_py;   //!
+  TBranch        *b_Met_type1PF_pz;   //!
 
 };
 #endif
