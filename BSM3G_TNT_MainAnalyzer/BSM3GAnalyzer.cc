@@ -40,7 +40,7 @@ BSM3GAnalyzer::BSM3GAnalyzer(TFile* theFile, char* fname) {
   //---loop over events and perform the analysis
   //for (int entries = 0; entries < 1000; ++entries) { // for testing purposes --> loop over only 1k events
   for(int entries = 0; entries < nentries; ++entries) {
-    if((entries+1) % 1 == 0) { std::cout << "Analyzing Event #" << entries+1 << std::endl; }
+    if((entries+1) % 100 == 0) { std::cout << "BSM3GAnalyzer Message: Analyzing Event #" << entries+1 << std::endl; }
     BOOM->GetEntry(entries);
     analyze(theFile);
   }
@@ -649,9 +649,9 @@ void BSM3GAnalyzer::analyze(TFile *theFile) {
   }
 
   //---recalculate MET (if the muons are treated as neutrinos/taus or if the objects are being 'smeared')
-  double temppx = Met_px + deltaForMEx;
-  double temppy = Met_py + deltaForMEy;
-  double temppz = Met_pz;
+  double temppx = Met_type1PF_px + deltaForMEx;
+  double temppy = Met_type1PF_py + deltaForMEy;
+  double temppz = Met_type1PF_pz;
   double temppt = TMath::Sqrt((temppx*temppx) + (temppy*temppy));
   TLorentzVector theTempMETVector;
   theTempMETVector.SetPxPyPzE(temppx,temppy,temppz,temppt);
@@ -2043,12 +2043,6 @@ bool BSM3GAnalyzer::passRecoTau1Cuts(int nobj) {
       if (Tau_byMediumIsolationMVA3newDMwLT->at(nobj) < 0.5) {return false;}
     } else if(_RecoTau1DiscrByMaxIsolation == "byTightIsolationMVA3newDMwLT") {
       if (Tau_byTightIsolationMVA3newDMwLT->at(nobj) < 0.5) {return false;}
-    } else if(_RecoTau1DiscrByMaxIsolation == "byLooseCombinedIsolationDeltaBetaCorr") {
-      if (Tau_byLooseCombinedIsolationDeltaBetaCorr->at(nobj) < 0.5) {return false;}
-    } else if(_RecoTau1DiscrByMaxIsolation == "byMediumCombinedIsolationDeltaBetaCorr") {
-      if (Tau_byMediumCombinedIsolationDeltaBetaCorr->at(nobj) < 0.5) {return false;}
-    } else if(_RecoTau1DiscrByMaxIsolation == "byTightCombinedIsolationDeltaBetaCorr") {
-      if (Tau_byTightCombinedIsolationDeltaBetaCorr->at(nobj) < 0.5) {return false;}
     } else if(_RecoTau1DiscrByMaxIsolation == "byLooseCombinedIsolationDeltaBetaCorr3Hits") {
       if (Tau_byLooseCombinedIsolationDeltaBetaCorr3Hits->at(nobj) < 0.5) {return false;}
     } else if(_RecoTau1DiscrByMaxIsolation == "byMediumCombinedIsolationDeltaBetaCorr3Hits") {
@@ -2073,8 +2067,6 @@ bool BSM3GAnalyzer::passRecoTau1Cuts(int nobj) {
       if (Tau_byMediumIsolationMVA3oldDMwoLT->at(nobj) < 0.5) {return false;}
     } else if(_RecoTau1DiscrByMaxIsolation == "byTightIsolationMVA3oldDMwoLT") {
       if (Tau_byTightIsolationMVA3oldDMwoLT->at(nobj) < 0.5) {return false;}
-    } else if(_RecoTau1DiscrByMaxIsolation == "byVLooseCombinedIsolationDeltaBetaCorr") {
-      if (Tau_byVLooseCombinedIsolationDeltaBetaCorr->at(nobj) < 0.5) {return false;}
     } else { }
 
     //--- min isolation requirement
@@ -2086,12 +2078,6 @@ bool BSM3GAnalyzer::passRecoTau1Cuts(int nobj) {
         if (Tau_byMediumIsolationMVA3newDMwLT->at(nobj) > 0.5) {return false;}
       } else if(_RecoTau1DiscrByMinIsolation == "byTightIsolationMVA3newDMwLT") {
         if (Tau_byTightIsolationMVA3newDMwLT->at(nobj) > 0.5) {return false;}
-      } else if(_RecoTau1DiscrByMinIsolation == "byLooseCombinedIsolationDeltaBetaCorr") {
-        if (Tau_byLooseCombinedIsolationDeltaBetaCorr->at(nobj) > 0.5) {return false;}
-      } else if(_RecoTau1DiscrByMinIsolation == "byMediumCombinedIsolationDeltaBetaCorr") {
-        if (Tau_byMediumCombinedIsolationDeltaBetaCorr->at(nobj) > 0.5) {return false;}
-      } else if(_RecoTau1DiscrByMinIsolation == "byTightCombinedIsolationDeltaBetaCorr") {
-        if (Tau_byTightCombinedIsolationDeltaBetaCorr->at(nobj) > 0.5) {return false;}
       } else if(_RecoTau1DiscrByMinIsolation == "byLooseCombinedIsolationDeltaBetaCorr3Hits") {
         if (Tau_byLooseCombinedIsolationDeltaBetaCorr3Hits->at(nobj) > 0.5) {return false;}
       } else if(_RecoTau1DiscrByMinIsolation == "byMediumCombinedIsolationDeltaBetaCorr3Hits") {
@@ -2116,8 +2102,6 @@ bool BSM3GAnalyzer::passRecoTau1Cuts(int nobj) {
         if (Tau_byMediumIsolationMVA3oldDMwoLT->at(nobj) > 0.5) {return false;}
       } else if(_RecoTau1DiscrByMinIsolation == "byTightIsolationMVA3oldDMwoLT") {
         if (Tau_byTightIsolationMVA3oldDMwoLT->at(nobj) > 0.5) {return false;}
-      } else if(_RecoTau1DiscrByMinIsolation == "byVLooseCombinedIsolationDeltaBetaCorr") {
-        if (Tau_byVLooseCombinedIsolationDeltaBetaCorr->at(nobj) > 0.5) {return false;}
       } else { }
     }
 
@@ -2249,12 +2233,6 @@ bool BSM3GAnalyzer::passRecoTau2Cuts(int nobj) {
       if (Tau_byMediumIsolationMVA3newDMwLT->at(nobj) < 0.5) {return false;}
     } else if(_RecoTau2DiscrByMaxIsolation == "byTightIsolationMVA3newDMwLT") {
       if (Tau_byTightIsolationMVA3newDMwLT->at(nobj) < 0.5) {return false;}
-    } else if(_RecoTau2DiscrByMaxIsolation == "byLooseCombinedIsolationDeltaBetaCorr") {
-      if (Tau_byLooseCombinedIsolationDeltaBetaCorr->at(nobj) < 0.5) {return false;}
-    } else if(_RecoTau2DiscrByMaxIsolation == "byMediumCombinedIsolationDeltaBetaCorr") {
-      if (Tau_byMediumCombinedIsolationDeltaBetaCorr->at(nobj) < 0.5) {return false;}
-    } else if(_RecoTau2DiscrByMaxIsolation == "byTightCombinedIsolationDeltaBetaCorr") {
-      if (Tau_byTightCombinedIsolationDeltaBetaCorr->at(nobj) < 0.5) {return false;}
     } else if(_RecoTau2DiscrByMaxIsolation == "byLooseCombinedIsolationDeltaBetaCorr3Hits") {
       if (Tau_byLooseCombinedIsolationDeltaBetaCorr3Hits->at(nobj) < 0.5) {return false;}
     } else if(_RecoTau2DiscrByMaxIsolation == "byMediumCombinedIsolationDeltaBetaCorr3Hits") {
@@ -2279,8 +2257,6 @@ bool BSM3GAnalyzer::passRecoTau2Cuts(int nobj) {
       if (Tau_byMediumIsolationMVA3oldDMwoLT->at(nobj) < 0.5) {return false;}
     } else if(_RecoTau2DiscrByMaxIsolation == "byTightIsolationMVA3oldDMwoLT") {
       if (Tau_byTightIsolationMVA3oldDMwoLT->at(nobj) < 0.5) {return false;}
-    } else if(_RecoTau2DiscrByMaxIsolation == "byVLooseCombinedIsolationDeltaBetaCorr") {
-      if (Tau_byVLooseCombinedIsolationDeltaBetaCorr->at(nobj) < 0.5) {return false;}
     } else { }
 
     //--- min isolation requirement
@@ -2292,12 +2268,6 @@ bool BSM3GAnalyzer::passRecoTau2Cuts(int nobj) {
         if (Tau_byMediumIsolationMVA3newDMwLT->at(nobj) > 0.5) {return false;}
       } else if(_RecoTau2DiscrByMinIsolation == "byTightIsolationMVA3newDMwLT") {
         if (Tau_byTightIsolationMVA3newDMwLT->at(nobj) > 0.5) {return false;}
-      } else if(_RecoTau2DiscrByMinIsolation == "byLooseCombinedIsolationDeltaBetaCorr") {
-        if (Tau_byLooseCombinedIsolationDeltaBetaCorr->at(nobj) > 0.5) {return false;}
-      } else if(_RecoTau2DiscrByMinIsolation == "byMediumCombinedIsolationDeltaBetaCorr") {
-        if (Tau_byMediumCombinedIsolationDeltaBetaCorr->at(nobj) > 0.5) {return false;}
-      } else if(_RecoTau2DiscrByMinIsolation == "byTightCombinedIsolationDeltaBetaCorr") {
-        if (Tau_byTightCombinedIsolationDeltaBetaCorr->at(nobj) > 0.5) {return false;}
       } else if(_RecoTau2DiscrByMinIsolation == "byLooseCombinedIsolationDeltaBetaCorr3Hits") {
         if (Tau_byLooseCombinedIsolationDeltaBetaCorr3Hits->at(nobj) > 0.5) {return false;}
       } else if(_RecoTau2DiscrByMinIsolation == "byMediumCombinedIsolationDeltaBetaCorr3Hits") {
@@ -2322,8 +2292,6 @@ bool BSM3GAnalyzer::passRecoTau2Cuts(int nobj) {
         if (Tau_byMediumIsolationMVA3oldDMwoLT->at(nobj) > 0.5) {return false;}
       } else if(_RecoTau2DiscrByMinIsolation == "byTightIsolationMVA3oldDMwoLT") {
         if (Tau_byTightIsolationMVA3oldDMwoLT->at(nobj) > 0.5) {return false;}
-      } else if(_RecoTau2DiscrByMinIsolation == "byVLooseCombinedIsolationDeltaBetaCorr") {
-        if (Tau_byVLooseCombinedIsolationDeltaBetaCorr->at(nobj) > 0.5) {return false;}
       } else { }
     }
 
@@ -3556,11 +3524,8 @@ void BSM3GAnalyzer::setBranchAddress(TTree* BOOM) {
   Tau_againstElectronMVATightMVA5 = 0;
   Tau_nProngs = 0;
   Tau_puCorrPtSum = 0;
-  Tau_byLooseCombinedIsolationDeltaBetaCorr = 0;
   Tau_byLooseCombinedIsolationDeltaBetaCorr3Hits = 0;
-  Tau_byMediumCombinedIsolationDeltaBetaCorr = 0;
   Tau_byMediumCombinedIsolationDeltaBetaCorr3Hits = 0;
-  Tau_byTightCombinedIsolationDeltaBetaCorr = 0;
   Tau_byTightCombinedIsolationDeltaBetaCorr3Hits = 0;
   Tau_byLooseIsolationMVA3newDMwLT = 0;
   Tau_byLooseIsolationMVA3newDMwoLT = 0;
@@ -3579,7 +3544,6 @@ void BSM3GAnalyzer::setBranchAddress(TTree* BOOM) {
   Tau_againstMuonTight2 = 0;
   Tau_againstElectronMVALooseMVA5 = 0;
   Tau_againstElectronMVAMediumMVA5 = 0;
-  Tau_byVLooseCombinedIsolationDeltaBetaCorr = 0;
   Tau_leadChargedCandPt = 0;
   Tau_leadChargedCandCharge = 0;
   Tau_leadChargedCandEta = 0;
@@ -3658,11 +3622,8 @@ void BSM3GAnalyzer::setBranchAddress(TTree* BOOM) {
   BOOM->SetBranchAddress("Tau_againstElectronMVATightMVA5", &Tau_againstElectronMVATightMVA5, &b_Tau_againstElectronMVATightMVA5);
   BOOM->SetBranchAddress("Tau_nProngs", &Tau_nProngs, &b_Tau_nProngs);
   BOOM->SetBranchAddress("Tau_puCorrPtSum", &Tau_puCorrPtSum, &b_Tau_puCorrPtSum);
-  BOOM->SetBranchAddress("Tau_byLooseCombinedIsolationDeltaBetaCorr", &Tau_byLooseCombinedIsolationDeltaBetaCorr, &b_Tau_byLooseCombinedIsolationDeltaBetaCorr);
   BOOM->SetBranchAddress("Tau_byLooseCombinedIsolationDeltaBetaCorr3Hits", &Tau_byLooseCombinedIsolationDeltaBetaCorr3Hits, &b_Tau_byLooseCombinedIsolationDeltaBetaCorr3Hits);
-  BOOM->SetBranchAddress("Tau_byMediumCombinedIsolationDeltaBetaCorr", &Tau_byMediumCombinedIsolationDeltaBetaCorr, &b_Tau_byMediumCombinedIsolationDeltaBetaCorr);
   BOOM->SetBranchAddress("Tau_byMediumCombinedIsolationDeltaBetaCorr3Hits", &Tau_byMediumCombinedIsolationDeltaBetaCorr3Hits, &b_Tau_byMediumCombinedIsolationDeltaBetaCorr3Hits);
-  BOOM->SetBranchAddress("Tau_byTightCombinedIsolationDeltaBetaCorr", &Tau_byTightCombinedIsolationDeltaBetaCorr, &b_Tau_byTightCombinedIsolationDeltaBetaCorr);
   BOOM->SetBranchAddress("Tau_byTightCombinedIsolationDeltaBetaCorr3Hits", &Tau_byTightCombinedIsolationDeltaBetaCorr3Hits, &b_Tau_byTightCombinedIsolationDeltaBetaCorr3Hits);
   BOOM->SetBranchAddress("Tau_byLooseIsolationMVA3newDMwLT", &Tau_byLooseIsolationMVA3newDMwLT, &b_Tau_byLooseIsolationMVA3newDMwLT);
   BOOM->SetBranchAddress("Tau_byLooseIsolationMVA3newDMwoLT", &Tau_byLooseIsolationMVA3newDMwoLT, &b_Tau_byLooseIsolationMVA3newDMwoLT);
@@ -3681,7 +3642,6 @@ void BSM3GAnalyzer::setBranchAddress(TTree* BOOM) {
   BOOM->SetBranchAddress("Tau_againstMuonTight2", &Tau_againstMuonTight2, &b_Tau_againstMuonTight2);
   BOOM->SetBranchAddress("Tau_againstElectronMVALooseMVA5", &Tau_againstElectronMVALooseMVA5, &b_Tau_againstElectronMVALooseMVA5);
   BOOM->SetBranchAddress("Tau_againstElectronMVAMediumMVA5", &Tau_againstElectronMVAMediumMVA5, &b_Tau_againstElectronMVAMediumMVA5);
-  BOOM->SetBranchAddress("Tau_byVLooseCombinedIsolationDeltaBetaCorr", &Tau_byVLooseCombinedIsolationDeltaBetaCorr, &b_Tau_byVLooseCombinedIsolationDeltaBetaCorr);
   BOOM->SetBranchAddress("Tau_leadChargedCandPt", &Tau_leadChargedCandPt, &b_Tau_leadChargedCandPt);
   BOOM->SetBranchAddress("Tau_leadChargedCandCharge", &Tau_leadChargedCandCharge, &b_Tau_leadChargedCandCharge);
   BOOM->SetBranchAddress("Tau_leadChargedCandEta", &Tau_leadChargedCandEta, &b_Tau_leadChargedCandEta);
@@ -3699,8 +3659,8 @@ void BSM3GAnalyzer::setBranchAddress(TTree* BOOM) {
   BOOM->SetBranchAddress("Jet_chargedEmEnergyFraction", &Jet_chargedEmEnergyFraction, &b_Jet_chargedEmEnergyFraction);
   BOOM->SetBranchAddress("Jet_partonFlavour", &Jet_partonFlavour, &b_Jet_partonFlavour);
   BOOM->SetBranchAddress("Jet_bDiscriminator", &Jet_bDiscriminator, &b_Jet_bDiscriminator);
-  BOOM->SetBranchAddress("Met_px", &Met_px, &b_Met_px);
-  BOOM->SetBranchAddress("Met_py", &Met_py, &b_Met_py);
-  BOOM->SetBranchAddress("Met_pz", &Met_pz, &b_Met_pz);
+  BOOM->SetBranchAddress("Met_type1PF_px", &Met_type1PF_px, &b_Met_type1PF_px);
+  BOOM->SetBranchAddress("Met_type1PF_py", &Met_type1PF_py, &b_Met_type1PF_py);
+  BOOM->SetBranchAddress("Met_type1PF_pz", &Met_type1PF_pz, &b_Met_type1PF_pz);
 
 };
