@@ -140,9 +140,12 @@ private:
 
   //-----generator level histograms
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hNGenTau;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hNGenHadTau;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hGenTauEnergy;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hGenTauPt;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hGenTauEta;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hGenHadTauPt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hGenHadTauEta;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hGenTauPhi;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hNGenMuon;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hGenMuonEnergy;
@@ -266,6 +269,26 @@ private:
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hDiMuonPZetaVis;
   std::map< unsigned int, std::map<unsigned int, TH2*>> _hDiMuonZeta2D;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hDiMuonZeta1D;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hTau1Tau2_Tau1DiJetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hTau1Tau2_Tau2DiJetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH2*>> _hTau1PtVsTau2Pt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hTau1Tau2DeltaR;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hTau1Tau2DeltaPtDivSumPt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hTau1Tau2DeltaPt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hDiTau_Tau1MetMt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hDiTau_Tau2MetMt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hTau1Tau2OSLS;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hTau1Tau2CosDphi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hDiTau_Tau1MetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hDiTau_Tau2MetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH2*>> _hTau1MetDeltaPhiVsTau1Tau2CosDphi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hDiTauPZeta;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hDiTauPZetaVis;
+  std::map< unsigned int, std::map<unsigned int, TH2*>> _hDiTauZeta2D;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hDiTauZeta1D;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hDiTauNotReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hDiTauReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hDiTauDiJetReconstructableMass;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hMet;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hR1;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hR2;

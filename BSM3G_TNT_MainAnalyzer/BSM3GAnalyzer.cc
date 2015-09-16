@@ -26,7 +26,8 @@ BSM3GAnalyzer::BSM3GAnalyzer(TFile* theFile, char* fname) {
 
   //---open input root file and read in the tree information
   //TFile *f = new TFile ("OutTree_9_1_dab.root");
-  TFile *f = new TFile (fname);
+  //TFile *f = new TFile (fname);
+  TFile *f = TFile::Open(fname);
   f->cd("TNT");
   TTree* BOOM = (TTree*)f->Get("TNT/BOOM");
   int nentries = (int) BOOM->GetEntries();
@@ -1117,6 +1118,54 @@ void BSM3GAnalyzer::fillHistograms(unsigned int i) {
       //std::cout << "NGenTaus = " << nGenTaus << std::endl;
       _hNGenTau[i][NpdfID]->Fill(nGenTaus,isrgluon_weight * pdfWeightVector.at(NpdfID));
 
+      int nGenHadTaus = 0;
+      bool IsItAHadronicDecay; // boolean used to specify whether a gen tau lepton decays hadronically
+      TLorentzVector theGenObject(0,0,0,0); // initialize the 4-momentum vector of the vis gen tau matched to the reco tau
+      TLorentzVector theNeutrinoObject(0,0,0,0); // initialize the 4-momentum vector of the tau neutrino from the tau decay
+      vector<bool> IsItAHadronicDecayVector; // vector of booleans which contain the information about whether a gen tau lepton decays hadronically
+      IsItAHadronicDecayVector.clear(); // clear any previous declaration from memory
+      vector<int> tempTauIndexVector; // vector which contains the index (in the gen collection) of the gen level taus (before decaying)
+      tempTauIndexVector.clear(); // clear any previous declaration from memory
+      vector<TLorentzVector> tempNeutrinoMomentumVector; // vector of lorentz 4-momentum vectors for each tau neutrino from the tau decay
+      tempNeutrinoMomentumVector.clear(); // clear any previous declaration from memory
+      //---Loop over gen particles to find the tau neutrinos and then store the index of each tau neutrino's mother (a tau).
+      //---Also store the tau neutrino's 4-momentum vector in order to calculate the visible tau 4-momentum at a later point.
+      for(int j = 0; j < Gen_pt->size(); j++) {
+        if( (abs(Gen_pdg_id->at(j)) == 16) && (abs(Gen_pdg_id->at(Gen_BmotherIndex->at(j))) == 15) && (Gen_status->at(Gen_BmotherIndex->at(j)) == 2) ) {
+          tempTauIndexVector.push_back(Gen_BmotherIndex->at(j));
+          theNeutrinoObject.SetPtEtaPhiE(Gen_pt->at(j), Gen_eta->at(j), Gen_phi->at(j), Gen_energy->at(j));
+          tempNeutrinoMomentumVector.push_back(theNeutrinoObject);
+        }
+      }
+      //---if there is at least one gen tau in the event
+      if(tempTauIndexVector.size() > 0) {
+        //---Loop over the gen taus and determine whether it decays hadronically.
+        for(int jj = 0; jj < tempTauIndexVector.size(); jj++) {
+          IsItAHadronicDecay = true;
+          for(int j = 0; j < Gen_pt->size(); j++) {
+            if( ((abs(Gen_pdg_id->at(j)) == 12) || (abs(Gen_pdg_id->at(j)) == 14)) && (Gen_BmotherIndex->at(j) == tempTauIndexVector.at(jj)) ) {
+              IsItAHadronicDecay = false; // it is not a hadronic tau decay since it decayed to a electron/muon neutrino
+            }
+          }
+          IsItAHadronicDecayVector.push_back(IsItAHadronicDecay);
+        }
+        //---Loop over the gen taus and calculate the 4-momentum of the visible products (i.e. subtract the 4-momentum of the tau neutrino)
+        for(int jj = 0; jj < tempTauIndexVector.size(); jj++) {
+          for(int j = 0; j < Gen_pt->size(); j++) {
+            if(j == tempTauIndexVector.at(jj)) {
+              theGenObject.SetPtEtaPhiE(Gen_pt->at(j), Gen_eta->at(j), Gen_phi->at(j), Gen_energy->at(j)); // 4-momentum of the gen tau
+              theGenObject = theGenObject - tempNeutrinoMomentumVector.at(jj); // subtract the 4-momentum of the tau neutrino (visible tau)
+              if( (IsItAHadronicDecayVector.at(jj)) ) {
+                nGenHadTaus++;
+                _hGenHadTauPt[i][NpdfID]->Fill(theGenObject.Pt(),isrgluon_weight * pdfWeightVector.at(NpdfID));
+                _hGenHadTauEta[i][NpdfID]->Fill(theGenObject.Eta(),isrgluon_weight * pdfWeightVector.at(NpdfID));
+              }
+            }
+          }
+        }
+      }
+      _hNGenHadTau[i][NpdfID]->Fill(nGenHadTaus,isrgluon_weight * pdfWeightVector.at(NpdfID));
+
       // ------Generated Muons
       int nGenMuons = 0;
       for(int j = 0; j < Gen_pt->size(); j++) {
@@ -1393,18 +1442,6 @@ void BSM3GAnalyzer::fillHistograms(unsigned int i) {
         TheLeadDiJetVect = CalculateTheDiJet4Momentum(smearedJetMomentumVector.at(theLeadingJetIndex),smearedJetMomentumVector.at(theSecondLeadingJetIndex)).second;
         _hMetDiJetDeltaPhi[i][NpdfID]->Fill(abs(normalizedPhi(theMETVector.Phi() - TheLeadDiJetVect.Phi())),isrgluon_weight * pdfWeightVector.at(NpdfID));
       }
-/*
-      for(int j = 0; j < Tau_pt->size(); j++) {
-        for(int jj = 0; jj < Tau_pt->size(); jj++) {
-          if ((passRecoTau1Cuts(j)) && (passRecoTau2Cuts(jj)) && (passDiTauTopologyCuts(j,jj)) && (jj > j)) {
-            _UseVectorSumOfVisProductsAndMetMassReco = _UseVectorSumOfDiTauProductsAndMetMassReco;
-            _UseCollinerApproxMassReco = _UseCollinerApproxDiTauMassReco;
-	    if(CalculateTheDiTau4Momentum(smearedMuonMomentumVector.at(j),smearedMuonMomentumVector.at(jj)).first) {_hDiMuonReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedMuonMomentumVector.at(j),smearedMuonMomentumVector.at(jj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
-	    else {_hDiMuonNotReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedMuonMomentumVector.at(j),smearedMuonMomentumVector.at(jj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
-          }
-        }
-      }
-*/
 
       for(int j = 0; j < Muon_pt->size(); j++) {
         for(int jj = 0; jj < Muon_pt->size(); jj++) {
@@ -1439,6 +1476,39 @@ void BSM3GAnalyzer::fillHistograms(unsigned int i) {
 	}
       }
 
+      for(int j = 0; j < Tau_pt->size(); j++) {
+        for(int jj = 0; jj < Tau_pt->size(); jj++) {
+	  if ((passRecoTau1Cuts(j)) && (passRecoTau2Cuts(jj)) && (passDiTauTopologyCuts(j,jj)) && (jj > j)) {
+            if ((theLeadingJetIndex >= 0) && (theSecondLeadingJetIndex >= 0)) {
+              TheLeadDiJetVect = CalculateTheDiJet4Momentum(smearedJetMomentumVector.at(theLeadingJetIndex),smearedJetMomentumVector.at(theSecondLeadingJetIndex)).second;
+	      _hTau1Tau2_Tau1DiJetDeltaPhi[i][NpdfID]->Fill(abs(normalizedPhi(smearedTauMomentumVector.at(j).Phi() - TheLeadDiJetVect.Phi())),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	      _hTau1Tau2_Tau2DiJetDeltaPhi[i][NpdfID]->Fill(abs(normalizedPhi(smearedTauMomentumVector.at(jj).Phi() - TheLeadDiJetVect.Phi())),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+              _UseVectorSumOfVisProductsAndMetMassReco = "1";
+              _UseCollinerApproxMassReco = _UseCollinerApproxDiTauMassReco;
+	      _hDiTauDiJetReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(TheLeadDiJetVect,CalculateTheDiJet4Momentum(smearedTauMomentumVector.at(j),smearedTauMomentumVector.at(jj)).second).second.M(),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+            }
+	    _hTau1PtVsTau2Pt[i][NpdfID]->Fill(smearedTauMomentumVector.at(j).Pt(),smearedTauMomentumVector.at(jj).Pt(),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hTau1Tau2DeltaR[i][NpdfID]->Fill(smearedTauMomentumVector.at(j).DeltaR(smearedTauMomentumVector.at(jj)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hTau1Tau2DeltaPtDivSumPt[i][NpdfID]->Fill((smearedTauMomentumVector.at(j).Pt() - smearedTauMomentumVector.at(jj).Pt()) / (smearedTauMomentumVector.at(j).Pt() + smearedTauMomentumVector.at(jj).Pt()),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hTau1Tau2DeltaPt[i][NpdfID]->Fill((smearedTauMomentumVector.at(j).Pt() - smearedTauMomentumVector.at(jj).Pt()),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+            _hTau1Tau2OSLS[i][NpdfID]->Fill(Tau_charge->at(j) * Tau_charge->at(jj),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hTau1Tau2CosDphi[i][NpdfID]->Fill(cos(abs(normalizedPhi(smearedTauMomentumVector.at(j).Phi() - smearedTauMomentumVector.at(jj).Phi()))),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hDiTau_Tau1MetDeltaPhi[i][NpdfID]->Fill(abs(normalizedPhi(smearedTauMomentumVector.at(j).Phi() -  theMETVector.Phi())),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hDiTau_Tau2MetDeltaPhi[i][NpdfID]->Fill(abs(normalizedPhi(smearedTauMomentumVector.at(jj).Phi() -  theMETVector.Phi())),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hTau1MetDeltaPhiVsTau1Tau2CosDphi[i][NpdfID]->Fill(abs(normalizedPhi(smearedTauMomentumVector.at(j).Phi() -  theMETVector.Phi())), cos(abs(normalizedPhi(smearedTauMomentumVector.at(j).Phi() - smearedTauMomentumVector.at(jj).Phi()))),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+            _UseVectorSumOfVisProductsAndMetMassReco = _UseVectorSumOfDiTauProductsAndMetMassReco;
+            _UseCollinerApproxMassReco = _UseCollinerApproxDiTauMassReco;
+	    if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(j),smearedTauMomentumVector.at(jj)).first) {_hDiTauReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(j),smearedTauMomentumVector.at(jj)).second.M(),isrgluon_weight  * pdfWeightVector.at(NpdfID));}
+	    else {_hDiTauNotReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(j),smearedTauMomentumVector.at(jj)).second.M(),isrgluon_weight  * pdfWeightVector.at(NpdfID));}
+	    _hDiTau_Tau1MetMt[i][NpdfID]->Fill(CalculateLeptonMetMt(smearedTauMomentumVector.at(j)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hDiTau_Tau2MetMt[i][NpdfID]->Fill(CalculateLeptonMetMt(smearedTauMomentumVector.at(jj)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hDiTauPZeta[i][NpdfID]->Fill(CalculatePZeta(smearedTauMomentumVector.at(j),smearedTauMomentumVector.at(jj)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hDiTauPZetaVis[i][NpdfID]->Fill(CalculatePZetaVis(smearedTauMomentumVector.at(j),smearedTauMomentumVector.at(jj)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hDiTauZeta2D[i][NpdfID]->Fill(CalculatePZetaVis(smearedTauMomentumVector.at(j),smearedTauMomentumVector.at(jj)),CalculatePZeta(smearedTauMomentumVector.at(j),smearedTauMomentumVector.at(jj)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hDiTauZeta1D[i][NpdfID]->Fill((_DiTauPZetaCutCoefficient * CalculatePZeta(smearedTauMomentumVector.at(j),smearedTauMomentumVector.at(jj))) + (_DiTauPZetaVisCutCoefficient * CalculatePZetaVis(smearedTauMomentumVector.at(j),smearedTauMomentumVector.at(jj))),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	  }
+	}
+      }
 
     }
 
@@ -1478,9 +1548,12 @@ void BSM3GAnalyzer::bookHistograms(TFile * theOutFile, string mydirectory , unsi
     //--- book generator level histograms
     if (_FillGenHists == "1") {
       _hNGenTau[i][NpdfCounter]                         = new TH1F(("NGenTau_"+j.str()).c_str(),                       ("NGenTau_"+j.str()).c_str(),     20, 0., 20.);
+      _hNGenHadTau[i][NpdfCounter]                      = new TH1F(("NGenHadTau_"+j.str()).c_str(),                    ("NGenHadTau_"+j.str()).c_str(),     20, 0., 20.);
       _hGenTauEnergy[i][NpdfCounter]                    = new TH1F(("GenTauEnergy_"+j.str()).c_str(),                  ("GenTauEnergy_"+j.str()).c_str(), 500, 0., 5000.);
       _hGenTauPt[i][NpdfCounter]                        = new TH1F(("GenTauPt_"+j.str()).c_str(),                      ("GenTauPt_"+j.str()).c_str(),    500, 0., 5000.);
       _hGenTauEta[i][NpdfCounter]                       = new TH1F(("GenTauEta_"+j.str()).c_str(),                     ("GenTauEta_"+j.str()).c_str(), 72, -3.6, +3.6);
+      _hGenHadTauPt[i][NpdfCounter]                     = new TH1F(("GenHadTauPt_"+j.str()).c_str(),                   ("GenHadTauPt_"+j.str()).c_str(),    500, 0., 5000.);
+      _hGenHadTauEta[i][NpdfCounter]                    = new TH1F(("GenHadTauEta_"+j.str()).c_str(),                  ("GenHadTauEta_"+j.str()).c_str(), 72, -3.6, +3.6);
       _hGenTauPhi[i][NpdfCounter]                       = new TH1F(("GenTauPhi_"+j.str()).c_str(),                     ("GenTauPhi_"+j.str()).c_str(), 36, -TMath::Pi(), +TMath::Pi());
       _hNGenMuon[i][NpdfCounter]                         = new TH1F(("NGenMuon_"+j.str()).c_str(),                       ("NGenMuon_"+j.str()).c_str(),     20, 0., 20.);
       _hGenMuonEnergy[i][NpdfCounter]                    = new TH1F(("GenMuonEnergy_"+j.str()).c_str(),                  ("GenMuonEnergy_"+j.str()).c_str(), 200, 0., 500.);
@@ -1590,6 +1663,7 @@ void BSM3GAnalyzer::bookHistograms(TFile * theOutFile, string mydirectory , unsi
     }
 
     if (_FillTopologyHists == "1") {
+      _hMet[i][NpdfCounter]                    = new TH1F(("Met_"+j.str()).c_str(),                   ("Met_"+j.str()).c_str(), 100, 0, 1000);
       _hMetDiJetDeltaPhi[i][NpdfCounter]                     = new TH1F(("MetDiJetDeltaPhi_"+j.str()).c_str(),                     ("MetDiJetDeltaPhi_"+j.str()).c_str(), 72, 0, +TMath::Pi());
       _hMuon1Muon2_Muon1DiJetDeltaPhi[i][NpdfCounter]        = new TH1F(("Muon1Muon2_Muon1DiJetDeltaPhi_"+j.str()).c_str(),        ("Muon1Muon2_Muon1DiJetDeltaPhi_"+j.str()).c_str(), 72, 0, +TMath::Pi());
       _hMuon1Muon2_Muon2DiJetDeltaPhi[i][NpdfCounter]        = new TH1F(("Muon1Muon2_Muon2DiJetDeltaPhi_"+j.str()).c_str(),        ("Muon1Muon2_Muon2DiJetDeltaPhi_"+j.str()).c_str(), 72, 0, +TMath::Pi()); 
@@ -1612,7 +1686,26 @@ void BSM3GAnalyzer::bookHistograms(TFile * theOutFile, string mydirectory , unsi
       _hDiMuonZeta1D[i][NpdfCounter]           = new TH1F(("DiMuonZeta1D_"+j.str()).c_str(),          ("DiMuonZeta1D_"+j.str()).c_str(), 150, -300, 300);
       _hDiMuonNotReconstructableMass[i][NpdfCounter]   = new TH1F(("DiMuonNotReconstructableMass_"+j.str()).c_str(),          ("DiMuonNotReconstructableMass_"+j.str()).c_str(), 600, 0, 1500);
       _hDiMuonReconstructableMass[i][NpdfCounter]      = new TH1F(("DiMuonReconstructableMass_"+j.str()).c_str(),             ("DiMuonReconstructableMass_"+j.str()).c_str(), 600, 0, 1500);
-      _hMet[i][NpdfCounter]                    = new TH1F(("Met_"+j.str()).c_str(),                   ("Met_"+j.str()).c_str(), 100, 0, 1000);
+      _hTau1Tau2_Tau1DiJetDeltaPhi[i][NpdfCounter]                = new TH1F(("Tau1Tau2_Tau1DiJetDeltaPhi_"+j.str()).c_str(),                ("Tau1Tau2_Tau1DiJetDeltaPhi_"+j.str()).c_str(), 72, 0, +TMath::Pi()); 
+      _hTau1Tau2_Tau2DiJetDeltaPhi[i][NpdfCounter]                = new TH1F(("Tau1Tau2_Tau2DiJetDeltaPhi_"+j.str()).c_str(),                 ("Tau1Tau2_Tau2DiJetDeltaPhi_"+j.str()).c_str(), 72, 0, +TMath::Pi());
+      _hTau1PtVsTau2Pt[i][NpdfCounter]                 = new TH2F(("Tau1PtVsTau2Pt_"+j.str()).c_str(),                     ("Tau1PtVsTau2Pt_"+j.str()).c_str(), 100, 0, 500, 100, 0, 500);
+      _hTau1Tau2DeltaR[i][NpdfCounter]                 = new TH1F(("Tau1Tau2DeltaR_"+j.str()).c_str(),                     ("Tau1Tau2DeltaR_"+j.str()).c_str(), 100, 0, 5.);
+      _hTau1Tau2DeltaPtDivSumPt[i][NpdfCounter]        = new TH1F(("Tau1Tau2DeltaPtDivSumPt_"+j.str()).c_str(),            ("Tau1Tau2DeltaPtDivSumPt_"+j.str()).c_str(), 100, -5, 5.);
+      _hTau1Tau2DeltaPt[i][NpdfCounter]                = new TH1F(("Tau1Tau2DeltaPt_"+j.str()).c_str(),                    ("Tau1Tau2DeltaPt_"+j.str()).c_str(), 100, 0, 1000);
+      _hDiTau_Tau1MetMt[i][NpdfCounter]                = new TH1F(("DiTau_Tau1MetMt_"+j.str()).c_str(),                    ("DiTau_Tau1MetMt_"+j.str()).c_str(), 100, 0, 500);
+      _hDiTau_Tau2MetMt[i][NpdfCounter]                = new TH1F(("DiTau_Tau2MetMt_"+j.str()).c_str(),                    ("DiTau_Tau2MetMt_"+j.str()).c_str(), 100, 0, 500);
+      _hTau1Tau2OSLS[i][NpdfCounter]                   = new TH1F(("Tau1Tau2OSLS_"+j.str()).c_str(),                       ("Tau1Tau2OSLS_"+j.str()).c_str(), 20, -10, 10);
+      _hTau1Tau2CosDphi[i][NpdfCounter]                = new TH1F(("Tau1Tau2CosDphi_"+j.str()).c_str(),                    ("Tau1Tau2CosDphi_"+j.str()).c_str(), 220, -1.1, 1.1);
+      _hDiTau_Tau1MetDeltaPhi[i][NpdfCounter]          = new TH1F(("DiTau_Tau1MetDeltaPhi_"+j.str()).c_str(),              ("DiTau_Tau1MetDeltaPhi_"+j.str()).c_str(), 72, 0, +TMath::Pi());
+      _hDiTau_Tau2MetDeltaPhi[i][NpdfCounter]          = new TH1F(("DiTau_Tau2MetDeltaPhi_"+j.str()).c_str(),              ("DiTau_Tau2MetDeltaPhi_"+j.str()).c_str(), 72, 0, +TMath::Pi());
+      _hTau1MetDeltaPhiVsTau1Tau2CosDphi[i][NpdfCounter] = new TH2F(("Tau1MetDeltaPhiVsTau1Tau2CosDphi_"+j.str()).c_str(), ("Tau1MetDeltaPhiVsTau1Tau2CosDphi_"+j.str()).c_str(), 72, 0, +TMath::Pi(), 220, -1.1, 1.1);
+      _hDiTauPZeta[i][NpdfCounter]             = new TH1F(("DiTauPZeta_"+j.str()).c_str(),            ("DiTauPZeta_"+j.str()).c_str(), 200, -100, 100);
+      _hDiTauPZetaVis[i][NpdfCounter]          = new TH1F(("DiTauPZetaVis_"+j.str()).c_str(),         ("DiTauPZetaVis_"+j.str()).c_str(), 100, 0, 100);
+      _hDiTauZeta2D[i][NpdfCounter]            = new TH2F(("DiTauZeta2D_"+j.str()).c_str(),           ("DiTauZeta2D_"+j.str()).c_str(), 100, 0, 100, 200, -100, 100);
+      _hDiTauZeta1D[i][NpdfCounter]            = new TH1F(("DiTauZeta1D_"+j.str()).c_str(),           ("DiTauZeta1D_"+j.str()).c_str(), 150, -300, 300);
+      _hDiTauNotReconstructableMass[i][NpdfCounter]           = new TH1F(("DiTauNotReconstructableMass_"+j.str()).c_str(),           ("DiTauNotReconstructableMass_"+j.str()).c_str(), 600, 0, 1500);
+      _hDiTauReconstructableMass[i][NpdfCounter]              = new TH1F(("DiTauReconstructableMass_"+j.str()).c_str(),              ("DiTauReconstructableMass_"+j.str()).c_str(), 600, 0, 1500);
+      _hDiTauDiJetReconstructableMass[i][NpdfCounter]         = new TH1F(("DiTauDiJetReconstructableMass_"+j.str()).c_str(),              ("DiTauDiJetReconstructableMass_"+j.str()).c_str(), 100, 0, 5000);
     }
 
     j.str("");
@@ -1633,9 +1726,12 @@ void BSM3GAnalyzer::writeHistograms(TFile *theOutFile, string mydirectory , unsi
     //--- book generator level histograms
     if (_FillGenHists == "1") {
       _hNGenTau[i][NpdfCounter]->Write();
+      _hNGenHadTau[i][NpdfCounter]->Write();
       _hGenTauEnergy[i][NpdfCounter]->Write();
       _hGenTauPt[i][NpdfCounter]->Write();
       _hGenTauEta[i][NpdfCounter]->Write();
+      _hGenHadTauPt[i][NpdfCounter]->Write();
+      _hGenHadTauEta[i][NpdfCounter]->Write();
       _hGenTauPhi[i][NpdfCounter]->Write();
       _hNGenMuon[i][NpdfCounter]->Write();
       _hGenMuonEnergy[i][NpdfCounter]->Write();
@@ -1768,6 +1864,26 @@ void BSM3GAnalyzer::writeHistograms(TFile *theOutFile, string mydirectory , unsi
       _hDiMuonNotReconstructableMass[i][NpdfCounter]->Write();
       _hDiMuonReconstructableMass[i][NpdfCounter]->Write();
       _hMet[i][NpdfCounter]->Write();                
+      _hTau1Tau2_Tau1DiJetDeltaPhi[i][NpdfCounter]->Write();
+      _hTau1Tau2_Tau2DiJetDeltaPhi[i][NpdfCounter]->Write();
+      _hTau1PtVsTau2Pt[i][NpdfCounter]->Write();            
+      _hTau1Tau2DeltaR[i][NpdfCounter]->Write();            
+      _hTau1Tau2DeltaPtDivSumPt[i][NpdfCounter]->Write();   
+      _hTau1Tau2DeltaPt[i][NpdfCounter]->Write();           
+      _hDiTau_Tau1MetMt[i][NpdfCounter]->Write();           
+      _hDiTau_Tau2MetMt[i][NpdfCounter]->Write();           
+      _hTau1Tau2OSLS[i][NpdfCounter]->Write();              
+      _hTau1Tau2CosDphi[i][NpdfCounter]->Write();           
+      _hDiTau_Tau1MetDeltaPhi[i][NpdfCounter]->Write();     
+      _hDiTau_Tau2MetDeltaPhi[i][NpdfCounter]->Write();     
+      _hTau1MetDeltaPhiVsTau1Tau2CosDphi[i][NpdfCounter]->Write();
+      _hDiTauPZeta[i][NpdfCounter]->Write();          
+      _hDiTauPZetaVis[i][NpdfCounter]->Write();       
+      _hDiTauZeta2D[i][NpdfCounter]->Write();         
+      _hDiTauZeta1D[i][NpdfCounter]->Write();         
+      _hDiTauNotReconstructableMass[i][NpdfCounter]->Write();
+      _hDiTauReconstructableMass[i][NpdfCounter]->Write();   
+      _hDiTauDiJetReconstructableMass[i][NpdfCounter]->Write();
     }
 
   }
