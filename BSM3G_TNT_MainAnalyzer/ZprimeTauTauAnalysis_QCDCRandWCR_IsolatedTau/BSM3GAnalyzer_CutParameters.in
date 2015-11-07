@@ -414,7 +414,7 @@ DiJetMassMinCut 750.0
 DiJetMassMaxCut 9999.0
 DoMuon1Tau1DiscrByDeltaR 1
 Muon1Tau1DeltaRCut 0.3
-Muon1Tau1DiscrByOSLSType OS
+Muon1Tau1DiscrByOSLSType LS
 DoMuon1Tau1DiscrByCosDphi 1
 Muon1Tau1CosDphiMaxCut -0.95
 Muon1Tau1CosDphiMinCut -1.00
