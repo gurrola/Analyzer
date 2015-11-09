@@ -17,7 +17,7 @@ GenSMHiggsNmin 0
 GenSMHiggsNmax 1000
 RecoVertexNmin 1
 RecoVertexNmax 1000
-RecoTriggers1Nmin 0
+RecoTriggers1Nmin 1
 RecoMuon1Nmin 1
 RecoMuon1Nmax 1000
 RecoMuon2Nmin 0
