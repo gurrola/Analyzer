@@ -640,10 +640,10 @@ TauEnergySigmaOffset 1.0
 SmearTheJet 0
 JetEnergyScaleOffset 1.0
 MatchBToGen 0
-CalculatePUSystematics 1
+CalculatePUSystematics 0
 DataHistos PUdata_new_2p11ifb.root
 MCHistos PUsim_new.root
-isData 0
+isData 1
 FillRecoVertexHists 1
 FillGenHists 1
 FillRecoTauHists 1

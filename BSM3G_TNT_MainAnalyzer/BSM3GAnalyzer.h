@@ -58,6 +58,7 @@ private:
   void writeHistograms(TFile*, string, unsigned int);
   void setMapSelectionAlgoIDs();
   void initMapSelectionCounters();
+  void initializePileupInfo();
   void printEfficiency();
   int getBin(char * cstr, int nVertices);
   int ExtractNumberOfGoodGenTaus();
@@ -67,6 +68,8 @@ private:
   int ExtractNumberOfGoodGenZs();
   int ExtractNumberOfGoodGenWs();
   int ExtractNumberOfGoodGenSMHiggs();
+  bool passRecoTrigger1Cuts();
+  bool passRecoTrigger2Cuts();
   bool passRecoMuon1Cuts(int);
   bool passRecoMuon2Cuts(int);
   bool passRecoElectron1Cuts(int);
@@ -91,6 +94,14 @@ private:
   bool passDiMuonTopologyCuts(int, int);
   bool passDiElectronTopologyCuts(int, int);
   bool passDiJetTopologyCuts(int, int);
+  bool passMuon1Tau1TopologyCuts(int, int);
+  bool passMuon1Tau2TopologyCuts(int, int);
+  bool passMuon2Tau1TopologyCuts(int, int);
+  bool passMuon2Tau2TopologyCuts(int, int);
+  bool passElectron1Tau1TopologyCuts(int, int);
+  bool passElectron1Tau2TopologyCuts(int, int);
+  bool passElectron2Tau1TopologyCuts(int, int);
+  bool passElectron2Tau2TopologyCuts(int, int);
   std::pair<bool, TLorentzVector> CalculateTheDiJet4Momentum(TLorentzVector, TLorentzVector);
   std::pair<bool, TLorentzVector> CalculateTheDiTau4Momentum(TLorentzVector, TLorentzVector);
   std::pair<bool, pair<float, float> > isZmm(TLorentzVector);
@@ -123,6 +134,9 @@ private:
 
   string _DataHistos;
   string _MCHistos;
+
+  TH1F *hPUmc = new TH1F("hPUmc", "hPUmc", 100, 0, 100);
+  TH1F *hPUdata = new TH1F("hPUdata", "hPUdata", 100, 0, 100);
 
   //-----Fill Histograms?
   string _FillRecoVertexHists;
@@ -298,6 +312,90 @@ private:
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hDphi2MHT;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hAlpha;
   std::map< unsigned int, std::map<unsigned int, TH2*>> _hDphi1VsDphi2;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1_Tau1DiJetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1_Muon1DiJetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1_Muon1IsZmm;
+  std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon1PtVsTau1Pt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1DeltaR;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1DeltaPtDivSumPt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1DeltaPt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1_Muon1MetMt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1_Tau1MetMt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1OSLS;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1CosDphi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1_Muon1MetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1_Tau1MetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon1MetDeltaPhiVsMuon1Tau1CosDphi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1NotReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1ReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1PZeta;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1PZetaVis;
+  std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon1Tau1Zeta2D;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1Zeta1D;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1DiJetReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2_Tau2DiJetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2_Muon1DiJetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2_Muon1IsZmm;
+  std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon1PtVsTau2Pt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2DeltaR;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2DeltaPtDivSumPt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2DeltaPt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2_Muon1MetMt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2_Tau2MetMt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2OSLS;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2CosDphi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2_Muon1MetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2_Tau2MetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon1MetDeltaPhiVsMuon1Tau2CosDphi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2NotReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2ReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2PZeta;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2PZetaVis;
+  std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon1Tau2Zeta2D;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2Zeta1D;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2DiJetReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1_Tau1DiJetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1_Muon2DiJetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1_Muon2IsZmm;
+  std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon2PtVsTau1Pt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1DeltaR;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1DeltaPtDivSumPt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1DeltaPt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1_Muon2MetMt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1_Tau1MetMt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1OSLS;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1CosDphi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1_Muon2MetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1_Tau1MetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon2MetDeltaPhiVsMuon2Tau1CosDphi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1NotReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1ReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1PZeta;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1PZetaVis;
+  std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon2Tau1Zeta2D;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1Zeta1D;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1DiJetReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2_Tau2DiJetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2_Muon2DiJetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2_Muon2IsZmm;
+  std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon2PtVsTau2Pt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2DeltaR;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2DeltaPtDivSumPt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2DeltaPt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2_Muon2MetMt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2_Tau2MetMt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2OSLS;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2CosDphi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2_Muon2MetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2_Tau2MetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon2MetDeltaPhiVsMuon2Tau2CosDphi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2NotReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2ReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2PZeta;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2PZetaVis;
+  std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon2Tau2Zeta2D;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2Zeta1D;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2DiJetReconstructableMass;
 
   //-----Event Sequence inputTags
   int _GenTauNmin;
@@ -359,6 +457,24 @@ private:
   int _DiTauCombinationsNmax;
   int _DiJetCombinationsNmin;
   int _DiJetCombinationsNmax;
+  int _Muon1Tau1CombinationsNmin;
+  int _Muon1Tau1CombinationsNmax;
+  int _Muon1Tau2CombinationsNmin;
+  int _Muon1Tau2CombinationsNmax;
+  int _Muon2Tau1CombinationsNmin;
+  int _Muon2Tau1CombinationsNmax;
+  int _Muon2Tau2CombinationsNmin;
+  int _Muon2Tau2CombinationsNmax;
+  int _Electron1Tau1CombinationsNmin;
+  int _Electron1Tau1CombinationsNmax;
+  int _Electron1Tau2CombinationsNmin;
+  int _Electron1Tau2CombinationsNmax;
+  int _Electron2Tau1CombinationsNmin;
+  int _Electron2Tau1CombinationsNmax;
+  int _Electron2Tau2CombinationsNmin;
+  int _Electron2Tau2CombinationsNmax;
+  int _RecoTriggers2Nmin;
+  int _RecoTriggers1Nmin;
   vector<string> _EventSelectionSequence;
   vector<string> _TopologicalSelectionSequence;
 
@@ -795,11 +911,202 @@ private:
   float _DiJetMassMinCut;
   float _DiJetMassMaxCut;
 
+  float _Muon1Tau1DeltaRCut;
+  float _Muon1Tau1CosDphiMinCut;
+  float _Muon1Tau1CosDphiMaxCut;
+  float _Muon1Tau1MassMinCut;
+  float _Muon1Tau1MassMaxCut;
+  float _Muon1Tau1PZetaCutCoefficient;
+  float _Muon1Tau1PZetaVisCutCoefficient;
+  float _Muon1Tau1CDFzeta2DMinCutValue;
+  float _Muon1Tau1CDFzeta2DMaxCutValue;
+  float _Muon1Tau1DeltaPtDivSumPtMinCutValue;
+  float _Muon1Tau1DeltaPtDivSumPtMaxCutValue;
+  float _Muon1Tau1DeltaPtMinCutValue;
+  float _Muon1Tau1DeltaPtMaxCutValue;
+  string _DoMuon1Tau1DiscrByDeltaR;
+  string _DoMuon1Tau1DiscrByCosDphi;
+  string _DoDiscrByMuon1Tau1MassReco;
+  string _DoMuon1Tau1DiscrByCDFzeta2D;
+  string _DoMuon1Tau1DiscrByDeltaPtDivSumPt;
+  string _DoMuon1Tau1DiscrByDeltaPt;
+  string _UseVectorSumOfMuon1Tau1ProductsAndMetMassReco;
+  string _UseCollinerApproxMuon1Tau1MassReco;
+  string _Muon1Tau1DiscrByOSLSType;
+
+  float _Muon1Tau2DeltaRCut;
+  float _Muon1Tau2CosDphiMinCut;
+  float _Muon1Tau2CosDphiMaxCut;
+  float _Muon1Tau2MassMinCut;
+  float _Muon1Tau2MassMaxCut;
+  float _Muon1Tau2PZetaCutCoefficient;
+  float _Muon1Tau2PZetaVisCutCoefficient;
+  float _Muon1Tau2CDFzeta2DMinCutValue;
+  float _Muon1Tau2CDFzeta2DMaxCutValue;
+  float _Muon1Tau2DeltaPtDivSumPtMinCutValue;
+  float _Muon1Tau2DeltaPtDivSumPtMaxCutValue;
+  float _Muon1Tau2DeltaPtMinCutValue;
+  float _Muon1Tau2DeltaPtMaxCutValue;
+  string _DoMuon1Tau2DiscrByDeltaR;
+  string _DoMuon1Tau2DiscrByCosDphi;
+  string _DoDiscrByMuon1Tau2MassReco;
+  string _DoMuon1Tau2DiscrByCDFzeta2D;
+  string _DoMuon1Tau2DiscrByDeltaPtDivSumPt;
+  string _DoMuon1Tau2DiscrByDeltaPt;
+  string _UseVectorSumOfMuon1Tau2ProductsAndMetMassReco;
+  string _UseCollinerApproxMuon1Tau2MassReco;
+  string _Muon1Tau2DiscrByOSLSType;
+
+  float _Muon2Tau1DeltaRCut;
+  float _Muon2Tau1CosDphiMinCut;
+  float _Muon2Tau1CosDphiMaxCut;
+  float _Muon2Tau1MassMinCut;
+  float _Muon2Tau1MassMaxCut;
+  float _Muon2Tau1PZetaCutCoefficient;
+  float _Muon2Tau1PZetaVisCutCoefficient;
+  float _Muon2Tau1CDFzeta2DMinCutValue;
+  float _Muon2Tau1CDFzeta2DMaxCutValue;
+  float _Muon2Tau1DeltaPtDivSumPtMinCutValue;
+  float _Muon2Tau1DeltaPtDivSumPtMaxCutValue;
+  float _Muon2Tau1DeltaPtMinCutValue;
+  float _Muon2Tau1DeltaPtMaxCutValue;
+  string _DoMuon2Tau1DiscrByDeltaR;
+  string _DoMuon2Tau1DiscrByCosDphi;
+  string _DoDiscrByMuon2Tau1MassReco;
+  string _DoMuon2Tau1DiscrByCDFzeta2D;
+  string _DoMuon2Tau1DiscrByDeltaPtDivSumPt;
+  string _DoMuon2Tau1DiscrByDeltaPt;
+  string _UseVectorSumOfMuon2Tau1ProductsAndMetMassReco;
+  string _UseCollinerApproxMuon2Tau1MassReco;
+  string _Muon2Tau1DiscrByOSLSType;
+
+  float _Muon2Tau2DeltaRCut;
+  float _Muon2Tau2CosDphiMinCut;
+  float _Muon2Tau2CosDphiMaxCut;
+  float _Muon2Tau2MassMinCut;
+  float _Muon2Tau2MassMaxCut;
+  float _Muon2Tau2PZetaCutCoefficient;
+  float _Muon2Tau2PZetaVisCutCoefficient;
+  float _Muon2Tau2CDFzeta2DMinCutValue;
+  float _Muon2Tau2CDFzeta2DMaxCutValue;
+  float _Muon2Tau2DeltaPtDivSumPtMinCutValue;
+  float _Muon2Tau2DeltaPtDivSumPtMaxCutValue;
+  float _Muon2Tau2DeltaPtMinCutValue;
+  float _Muon2Tau2DeltaPtMaxCutValue;
+  string _DoMuon2Tau2DiscrByDeltaR;
+  string _DoMuon2Tau2DiscrByCosDphi;
+  string _DoDiscrByMuon2Tau2MassReco;
+  string _DoMuon2Tau2DiscrByCDFzeta2D;
+  string _DoMuon2Tau2DiscrByDeltaPtDivSumPt;
+  string _DoMuon2Tau2DiscrByDeltaPt;
+  string _UseVectorSumOfMuon2Tau2ProductsAndMetMassReco;
+  string _UseCollinerApproxMuon2Tau2MassReco;
+  string _Muon2Tau2DiscrByOSLSType;
+
+  float _Electron1Tau1DeltaRCut;
+  float _Electron1Tau1CosDphiMinCut;
+  float _Electron1Tau1CosDphiMaxCut;
+  float _Electron1Tau1MassMinCut;
+  float _Electron1Tau1MassMaxCut;
+  float _Electron1Tau1PZetaCutCoefficient;
+  float _Electron1Tau1PZetaVisCutCoefficient;
+  float _Electron1Tau1CDFzeta2DMinCutValue;
+  float _Electron1Tau1CDFzeta2DMaxCutValue;
+  float _Electron1Tau1DeltaPtDivSumPtMinCutValue;
+  float _Electron1Tau1DeltaPtDivSumPtMaxCutValue;
+  float _Electron1Tau1DeltaPtMinCutValue;
+  float _Electron1Tau1DeltaPtMaxCutValue;
+  string _DoElectron1Tau1DiscrByDeltaR;
+  string _DoElectron1Tau1DiscrByCosDphi;
+  string _DoDiscrByElectron1Tau1MassReco;
+  string _DoElectron1Tau1DiscrByCDFzeta2D;
+  string _DoElectron1Tau1DiscrByDeltaPtDivSumPt;
+  string _DoElectron1Tau1DiscrByDeltaPt;
+  string _UseVectorSumOfElectron1Tau1ProductsAndMetMassReco;
+  string _UseCollinerApproxElectron1Tau1MassReco;
+  string _Electron1Tau1DiscrByOSLSType;
+
+  float _Electron1Tau2DeltaRCut;
+  float _Electron1Tau2CosDphiMinCut;
+  float _Electron1Tau2CosDphiMaxCut;
+  float _Electron1Tau2MassMinCut;
+  float _Electron1Tau2MassMaxCut;
+  float _Electron1Tau2PZetaCutCoefficient;
+  float _Electron1Tau2PZetaVisCutCoefficient;
+  float _Electron1Tau2CDFzeta2DMinCutValue;
+  float _Electron1Tau2CDFzeta2DMaxCutValue;
+  float _Electron1Tau2DeltaPtDivSumPtMinCutValue;
+  float _Electron1Tau2DeltaPtDivSumPtMaxCutValue;
+  float _Electron1Tau2DeltaPtMinCutValue;
+  float _Electron1Tau2DeltaPtMaxCutValue;
+  string _DoElectron1Tau2DiscrByDeltaR;
+  string _DoElectron1Tau2DiscrByCosDphi;
+  string _DoDiscrByElectron1Tau2MassReco;
+  string _DoElectron1Tau2DiscrByCDFzeta2D;
+  string _DoElectron1Tau2DiscrByDeltaPtDivSumPt;
+  string _DoElectron1Tau2DiscrByDeltaPt;
+  string _UseVectorSumOfElectron1Tau2ProductsAndMetMassReco;
+  string _UseCollinerApproxElectron1Tau2MassReco;
+  string _Electron1Tau2DiscrByOSLSType;
+
+  float _Electron2Tau1DeltaRCut;
+  float _Electron2Tau1CosDphiMinCut;
+  float _Electron2Tau1CosDphiMaxCut;
+  float _Electron2Tau1MassMinCut;
+  float _Electron2Tau1MassMaxCut;
+  float _Electron2Tau1PZetaCutCoefficient;
+  float _Electron2Tau1PZetaVisCutCoefficient;
+  float _Electron2Tau1CDFzeta2DMinCutValue;
+  float _Electron2Tau1CDFzeta2DMaxCutValue;
+  float _Electron2Tau1DeltaPtDivSumPtMinCutValue;
+  float _Electron2Tau1DeltaPtDivSumPtMaxCutValue;
+  float _Electron2Tau1DeltaPtMinCutValue;
+  float _Electron2Tau1DeltaPtMaxCutValue;
+  string _DoElectron2Tau1DiscrByDeltaR;
+  string _DoElectron2Tau1DiscrByCosDphi;
+  string _DoDiscrByElectron2Tau1MassReco;
+  string _DoElectron2Tau1DiscrByCDFzeta2D;
+  string _DoElectron2Tau1DiscrByDeltaPtDivSumPt;
+  string _DoElectron2Tau1DiscrByDeltaPt;
+  string _UseVectorSumOfElectron2Tau1ProductsAndMetMassReco;
+  string _UseCollinerApproxElectron2Tau1MassReco;
+  string _Electron2Tau1DiscrByOSLSType;
+
+  float _Electron2Tau2DeltaRCut;
+  float _Electron2Tau2CosDphiMinCut;
+  float _Electron2Tau2CosDphiMaxCut;
+  float _Electron2Tau2MassMinCut;
+  float _Electron2Tau2MassMaxCut;
+  float _Electron2Tau2PZetaCutCoefficient;
+  float _Electron2Tau2PZetaVisCutCoefficient;
+  float _Electron2Tau2CDFzeta2DMinCutValue;
+  float _Electron2Tau2CDFzeta2DMaxCutValue;
+  float _Electron2Tau2DeltaPtDivSumPtMinCutValue;
+  float _Electron2Tau2DeltaPtDivSumPtMaxCutValue;
+  float _Electron2Tau2DeltaPtMinCutValue;
+  float _Electron2Tau2DeltaPtMaxCutValue;
+  string _DoElectron2Tau2DiscrByDeltaR;
+  string _DoElectron2Tau2DiscrByCosDphi;
+  string _DoDiscrByElectron2Tau2MassReco;
+  string _DoElectron2Tau2DiscrByCDFzeta2D;
+  string _DoElectron2Tau2DiscrByDeltaPtDivSumPt;
+  string _DoElectron2Tau2DiscrByDeltaPt;
+  string _UseVectorSumOfElectron2Tau2ProductsAndMetMassReco;
+  string _UseCollinerApproxElectron2Tau2MassReco;
+  string _Electron2Tau2DiscrByOSLSType;
+
+  string _Trigger1FirstRequirement;
+  string _Trigger1SecondRequirement;
+  string _Trigger2FirstRequirement;
+  string _Trigger2SecondRequirement;
+
   //-----For PDF weights
   vector<double> pdfWeightVector;
 
   // Define Branches
   void setBranchAddress(TTree* BOOM);
+  vector<string>  *Trigger_names;
+  vector<int>     *Trigger_decision;
   vector<double>  *Muon_pt;
   vector<double>  *Muon_eta;
   vector<double>  *Muon_phi;
@@ -842,20 +1149,20 @@ private:
   vector<int>     *Tau_byMediumCombinedIsolationDeltaBetaCorr3Hits;
   vector<int>     *Tau_byTightCombinedIsolationDeltaBetaCorr3Hits;
   vector<int>     *Tau_byLooseIsolationMVA3newDMwLT;
-  vector<int>     *Tau_byLooseIsolationMVA3newDMwoLT;
+  //vector<int>     *Tau_byLooseIsolationMVA3newDMwoLT;
   vector<int>     *Tau_byLooseIsolationMva3oldDMwLT;
-  vector<int>     *Tau_byLooseIsolationMVA3oldDMwoLT;
+  //vector<int>     *Tau_byLooseIsolationMVA3oldDMwoLT;
   vector<int>     *Tau_byMediumIsolationMVA3newDMwLT;
-  vector<int>     *Tau_byMediumIsolationMVA3newDMwoLT;
+  //vector<int>     *Tau_byMediumIsolationMVA3newDMwoLT;
   vector<int>     *Tau_byMediumIsolationMva3oldDMwLT;
-  vector<int>     *Tau_byMediumIsolationMVA3oldDMwoLT;
+  //vector<int>     *Tau_byMediumIsolationMVA3oldDMwoLT;
   vector<int>     *Tau_byTightIsolationMVA3newDMwLT;
-  vector<int>     *Tau_byTightIsolationMVA3newDMwoLT;
+  //vector<int>     *Tau_byTightIsolationMVA3newDMwoLT;
   vector<int>     *Tau_byTightIsolationMva3oldDMwLT;
-  vector<int>     *Tau_byTightIsolationMVA3oldDMwoLT;
-  vector<int>     *Tau_againstMuonLoose2;
+  //vector<int>     *Tau_byTightIsolationMVA3oldDMwoLT;
+  //vector<int>     *Tau_againstMuonLoose2;
   vector<int>     *Tau_againstMuonLoose3;
-  vector<int>     *Tau_againstMuonTight2;
+  //vector<int>     *Tau_againstMuonTight2;
   vector<int>     *Tau_againstElectronMVALooseMVA5;
   vector<int>     *Tau_againstElectronMVAMediumMVA5;
   vector<double>  *Tau_leadChargedCandPt;
@@ -883,13 +1190,15 @@ private:
   vector<double>  *Gen_motherpdg_id;
   vector<double>  *Gen_status;
   vector<int>  *Gen_BmotherIndex;
-  Float_t         trueInteractions;
+  Float_t         nTruePUInteractions;
   Int_t           bestVertices;
   Double_t        Met_type1PF_px;
   Double_t        Met_type1PF_py;
   Double_t        Met_type1PF_pz;
 
   // List of branches
+  TBranch        *b_Trigger_decision;   //!
+  TBranch        *b_Trigger_names;   //!
   TBranch        *b_Gen_pt;   //!
   TBranch        *b_Gen_eta;   //!
   TBranch        *b_Gen_phi;   //!
@@ -898,7 +1207,7 @@ private:
   TBranch        *b_Gen_motherpdg_id;   //!
   TBranch        *b_Gen_status;   //!
   TBranch        *b_Gen_BmotherIndex;   //!
-  TBranch        *b_trueInteractions;   //!
+  TBranch        *b_nTruePUInteractions;   //!
   TBranch        *b_bestVertices;   //!
   TBranch        *b_Muon_pt;   //!
   TBranch        *b_Muon_eta;   //!
@@ -942,20 +1251,20 @@ private:
   TBranch        *b_Tau_byMediumCombinedIsolationDeltaBetaCorr3Hits;   //!
   TBranch        *b_Tau_byTightCombinedIsolationDeltaBetaCorr3Hits;   //!
   TBranch        *b_Tau_byLooseIsolationMVA3newDMwLT;   //!
-  TBranch        *b_Tau_byLooseIsolationMVA3newDMwoLT;   //!
+  //TBranch        *b_Tau_byLooseIsolationMVA3newDMwoLT;   //!
   TBranch        *b_Tau_byLooseIsolationMva3oldDMwLT;   //!
-  TBranch        *b_Tau_byLooseIsolationMVA3oldDMwoLT;   //!
+  //TBranch        *b_Tau_byLooseIsolationMVA3oldDMwoLT;   //!
   TBranch        *b_Tau_byMediumIsolationMVA3newDMwLT;   //!
-  TBranch        *b_Tau_byMediumIsolationMVA3newDMwoLT;   //!
+  //TBranch        *b_Tau_byMediumIsolationMVA3newDMwoLT;   //!
   TBranch        *b_Tau_byMediumIsolationMva3oldDMwLT;   //!
-  TBranch        *b_Tau_byMediumIsolationMVA3oldDMwoLT;   //!
+  //TBranch        *b_Tau_byMediumIsolationMVA3oldDMwoLT;   //!
   TBranch        *b_Tau_byTightIsolationMVA3newDMwLT;   //!
-  TBranch        *b_Tau_byTightIsolationMVA3newDMwoLT;   //!
+  //TBranch        *b_Tau_byTightIsolationMVA3newDMwoLT;   //!
   TBranch        *b_Tau_byTightIsolationMva3oldDMwLT;   //!
-  TBranch        *b_Tau_byTightIsolationMVA3oldDMwoLT;   //!
-  TBranch        *b_Tau_againstMuonLoose2;   //!
+  //TBranch        *b_Tau_byTightIsolationMVA3oldDMwoLT;   //!
+  //TBranch        *b_Tau_againstMuonLoose2;   //!
   TBranch        *b_Tau_againstMuonLoose3;   //!
-  TBranch        *b_Tau_againstMuonTight2;   //!
+  //TBranch        *b_Tau_againstMuonTight2;   //!
   TBranch        *b_Tau_againstElectronMVALooseMVA5;   //!
   TBranch        *b_Tau_againstElectronMVAMediumMVA5;   //!
   TBranch        *b_Tau_leadChargedCandPt;   //!

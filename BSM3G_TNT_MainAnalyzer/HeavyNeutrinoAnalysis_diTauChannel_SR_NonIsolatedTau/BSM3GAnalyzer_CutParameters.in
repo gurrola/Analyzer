@@ -123,8 +123,8 @@ RecoTau1PtMaxCut 9999.9
 DoRecoTau1DiscrByLeadTrack 0
 RecoTau1LeadTrackThreshold 5.0
 DoRecoTau1DiscrByIsolation 1
-RecoTau1DiscrByMinIsolation ZERO
-RecoTau1DiscrByMaxIsolation byTightCombinedIsolationDeltaBetaCorr3Hits
+RecoTau1DiscrByMinIsolation byTightCombinedIsolationDeltaBetaCorr3Hits
+RecoTau1DiscrByMaxIsolation byLooseCombinedIsolationDeltaBetaCorr3Hits
 RecoTau1DiscrByProngType 1or2or3hps
 DoRecoTau1DiscrAgainstElectron 1
 RecoTau1DiscrAgainstElectron againstElectronMVALooseMVA5
@@ -147,8 +147,8 @@ RecoTau2PtMaxCut 9999.9
 DoRecoTau2DiscrByLeadTrack 0
 RecoTau2LeadTrackThreshold 5.0
 DoRecoTau2DiscrByIsolation 1
-RecoTau2DiscrByMinIsolation ZERO
-RecoTau2DiscrByMaxIsolation byTightCombinedIsolationDeltaBetaCorr3Hits
+RecoTau2DiscrByMinIsolation byTightCombinedIsolationDeltaBetaCorr3Hits
+RecoTau2DiscrByMaxIsolation byLooseCombinedIsolationDeltaBetaCorr3Hits
 RecoTau2DiscrByProngType 1or2or3hps
 DoRecoTau2DiscrAgainstElectron 1
 RecoTau2DiscrAgainstElectron againstElectronMVALooseMVA5
@@ -640,10 +640,10 @@ TauEnergySigmaOffset 1.0
 SmearTheJet 0
 JetEnergyScaleOffset 1.0
 MatchBToGen 0
-CalculatePUSystematics 1
+CalculatePUSystematics 0
 DataHistos PUdata_new_2p11ifb.root
 MCHistos PUsim_new.root
-isData 0
+isData 1
 FillRecoVertexHists 1
 FillGenHists 1
 FillRecoTauHists 1
