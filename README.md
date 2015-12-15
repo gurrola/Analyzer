@@ -157,7 +157,7 @@ In order to use the code you need to follow carefully these steps:
 
   8.1 git clone https://github.com/gurrola/Analyzer <br>
   8.2 cd Analyzer <br>
-  8.3 git checkout forMiniAODv2_11062015_v1 <br>
+  8.3 git checkout forMiniAODv2_12142015 <br>
   8.4 cd ./.. <br>
   8.5 scram b -j 10 <br>
 
