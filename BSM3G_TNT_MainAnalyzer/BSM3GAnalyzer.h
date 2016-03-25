@@ -142,7 +142,8 @@ private:
   string _FillRecoVertexHists;
   string _FillGenHists;
   string _FillRecoTauHists;      
-  string _FillRecoMuonHists;     
+  string _FillRecoMuonHists; 
+  string _FillRecoElectronHists;
   string _FillRecoJetHists;    
   string _FillTopologyHists;     
 
@@ -166,6 +167,13 @@ private:
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hGenMuonPt;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hGenMuonEta;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hGenMuonPhi;
+  //Ali's changes starts here
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hNGenElectron;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hGenElectronEnergy;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hGenElectronPt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hGenElectronEta;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hGenElectronPhi;
+  //Ali's changes ends here
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hGenDiTauMass;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hGenZprimeMass;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hGenZprimeStatusCode;
@@ -210,6 +218,27 @@ private:
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2MetMt;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hFirstLeadingMuon2Pt;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hFirstLeadingMuon2Eta;
+  //Ali's changes starts here
+  //-----reconstruction level electron histograms
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hNElectron1;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Energy;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Pt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Eta;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Phi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1MetMt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hFirstLeadingElectron1Pt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hFirstLeadingElectron1Eta;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hNElectron2;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Energy;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Pt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Eta;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Phi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2MetMt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hFirstLeadingElectron2Pt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hFirstLeadingElectron2Eta;
+  
+  //Ali's changes ends here
+
 
   //-----reconstruction level jet histograms
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hNJet1;
@@ -465,6 +494,16 @@ private:
   int _Muon2Tau1CombinationsNmax;
   int _Muon2Tau2CombinationsNmin;
   int _Muon2Tau2CombinationsNmax;
+  //Ali's changes starts here
+  int _Muon1Electron1CombinationsNmin;
+  int _Muon1Electron1CombinationsNmax;
+  int _Muon1Electron2CombinationsNmin;
+  int _Muon1Electron2CombinationsNmax;
+  int _Muon2Electron1CombinationsNmin;
+  int _Muon2Electron1CombinationsNmax;
+  int _Muon2Electron2CombinationsNmin;
+  int _Muon2Electron2CombinationsNmax;
+  //Ali's changes ends here
   int _Electron1Tau1CombinationsNmin;
   int _Electron1Tau1CombinationsNmax;
   int _Electron1Tau2CombinationsNmin;
@@ -1002,7 +1041,99 @@ private:
   string _UseVectorSumOfMuon2Tau2ProductsAndMetMassReco;
   string _UseCollinerApproxMuon2Tau2MassReco;
   string _Muon2Tau2DiscrByOSLSType;
+//Ali's changes starts here
+  float _Muon1Electron1DeltaRCut;
+  float _Muon1Electron1CosDphiMinCut;
+  float _Muon1Electron1CosDphiMaxCut;
+  float _Muon1Electron1MassMinCut;
+  float _Muon1Electron1MassMaxCut;
+  float _Muon1Electron1PZetaCutCoefficient;
+  float _Muon1Electron1PZetaVisCutCoefficient;
+  float _Muon1Electron1CDFzeta2DMinCutValue;
+  float _Muon1Electron1CDFzeta2DMaxCutValue;
+  float _Muon1Electron1DeltaPtDivSumPtMinCutValue;
+  float _Muon1Electron1DeltaPtDivSumPtMaxCutValue;
+  float _Muon1Electron1DeltaPtMinCutValue;
+  float _Muon1Electron1DeltaPtMaxCutValue;
+  string _DoMuon1Electron1DiscrByDeltaR;
+  string _DoMuon1Electron1DiscrByCosDphi;
+  string _DoDiscrByMuon1Electron1MassReco;
+  string _DoMuon1Electron1DiscrByCDFzeta2D;
+  string _DoMuon1Electron1DiscrByDeltaPtDivSumPt;
+  string _DoMuon1Electron1DiscrByDeltaPt;
+  string _UseVectorSumOfMuon1Electron1ProductsAndMetMassReco;
+  string _UseCollinerApproxMuon1Electron1MassReco;
+  string _Muon1Electron1DiscrByOSLSType;
 
+  float _Muon1Electron2DeltaRCut;
+  float _Muon1Electron2CosDphiMinCut;
+  float _Muon1Electron2CosDphiMaxCut;
+  float _Muon1Electron2MassMinCut;
+  float _Muon1Electron2MassMaxCut;
+  float _Muon1Electron2PZetaCutCoefficient;
+  float _Muon1Electron2PZetaVisCutCoefficient;
+  float _Muon1Electron2CDFzeta2DMinCutValue;
+  float _Muon1Electron2CDFzeta2DMaxCutValue;
+  float _Muon1Electron2DeltaPtDivSumPtMinCutValue;
+  float _Muon1Electron2DeltaPtDivSumPtMaxCutValue;
+  float _Muon1Electron2DeltaPtMinCutValue;
+  float _Muon1Electron2DeltaPtMaxCutValue;
+  string _DoMuon1Electron2DiscrByDeltaR;
+  string _DoMuon1Electron2DiscrByCosDphi;
+  string _DoDiscrByMuon1Electron2MassReco;
+  string _DoMuon1Electron2DiscrByCDFzeta2D;
+  string _DoMuon1Electron2DiscrByDeltaPtDivSumPt;
+  string _DoMuon1Electron2DiscrByDeltaPt;
+  string _UseVectorSumOfMuon1Electron2ProductsAndMetMassReco;
+  string _UseCollinerApproxMuon1Electron2MassReco;
+  string _Muon1Electron2DiscrByOSLSType;
+
+  float _Muon2Electron1DeltaRCut;
+  float _Muon2Electron1CosDphiMinCut;
+  float _Muon2Electron1CosDphiMaxCut;
+  float _Muon2Electron1MassMinCut;
+  float _Muon2Electron1MassMaxCut;
+  float _Muon2Electron1PZetaCutCoefficient;
+  float _Muon2Electron1PZetaVisCutCoefficient;
+  float _Muon2Electron1CDFzeta2DMinCutValue;
+  float _Muon2Electron1CDFzeta2DMaxCutValue;
+  float _Muon2Electron1DeltaPtDivSumPtMinCutValue;
+  float _Muon2Electron1DeltaPtDivSumPtMaxCutValue;
+  float _Muon2Electron1DeltaPtMinCutValue;
+  float _Muon2Electron1DeltaPtMaxCutValue;
+  string _DoMuon2Electron1DiscrByDeltaR;
+  string _DoMuon2Electron1DiscrByCosDphi;
+  string _DoDiscrByMuon2Electron1MassReco;
+  string _DoMuon2Electron1DiscrByCDFzeta2D;
+  string _DoMuon2Electron1DiscrByDeltaPtDivSumPt;
+  string _DoMuon2Electron1DiscrByDeltaPt;
+  string _UseVectorSumOfMuon2Electron1ProductsAndMetMassReco;
+  string _UseCollinerApproxMuon2Electron1MassReco;
+  string _Muon2Electron1DiscrByOSLSType;
+
+  float _Muon2Electron2DeltaRCut;
+  float _Muon2Electron2CosDphiMinCut;
+  float _Muon2Electron2CosDphiMaxCut;
+  float _Muon2Electron2MassMinCut;
+  float _Muon2Electron2MassMaxCut;
+  float _Muon2Electron2PZetaCutCoefficient;
+  float _Muon2Electron2PZetaVisCutCoefficient;
+  float _Muon2Electron2CDFzeta2DMinCutValue;
+  float _Muon2Electron2CDFzeta2DMaxCutValue;
+  float _Muon2Electron2DeltaPtDivSumPtMinCutValue;
+  float _Muon2Electron2DeltaPtDivSumPtMaxCutValue;
+  float _Muon2Electron2DeltaPtMinCutValue;
+  float _Muon2Electron2DeltaPtMaxCutValue;
+  string _DoMuon2Electron2DiscrByDeltaR;
+  string _DoMuon2Electron2DiscrByCosDphi;
+  string _DoDiscrByMuon2Electron2MassReco;
+  string _DoMuon2Electron2DiscrByCDFzeta2D;
+  string _DoMuon2Electron2DiscrByDeltaPtDivSumPt;
+  string _DoMuon2Electron2DiscrByDeltaPt;
+  string _UseVectorSumOfMuon2Electron2ProductsAndMetMassReco;
+  string _UseCollinerApproxMuon2Electron2MassReco;
+  string _Muon2Electron2DiscrByOSLSType;
+//Ali's changes ends here
   float _Electron1Tau1DeltaRCut;
   float _Electron1Tau1CosDphiMinCut;
   float _Electron1Tau1CosDphiMaxCut;
