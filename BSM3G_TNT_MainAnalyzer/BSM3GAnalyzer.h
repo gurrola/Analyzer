@@ -102,6 +102,10 @@ private:
   bool passElectron1Tau2TopologyCuts(int, int);
   bool passElectron2Tau1TopologyCuts(int, int);
   bool passElectron2Tau2TopologyCuts(int, int);
+  bool passElectron1Muon1TopologyCuts(int, int);
+  bool passElectron1Muon2TopologyCuts(int, int);
+  bool passElectron2Muon1TopologyCuts(int, int);
+  bool passElectron2Muon2TopologyCuts(int, int);
   std::pair<bool, TLorentzVector> CalculateTheDiJet4Momentum(TLorentzVector, TLorentzVector);
   std::pair<bool, TLorentzVector> CalculateTheDiTau4Momentum(TLorentzVector, TLorentzVector);
   std::pair<bool, pair<float, float> > isZmm(TLorentzVector);
@@ -125,6 +129,8 @@ private:
   // ----------member data ---------------------------
 
   //-----Generator level Inputs 
+  float _GenZmassMinCut;
+  float _GenZmassMaxCut;
   float _GenTauPtMinCut;
   float _GenTauPtMaxCut;
   float _GenTauEtaMaxCut;
@@ -169,6 +175,7 @@ private:
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hGenDiTauMass;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hGenZprimeMass;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hGenZprimeStatusCode;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hGenZMass;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hGenTauStatusCode;
 
   //-----reconstruction level tau histograms
@@ -302,7 +309,9 @@ private:
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hDiTauZeta1D;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hDiTauNotReconstructableMass;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hDiTauReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hDiTauReconstructableMass_1or3prong;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hDiTauDiJetReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hDiTauLeadingJetReconstructableMass;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hMet;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hR1;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hR2;
@@ -328,6 +337,18 @@ private:
   std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon1MetDeltaPhiVsMuon1Tau1CosDphi;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1NotReconstructableMass;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1ReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1ReconstructableMass_1prong;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1ReconstructableMass_2prong;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1ReconstructableMass_3prong;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1ReconstructableMass_1or3prong;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1ReconstructableMass_OS;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1ReconstructableMass_LS;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1ReconstructableMass_OS;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1ReconstructableMass_LS;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2ReconstructableMass_OS;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2ReconstructableMass_LS;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2ReconstructableMass_OS;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2ReconstructableMass_LS;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1PZeta;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau1PZetaVis;
   std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon1Tau1Zeta2D;
@@ -349,6 +370,10 @@ private:
   std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon1MetDeltaPhiVsMuon1Tau2CosDphi;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2NotReconstructableMass;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2ReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2ReconstructableMass_1prong;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2ReconstructableMass_2prong;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2ReconstructableMass_3prong;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2ReconstructableMass_1or3prong;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2PZeta;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon1Tau2PZetaVis;
   std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon1Tau2Zeta2D;
@@ -370,6 +395,10 @@ private:
   std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon2MetDeltaPhiVsMuon2Tau1CosDphi;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1NotReconstructableMass;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1ReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1ReconstructableMass_1prong;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1ReconstructableMass_2prong;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1ReconstructableMass_3prong;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1ReconstructableMass_1or3prong;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1PZeta;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau1PZetaVis;
   std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon2Tau1Zeta2D;
@@ -391,11 +420,107 @@ private:
   std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon2MetDeltaPhiVsMuon2Tau2CosDphi;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2NotReconstructableMass;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2ReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2ReconstructableMass_1prong;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2ReconstructableMass_2prong;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2ReconstructableMass_3prong;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2ReconstructableMass_1or3prong;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2PZeta;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2PZetaVis;
   std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon2Tau2Zeta2D;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2Zeta1D;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2Tau2DiJetReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon1_Electron1DiJetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon1_Muon1DiJetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon1_Muon1IsZmm;
+  std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon1PtVsElectron1Pt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon1DeltaR;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon1DeltaPtDivSumPt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon1DeltaPt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon1_Muon1MetMt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon1_Electron1MetMt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon1OSLS;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon1CosDphi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon1_Muon1MetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon1_Electron1MetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon1MetDeltaPhiVsElectron1Muon1CosDphi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon1NotReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon1ReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon1ReconstructableMass_OS;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon1ReconstructableMass_LS;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon1PZeta;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon1PZetaVis;
+  std::map< unsigned int, std::map<unsigned int, TH2*>> _hElectron1Muon1Zeta2D;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon1Zeta1D;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon1DiJetReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon2_Electron1DiJetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon2_Muon2DiJetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon2_Muon2IsZmm;
+  std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon2PtVsElectron1Pt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon2DeltaR;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon2DeltaPtDivSumPt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon2DeltaPt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon2_Muon2MetMt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon2_Electron1MetMt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon2OSLS;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon2CosDphi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon2_Muon2MetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon2_Electron1MetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon2MetDeltaPhiVsElectron1Muon2CosDphi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon2NotReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon2ReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon2ReconstructableMass_OS;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon2ReconstructableMass_LS;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon2PZeta;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon2PZetaVis;
+  std::map< unsigned int, std::map<unsigned int, TH2*>> _hElectron1Muon2Zeta2D;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon2Zeta1D;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Muon2DiJetReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon1_Electron2DiJetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon1_Muon1DiJetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon1_Muon1IsZmm;
+  std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon1PtVsElectron2Pt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon1DeltaR;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon1DeltaPtDivSumPt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon1DeltaPt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon1_Muon1MetMt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon1_Electron2MetMt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon1OSLS;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon1CosDphi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon1_Muon1MetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon1_Electron2MetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon1MetDeltaPhiVsElectron2Muon1CosDphi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon1NotReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon1ReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon1ReconstructableMass_OS;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon1ReconstructableMass_LS;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon1PZeta;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon1PZetaVis;
+  std::map< unsigned int, std::map<unsigned int, TH2*>> _hElectron2Muon1Zeta2D;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon1Zeta1D;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon1DiJetReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon2_Electron2DiJetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon2_Muon2DiJetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon2_Muon2IsZmm;
+  std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon2PtVsElectron2Pt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon2DeltaR;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon2DeltaPtDivSumPt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon2DeltaPt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon2_Muon2MetMt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon2_Electron2MetMt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon2OSLS;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon2CosDphi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon2_Muon2MetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon2_Electron2MetDeltaPhi;
+  std::map< unsigned int, std::map<unsigned int, TH2*>> _hMuon2MetDeltaPhiVsElectron2Muon2CosDphi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon2NotReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon2ReconstructableMass;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon2ReconstructableMass_OS;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon2ReconstructableMass_LS;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon2PZeta;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon2PZetaVis;
+  std::map< unsigned int, std::map<unsigned int, TH2*>> _hElectron2Muon2Zeta2D;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon2Zeta1D;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Muon2DiJetReconstructableMass;
 
   //-----Event Sequence inputTags
   int _GenTauNmin;
@@ -473,6 +598,14 @@ private:
   int _Electron2Tau1CombinationsNmax;
   int _Electron2Tau2CombinationsNmin;
   int _Electron2Tau2CombinationsNmax;
+  int _Electron1Muon1CombinationsNmin;
+  int _Electron1Muon1CombinationsNmax;
+  int _Electron1Muon2CombinationsNmin;
+  int _Electron1Muon2CombinationsNmax;
+  int _Electron2Muon1CombinationsNmin;
+  int _Electron2Muon1CombinationsNmax;
+  int _Electron2Muon2CombinationsNmin;
+  int _Electron2Muon2CombinationsNmax;
   int _RecoTriggers2Nmin;
   int _RecoTriggers1Nmin;
   vector<string> _EventSelectionSequence;
@@ -506,6 +639,7 @@ private:
   //-----Inputs for systematic uncertainties
   double isrgluon_weight;
   double pu_weight;
+  double gen_weight;
   string _CalculatePUSystematics;
   std::vector<TLorentzVector> smearedMuonMomentumVector;
   std::vector<TLorentzVector> smearedTauMomentumVector;
@@ -524,6 +658,7 @@ private:
   double secondleadingjetpt;
   double secondleadingjeteta;
   int theSecondLeadingJetIndex;
+  string _ApplyGenWeight;
   string _SmearTheMuon;
   string _SmearTheTau;
   string _SmearTheElectron;
@@ -1095,6 +1230,98 @@ private:
   string _UseCollinerApproxElectron2Tau2MassReco;
   string _Electron2Tau2DiscrByOSLSType;
 
+  float _Electron1Muon1DeltaRCut;
+  float _Electron1Muon1CosDphiMinCut;
+  float _Electron1Muon1CosDphiMaxCut;
+  float _Electron1Muon1MassMinCut;
+  float _Electron1Muon1MassMaxCut;
+  float _Electron1Muon1PZetaCutCoefficient;
+  float _Electron1Muon1PZetaVisCutCoefficient;
+  float _Electron1Muon1CDFzeta2DMinCutValue;
+  float _Electron1Muon1CDFzeta2DMaxCutValue;
+  float _Electron1Muon1DeltaPtDivSumPtMinCutValue;
+  float _Electron1Muon1DeltaPtDivSumPtMaxCutValue;
+  float _Electron1Muon1DeltaPtMinCutValue;
+  float _Electron1Muon1DeltaPtMaxCutValue;
+  string _DoElectron1Muon1DiscrByDeltaR;
+  string _DoElectron1Muon1DiscrByCosDphi;
+  string _DoDiscrByElectron1Muon1MassReco;
+  string _DoElectron1Muon1DiscrByCDFzeta2D;
+  string _DoElectron1Muon1DiscrByDeltaPtDivSumPt;
+  string _DoElectron1Muon1DiscrByDeltaPt;
+  string _UseVectorSumOfElectron1Muon1ProductsAndMetMassReco;
+  string _UseCollinerApproxElectron1Muon1MassReco;
+  string _Electron1Muon1DiscrByOSLSType;
+
+  float _Electron1Muon2DeltaRCut;
+  float _Electron1Muon2CosDphiMinCut;
+  float _Electron1Muon2CosDphiMaxCut;
+  float _Electron1Muon2MassMinCut;
+  float _Electron1Muon2MassMaxCut;
+  float _Electron1Muon2PZetaCutCoefficient;
+  float _Electron1Muon2PZetaVisCutCoefficient;
+  float _Electron1Muon2CDFzeta2DMinCutValue;
+  float _Electron1Muon2CDFzeta2DMaxCutValue;
+  float _Electron1Muon2DeltaPtDivSumPtMinCutValue;
+  float _Electron1Muon2DeltaPtDivSumPtMaxCutValue;
+  float _Electron1Muon2DeltaPtMinCutValue;
+  float _Electron1Muon2DeltaPtMaxCutValue;
+  string _DoElectron1Muon2DiscrByDeltaR;
+  string _DoElectron1Muon2DiscrByCosDphi;
+  string _DoDiscrByElectron1Muon2MassReco;
+  string _DoElectron1Muon2DiscrByCDFzeta2D;
+  string _DoElectron1Muon2DiscrByDeltaPtDivSumPt;
+  string _DoElectron1Muon2DiscrByDeltaPt;
+  string _UseVectorSumOfElectron1Muon2ProductsAndMetMassReco;
+  string _UseCollinerApproxElectron1Muon2MassReco;
+  string _Electron1Muon2DiscrByOSLSType;
+
+  float _Electron2Muon1DeltaRCut;
+  float _Electron2Muon1CosDphiMinCut;
+  float _Electron2Muon1CosDphiMaxCut;
+  float _Electron2Muon1MassMinCut;
+  float _Electron2Muon1MassMaxCut;
+  float _Electron2Muon1PZetaCutCoefficient;
+  float _Electron2Muon1PZetaVisCutCoefficient;
+  float _Electron2Muon1CDFzeta2DMinCutValue;
+  float _Electron2Muon1CDFzeta2DMaxCutValue;
+  float _Electron2Muon1DeltaPtDivSumPtMinCutValue;
+  float _Electron2Muon1DeltaPtDivSumPtMaxCutValue;
+  float _Electron2Muon1DeltaPtMinCutValue;
+  float _Electron2Muon1DeltaPtMaxCutValue;
+  string _DoElectron2Muon1DiscrByDeltaR;
+  string _DoElectron2Muon1DiscrByCosDphi;
+  string _DoDiscrByElectron2Muon1MassReco;
+  string _DoElectron2Muon1DiscrByCDFzeta2D;
+  string _DoElectron2Muon1DiscrByDeltaPtDivSumPt;
+  string _DoElectron2Muon1DiscrByDeltaPt;
+  string _UseVectorSumOfElectron2Muon1ProductsAndMetMassReco;
+  string _UseCollinerApproxElectron2Muon1MassReco;
+  string _Electron2Muon1DiscrByOSLSType;
+
+  float _Electron2Muon2DeltaRCut;
+  float _Electron2Muon2CosDphiMinCut;
+  float _Electron2Muon2CosDphiMaxCut;
+  float _Electron2Muon2MassMinCut;
+  float _Electron2Muon2MassMaxCut;
+  float _Electron2Muon2PZetaCutCoefficient;
+  float _Electron2Muon2PZetaVisCutCoefficient;
+  float _Electron2Muon2CDFzeta2DMinCutValue;
+  float _Electron2Muon2CDFzeta2DMaxCutValue;
+  float _Electron2Muon2DeltaPtDivSumPtMinCutValue;
+  float _Electron2Muon2DeltaPtDivSumPtMaxCutValue;
+  float _Electron2Muon2DeltaPtMinCutValue;
+  float _Electron2Muon2DeltaPtMaxCutValue;
+  string _DoElectron2Muon2DiscrByDeltaR;
+  string _DoElectron2Muon2DiscrByCosDphi;
+  string _DoDiscrByElectron2Muon2MassReco;
+  string _DoElectron2Muon2DiscrByCDFzeta2D;
+  string _DoElectron2Muon2DiscrByDeltaPtDivSumPt;
+  string _DoElectron2Muon2DiscrByDeltaPt;
+  string _UseVectorSumOfElectron2Muon2ProductsAndMetMassReco;
+  string _UseCollinerApproxElectron2Muon2MassReco;
+  string _Electron2Muon2DiscrByOSLSType;
+
   string _Trigger1FirstRequirement;
   string _Trigger1SecondRequirement;
   string _Trigger2FirstRequirement;
@@ -1145,6 +1372,7 @@ private:
   vector<int>     *Tau_againstElectronMVATightMVA5;
   vector<double>  *Tau_nProngs;
   vector<double>  *Tau_puCorrPtSum;
+  vector<double>  *Tau_byCombinedIsolationDeltaBetaCorrRaw3Hits;
   vector<int>     *Tau_byLooseCombinedIsolationDeltaBetaCorr3Hits;
   vector<int>     *Tau_byMediumCombinedIsolationDeltaBetaCorr3Hits;
   vector<int>     *Tau_byTightCombinedIsolationDeltaBetaCorr3Hits;
@@ -1191,6 +1419,7 @@ private:
   vector<double>  *Gen_status;
   vector<int>  *Gen_BmotherIndex;
   Float_t         nTruePUInteractions;
+  Double_t        weightevt;
   Int_t           bestVertices;
   Double_t        Met_type1PF_px;
   Double_t        Met_type1PF_py;
@@ -1208,6 +1437,7 @@ private:
   TBranch        *b_Gen_status;   //!
   TBranch        *b_Gen_BmotherIndex;   //!
   TBranch        *b_nTruePUInteractions;   //!
+  TBranch        *b_weightevt;   //!
   TBranch        *b_bestVertices;   //!
   TBranch        *b_Muon_pt;   //!
   TBranch        *b_Muon_eta;   //!
@@ -1247,6 +1477,7 @@ private:
   TBranch        *b_Tau_againstElectronMVATightMVA5;   //!
   TBranch        *b_Tau_nProngs;   //!
   TBranch        *b_Tau_puCorrPtSum;   //!
+  TBranch        *b_Tau_byCombinedIsolationDeltaBetaCorrRaw3Hits;   //!
   TBranch        *b_Tau_byLooseCombinedIsolationDeltaBetaCorr3Hits;   //!
   TBranch        *b_Tau_byMediumCombinedIsolationDeltaBetaCorr3Hits;   //!
   TBranch        *b_Tau_byTightCombinedIsolationDeltaBetaCorr3Hits;   //!

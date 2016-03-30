@@ -58,6 +58,8 @@ void BSM3GAnalyzer::getInputs() {
 
   TEnv *params = new TEnv ("config_file");
   params->ReadFile ("BSM3GAnalyzer_CutParameters.in", kEnvChange);
+  _GenZmassMinCut    = params->GetValue ("GenZmassMinCut", 1.0);
+  _GenZmassMaxCut    = params->GetValue ("GenZmassMaxCut", 1.0);
   _GenTauPtMinCut    = params->GetValue ("GenTauPtMinCut", 1.0);
   _GenTauPtMaxCut    = params->GetValue ("GenTauPtMaxCut", 1.0);
   _GenTauEtaMaxCut   = params->GetValue ("GenTauEtaMaxCut", 1.0);
@@ -137,6 +139,14 @@ void BSM3GAnalyzer::getInputs() {
   _Electron2Tau1CombinationsNmax    = params->GetValue ("Electron2Tau1CombinationsNmax", 1);
   _Electron2Tau2CombinationsNmin    = params->GetValue ("Electron2Tau2CombinationsNmin", 1);
   _Electron2Tau2CombinationsNmax    = params->GetValue ("Electron2Tau2CombinationsNmax", 1);
+  _Electron1Muon1CombinationsNmin    = params->GetValue ("Electron1Muon1CombinationsNmin", 1);
+  _Electron1Muon1CombinationsNmax    = params->GetValue ("Electron1Muon1CombinationsNmax", 1);
+  _Electron1Muon2CombinationsNmin    = params->GetValue ("Electron1Muon2CombinationsNmin", 1);
+  _Electron1Muon2CombinationsNmax    = params->GetValue ("Electron1Muon2CombinationsNmax", 1);
+  _Electron2Muon1CombinationsNmin    = params->GetValue ("Electron2Muon1CombinationsNmin", 1);
+  _Electron2Muon1CombinationsNmax    = params->GetValue ("Electron2Muon1CombinationsNmax", 1);
+  _Electron2Muon2CombinationsNmin    = params->GetValue ("Electron2Muon2CombinationsNmin", 1);
+  _Electron2Muon2CombinationsNmax    = params->GetValue ("Electron2Muon2CombinationsNmax", 1);
   _RecoTriggers2Nmin                = params->GetValue ("RecoTriggers2Nmin", 1);
   _DoRecoMuon1DiscrByTightID         = params->GetValue ("DoRecoMuon1DiscrByTightID", "string");
   _DoRecoMuon1DiscrBySoftID          = params->GetValue ("DoRecoMuon1DiscrBySoftID", "string");
@@ -656,11 +666,100 @@ void BSM3GAnalyzer::getInputs() {
   _DoElectron2Tau2DiscrByDeltaPt        = params->GetValue ("DoElectron2Tau2DiscrByDeltaPt", "string");
   _Electron2Tau2DeltaPtMinCutValue      = params->GetValue ("Electron2Tau2DeltaPtMinCutValue", 1.0);
   _Electron2Tau2DeltaPtMaxCutValue      = params->GetValue ("Electron2Tau2DeltaPtMaxCutValue", 1.0);
+  _DoElectron1Muon1DiscrByDeltaR         = params->GetValue ("DoElectron1Muon1DiscrByDeltaR", "string");
+  _Electron1Muon1DeltaRCut               = params->GetValue ("Electron1Muon1DeltaRCut", 1.0);
+  _Electron1Muon1DiscrByOSLSType         = params->GetValue ("Electron1Muon1DiscrByOSLSType", "string");
+  _DoElectron1Muon1DiscrByCosDphi        = params->GetValue ("DoElectron1Muon1DiscrByCosDphi", "string");
+  _Electron1Muon1CosDphiMaxCut           = params->GetValue ("Electron1Muon1CosDphiMaxCut", 1.0);
+  _Electron1Muon1CosDphiMinCut           = params->GetValue ("Electron1Muon1CosDphiMinCut", 1.0);
+  _DoDiscrByElectron1Muon1MassReco       = params->GetValue ("DoDiscrByElectron1Muon1MassReco", "string");
+  _UseVectorSumOfElectron1Muon1ProductsAndMetMassReco = params->GetValue ("UseVectorSumOfElectron1Muon1ProductsAndMetMassReco", "string");
+  _UseCollinerApproxElectron1Muon1MassReco   = params->GetValue ("UseCollinerApproxElectron1Muon1MassReco", "string");
+  _Electron1Muon1MassMinCut              = params->GetValue ("Electron1Muon1MassMinCut", 1.0);
+  _Electron1Muon1MassMaxCut              = params->GetValue ("Electron1Muon1MassMaxCut", 1.0);
+  _DoElectron1Muon1DiscrByCDFzeta2D      = params->GetValue ("DoElectron1Muon1DiscrByCDFzeta2D", "string");
+  _Electron1Muon1PZetaCutCoefficient     = params->GetValue ("Electron1Muon1PZetaCutCoefficient", 1.0);
+  _Electron1Muon1PZetaVisCutCoefficient  = params->GetValue ("Electron1Muon1PZetaVisCutCoefficient", 1.0);
+  _Electron1Muon1CDFzeta2DMinCutValue    = params->GetValue ("Electron1Muon1CDFzeta2DMinCutValue", 1.0);
+  _Electron1Muon1CDFzeta2DMaxCutValue    = params->GetValue ("Electron1Muon1CDFzeta2DMaxCutValue", 1.0);
+  _DoElectron1Muon1DiscrByDeltaPtDivSumPt = params->GetValue ("DoElectron1Muon1DiscrByDeltaPtDivSumPt", "string");
+  _Electron1Muon1DeltaPtDivSumPtMinCutValue  = params->GetValue ("Electron1Muon1DeltaPtDivSumPtMinCutValue", 1.0);
+  _Electron1Muon1DeltaPtDivSumPtMaxCutValue  = params->GetValue ("Electron1Muon1DeltaPtDivSumPtMaxCutValue", 1.0);
+  _DoElectron1Muon1DiscrByDeltaPt        = params->GetValue ("DoElectron1Muon1DiscrByDeltaPt", "string");
+  _Electron1Muon1DeltaPtMinCutValue      = params->GetValue ("Electron1Muon1DeltaPtMinCutValue", 1.0);
+  _Electron1Muon1DeltaPtMaxCutValue      = params->GetValue ("Electron1Muon1DeltaPtMaxCutValue", 1.0);
+  _DoElectron1Muon2DiscrByDeltaR         = params->GetValue ("DoElectron1Muon2DiscrByDeltaR", "string");
+  _Electron1Muon2DeltaRCut               = params->GetValue ("Electron1Muon2DeltaRCut", 1.0);
+  _Electron1Muon2DiscrByOSLSType         = params->GetValue ("Electron1Muon2DiscrByOSLSType", "string");
+  _DoElectron1Muon2DiscrByCosDphi        = params->GetValue ("DoElectron1Muon2DiscrByCosDphi", "string");
+  _Electron1Muon2CosDphiMaxCut           = params->GetValue ("Electron1Muon2CosDphiMaxCut", 1.0);
+  _Electron1Muon2CosDphiMinCut           = params->GetValue ("Electron1Muon2CosDphiMinCut", 1.0);
+  _DoDiscrByElectron1Muon2MassReco       = params->GetValue ("DoDiscrByElectron1Muon2MassReco", "string");
+  _UseVectorSumOfElectron1Muon2ProductsAndMetMassReco = params->GetValue ("UseVectorSumOfElectron1Muon2ProductsAndMetMassReco", "string");
+  _UseCollinerApproxElectron1Muon2MassReco   = params->GetValue ("UseCollinerApproxElectron1Muon2MassReco", "string");
+  _Electron1Muon2MassMinCut              = params->GetValue ("Electron1Muon2MassMinCut", 1.0);
+  _Electron1Muon2MassMaxCut              = params->GetValue ("Electron1Muon2MassMaxCut", 1.0);
+  _DoElectron1Muon2DiscrByCDFzeta2D      = params->GetValue ("DoElectron1Muon2DiscrByCDFzeta2D", "string");
+  _Electron1Muon2PZetaCutCoefficient     = params->GetValue ("Electron1Muon2PZetaCutCoefficient", 1.0);
+  _Electron1Muon2PZetaVisCutCoefficient  = params->GetValue ("Electron1Muon2PZetaVisCutCoefficient", 1.0);
+  _Electron1Muon2CDFzeta2DMinCutValue    = params->GetValue ("Electron1Muon2CDFzeta2DMinCutValue", 1.0);
+  _Electron1Muon2CDFzeta2DMaxCutValue    = params->GetValue ("Electron1Muon2CDFzeta2DMaxCutValue", 1.0);
+  _DoElectron1Muon2DiscrByDeltaPtDivSumPt = params->GetValue ("DoElectron1Muon2DiscrByDeltaPtDivSumPt", "string");
+  _Electron1Muon2DeltaPtDivSumPtMinCutValue  = params->GetValue ("Electron1Muon2DeltaPtDivSumPtMinCutValue", 1.0);
+  _Electron1Muon2DeltaPtDivSumPtMaxCutValue  = params->GetValue ("Electron1Muon2DeltaPtDivSumPtMaxCutValue", 1.0);
+  _DoElectron1Muon2DiscrByDeltaPt        = params->GetValue ("DoElectron1Muon2DiscrByDeltaPt", "string");
+  _Electron1Muon2DeltaPtMinCutValue      = params->GetValue ("Electron1Muon2DeltaPtMinCutValue", 1.0);
+  _Electron1Muon2DeltaPtMaxCutValue      = params->GetValue ("Electron1Muon2DeltaPtMaxCutValue", 1.0);
+  _DoElectron2Muon1DiscrByDeltaR         = params->GetValue ("DoElectron2Muon1DiscrByDeltaR", "string");
+  _Electron2Muon1DeltaRCut               = params->GetValue ("Electron2Muon1DeltaRCut", 1.0);
+  _Electron2Muon1DiscrByOSLSType         = params->GetValue ("Electron2Muon1DiscrByOSLSType", "string");
+  _DoElectron2Muon1DiscrByCosDphi        = params->GetValue ("DoElectron2Muon1DiscrByCosDphi", "string");
+  _Electron2Muon1CosDphiMaxCut           = params->GetValue ("Electron2Muon1CosDphiMaxCut", 1.0);
+  _Electron2Muon1CosDphiMinCut           = params->GetValue ("Electron2Muon1CosDphiMinCut", 1.0);
+  _DoDiscrByElectron2Muon1MassReco       = params->GetValue ("DoDiscrByElectron2Muon1MassReco", "string");
+  _UseVectorSumOfElectron2Muon1ProductsAndMetMassReco = params->GetValue ("UseVectorSumOfElectron2Muon1ProductsAndMetMassReco", "string");
+  _UseCollinerApproxElectron2Muon1MassReco   = params->GetValue ("UseCollinerApproxElectron2Muon1MassReco", "string");
+  _Electron2Muon1MassMinCut              = params->GetValue ("Electron2Muon1MassMinCut", 1.0);
+  _Electron2Muon1MassMaxCut              = params->GetValue ("Electron2Muon1MassMaxCut", 1.0);
+  _DoElectron2Muon1DiscrByCDFzeta2D      = params->GetValue ("DoElectron2Muon1DiscrByCDFzeta2D", "string");
+  _Electron2Muon1PZetaCutCoefficient     = params->GetValue ("Electron2Muon1PZetaCutCoefficient", 1.0);
+  _Electron2Muon1PZetaVisCutCoefficient  = params->GetValue ("Electron2Muon1PZetaVisCutCoefficient", 1.0);
+  _Electron2Muon1CDFzeta2DMinCutValue    = params->GetValue ("Electron2Muon1CDFzeta2DMinCutValue", 1.0);
+  _Electron2Muon1CDFzeta2DMaxCutValue    = params->GetValue ("Electron2Muon1CDFzeta2DMaxCutValue", 1.0);
+  _DoElectron2Muon1DiscrByDeltaPtDivSumPt = params->GetValue ("DoElectron2Muon1DiscrByDeltaPtDivSumPt", "string");
+  _Electron2Muon1DeltaPtDivSumPtMinCutValue  = params->GetValue ("Electron2Muon1DeltaPtDivSumPtMinCutValue", 1.0);
+  _Electron2Muon1DeltaPtDivSumPtMaxCutValue  = params->GetValue ("Electron2Muon1DeltaPtDivSumPtMaxCutValue", 1.0);
+  _DoElectron2Muon1DiscrByDeltaPt        = params->GetValue ("DoElectron2Muon1DiscrByDeltaPt", "string");
+  _Electron2Muon1DeltaPtMinCutValue      = params->GetValue ("Electron2Muon1DeltaPtMinCutValue", 1.0);
+  _Electron2Muon1DeltaPtMaxCutValue      = params->GetValue ("Electron2Muon1DeltaPtMaxCutValue", 1.0);
+  _DoElectron2Muon2DiscrByDeltaR         = params->GetValue ("DoElectron2Muon2DiscrByDeltaR", "string");
+  _Electron2Muon2DeltaRCut               = params->GetValue ("Electron2Muon2DeltaRCut", 1.0);
+  _Electron2Muon2DiscrByOSLSType         = params->GetValue ("Electron2Muon2DiscrByOSLSType", "string");
+  _DoElectron2Muon2DiscrByCosDphi        = params->GetValue ("DoElectron2Muon2DiscrByCosDphi", "string");
+  _Electron2Muon2CosDphiMaxCut           = params->GetValue ("Electron2Muon2CosDphiMaxCut", 1.0);
+  _Electron2Muon2CosDphiMinCut           = params->GetValue ("Electron2Muon2CosDphiMinCut", 1.0);
+  _DoDiscrByElectron2Muon2MassReco       = params->GetValue ("DoDiscrByElectron2Muon2MassReco", "string");
+  _UseVectorSumOfElectron2Muon2ProductsAndMetMassReco = params->GetValue ("UseVectorSumOfElectron2Muon2ProductsAndMetMassReco", "string");
+  _UseCollinerApproxElectron2Muon2MassReco   = params->GetValue ("UseCollinerApproxElectron2Muon2MassReco", "string");
+  _Electron2Muon2MassMinCut              = params->GetValue ("Electron2Muon2MassMinCut", 1.0);
+  _Electron2Muon2MassMaxCut              = params->GetValue ("Electron2Muon2MassMaxCut", 1.0);
+  _DoElectron2Muon2DiscrByCDFzeta2D      = params->GetValue ("DoElectron2Muon2DiscrByCDFzeta2D", "string");
+  _Electron2Muon2PZetaCutCoefficient     = params->GetValue ("Electron2Muon2PZetaCutCoefficient", 1.0);
+  _Electron2Muon2PZetaVisCutCoefficient  = params->GetValue ("Electron2Muon2PZetaVisCutCoefficient", 1.0);
+  _Electron2Muon2CDFzeta2DMinCutValue    = params->GetValue ("Electron2Muon2CDFzeta2DMinCutValue", 1.0);
+  _Electron2Muon2CDFzeta2DMaxCutValue    = params->GetValue ("Electron2Muon2CDFzeta2DMaxCutValue", 1.0);
+  _DoElectron2Muon2DiscrByDeltaPtDivSumPt = params->GetValue ("DoElectron2Muon2DiscrByDeltaPtDivSumPt", "string");
+  _Electron2Muon2DeltaPtDivSumPtMinCutValue  = params->GetValue ("Electron2Muon2DeltaPtDivSumPtMinCutValue", 1.0);
+  _Electron2Muon2DeltaPtDivSumPtMaxCutValue  = params->GetValue ("Electron2Muon2DeltaPtDivSumPtMaxCutValue", 1.0);
+  _DoElectron2Muon2DiscrByDeltaPt        = params->GetValue ("DoElectron2Muon2DiscrByDeltaPt", "string");
+  _Electron2Muon2DeltaPtMinCutValue      = params->GetValue ("Electron2Muon2DeltaPtMinCutValue", 1.0);
+  _Electron2Muon2DeltaPtMaxCutValue      = params->GetValue ("Electron2Muon2DeltaPtMaxCutValue", 1.0);
   _Trigger1FirstRequirement             = params->GetValue ("Trigger1FirstRequirement", "string");
   _Trigger1SecondRequirement             = params->GetValue ("Trigger1SecondRequirement", "string");
   _Trigger2FirstRequirement             = params->GetValue ("Trigger2FirstRequirement", "string");
   _Trigger2SecondRequirement             = params->GetValue ("Trigger2SecondRequirement", "string");
   _CalculatePUSystematics            = params->GetValue ("CalculatePUSystematics", "string");
+  _ApplyGenWeight                    = params->GetValue ("ApplyGenWeight", "string");
   _SmearTheMuon                      = params->GetValue ("SmearTheMuon", "string");
   _MatchMuonToGen                    = params->GetValue ("MatchMuonToGen", "string");
   _UseMuonMotherId                   = params->GetValue ("UseMuonMotherId", "string");
@@ -768,6 +867,11 @@ void BSM3GAnalyzer::analyze(TFile *theFile) {
   _totalEvents++;
   //std::cout << "          BSM3GAnalyzer 'analyze' Function: Finished incrementing event counter" << std::endl;
 
+  //---MC@NLO/Powheg weights
+  if(weightevt > 0) {gen_weight = 1.0;}
+  else if(weightevt < 0) {gen_weight = -1.0;}
+  else {gen_weight = 0.0;}
+
   //---Get weights for the calculation of pdf systematic uncertainties for the denominator
   pdfWeightVector.clear();
   pdfWeightVector.push_back(1); // set the weight to 1 for the moment ...
@@ -869,8 +973,9 @@ void BSM3GAnalyzer::analyze(TFile *theFile) {
   //std::cout << "          BSM3GAnalyzer 'analyze' Function: Finished booking histograms" << std::endl;
   
   //---this is a placeholder for the moment ... eventually this will be a product of all the weights
-  isrgluon_weight = pu_weight;
-  
+  if(_ApplyGenWeight == "1") {isrgluon_weight = pu_weight * gen_weight;}
+  else {isrgluon_weight = pu_weight;}
+
   //---Get the event flags (did the event pass the cuts?)
   getEventFlags();
   //std::cout << "          BSM3GAnalyzer 'analyze' Function: Finished getting event flags" << std::endl;
@@ -1310,6 +1415,38 @@ void BSM3GAnalyzer::getEventFlags() {
       }
     }
   }
+  int nGoodElectron1Muon1Combinations = 0;
+  for(int ej = 0; ej < patElectron_pt->size(); ej++) {
+    for(int mj = 0; mj < Muon_pt->size(); mj++) {
+      if ((passRecoMuon1Cuts(mj)) && (passRecoElectron1Cuts(ej)) && (passElectron1Muon1TopologyCuts(mj,ej))) {
+        nGoodElectron1Muon1Combinations++;
+      }
+    }
+  }
+  int nGoodElectron1Muon2Combinations = 0;
+  for(int ej = 0; ej < patElectron_pt->size(); ej++) {
+    for(int mj = 0; mj < Muon_pt->size(); mj++) {
+      if ((passRecoMuon2Cuts(mj)) && (passRecoElectron1Cuts(ej)) && (passElectron1Muon2TopologyCuts(mj,ej))) {
+        nGoodElectron1Muon2Combinations++;
+      }
+    }
+  }
+  int nGoodElectron2Muon1Combinations = 0;
+  for(int ej = 0; ej < patElectron_pt->size(); ej++) {
+    for(int mj = 0; mj < Muon_pt->size(); mj++) {
+      if ((passRecoMuon1Cuts(mj)) && (passRecoElectron2Cuts(ej)) && (passElectron2Muon1TopologyCuts(mj,ej))) {
+        nGoodElectron2Muon1Combinations++;
+      }
+    }
+  }
+  int nGoodElectron2Muon2Combinations = 0;
+  for(int ej = 0; ej < patElectron_pt->size(); ej++) {
+    for(int mj = 0; mj < Muon_pt->size(); mj++) {
+      if ((passRecoMuon2Cuts(mj)) && (passRecoElectron2Cuts(ej)) && (passElectron2Muon2TopologyCuts(mj,ej))) {
+        nGoodElectron2Muon2Combinations++;
+      }
+    }
+  }
 
   if(nGoodDiMuonCombinations > 1000) {nGoodDiMuonCombinations = 999;}
   if(nGoodDiElectronCombinations > 1000) {nGoodDiElectronCombinations = 999;}
@@ -1323,6 +1460,10 @@ void BSM3GAnalyzer::getEventFlags() {
   if(nGoodElectron1Tau2Combinations > 1000) {nGoodElectron1Tau2Combinations = 999;}
   if(nGoodElectron2Tau1Combinations > 1000) {nGoodElectron2Tau1Combinations = 999;}
   if(nGoodElectron2Tau2Combinations > 1000) {nGoodElectron2Tau2Combinations = 999;}
+  if(nGoodElectron1Muon1Combinations > 1000) {nGoodElectron1Muon1Combinations = 999;}
+  if(nGoodElectron1Muon2Combinations > 1000) {nGoodElectron1Muon2Combinations = 999;}
+  if(nGoodElectron2Muon1Combinations > 1000) {nGoodElectron2Muon1Combinations = 999;}
+  if(nGoodElectron2Muon2Combinations > 1000) {nGoodElectron2Muon2Combinations = 999;}
   if(nGoodDiMuonCombinations>=_DiMuonCombinationsNmin) _EventFlag[_mapSelectionAlgoID["DiMuonCombinationsNmin"]] = true;
   if(nGoodDiMuonCombinations<=_DiMuonCombinationsNmax) _EventFlag[_mapSelectionAlgoID["DiMuonCombinationsNmax"]] = true;
   if(nGoodDiElectronCombinations>=_DiElectronCombinationsNmin) _EventFlag[_mapSelectionAlgoID["DiElectronCombinationsNmin"]] = true;
@@ -1347,6 +1488,14 @@ void BSM3GAnalyzer::getEventFlags() {
   if(nGoodElectron2Tau1Combinations<=_Electron2Tau1CombinationsNmax) _EventFlag[_mapSelectionAlgoID["Electron2Tau1CombinationsNmax"]] = true;
   if(nGoodElectron2Tau2Combinations>=_Electron2Tau2CombinationsNmin) _EventFlag[_mapSelectionAlgoID["Electron2Tau2CombinationsNmin"]] = true;
   if(nGoodElectron2Tau2Combinations<=_Electron2Tau2CombinationsNmax) _EventFlag[_mapSelectionAlgoID["Electron2Tau2CombinationsNmax"]] = true;
+  if(nGoodElectron1Muon1Combinations>=_Electron1Muon1CombinationsNmin) _EventFlag[_mapSelectionAlgoID["Electron1Muon1CombinationsNmin"]] = true;
+  if(nGoodElectron1Muon1Combinations<=_Electron1Muon1CombinationsNmax) _EventFlag[_mapSelectionAlgoID["Electron1Muon1CombinationsNmax"]] = true;
+  if(nGoodElectron1Muon2Combinations>=_Electron1Muon2CombinationsNmin) _EventFlag[_mapSelectionAlgoID["Electron1Muon2CombinationsNmin"]] = true;
+  if(nGoodElectron1Muon2Combinations<=_Electron1Muon2CombinationsNmax) _EventFlag[_mapSelectionAlgoID["Electron1Muon2CombinationsNmax"]] = true;
+  if(nGoodElectron2Muon1Combinations>=_Electron2Muon1CombinationsNmin) _EventFlag[_mapSelectionAlgoID["Electron2Muon1CombinationsNmin"]] = true;
+  if(nGoodElectron2Muon1Combinations<=_Electron2Muon1CombinationsNmax) _EventFlag[_mapSelectionAlgoID["Electron2Muon1CombinationsNmax"]] = true;
+  if(nGoodElectron2Muon2Combinations>=_Electron2Muon2CombinationsNmin) _EventFlag[_mapSelectionAlgoID["Electron2Muon2CombinationsNmin"]] = true;
+  if(nGoodElectron2Muon2Combinations<=_Electron2Muon2CombinationsNmax) _EventFlag[_mapSelectionAlgoID["Electron2Muon2CombinationsNmax"]] = true;
 
   // ------Does the event pass trigger requirements?
   nTriggersSatisfied = 0;
@@ -1479,6 +1628,15 @@ void BSM3GAnalyzer::fillHistograms(unsigned int i) {
           TLorentzVector genObjt1;
           genObjt1.SetPtEtaPhiE(Gen_pt->at(j), Gen_eta->at(j), Gen_phi->at(j), Gen_energy->at(j));
           _hGenZprimeMass[i][NpdfID]->Fill(genObjt1.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));
+        }
+      }
+
+      // ------Generated Zs
+      for(int j = 0; j < Gen_pt->size(); j++) {
+        if((abs(Gen_pdg_id->at(j)) == 23) && (Gen_status->at(j) != 22)) {
+          TLorentzVector genObjt1;
+          genObjt1.SetPtEtaPhiE(Gen_pt->at(j), Gen_eta->at(j), Gen_phi->at(j), Gen_energy->at(j));
+          _hGenZMass[i][NpdfID]->Fill(genObjt1.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));
         }
       }
 
@@ -1777,6 +1935,9 @@ void BSM3GAnalyzer::fillHistograms(unsigned int i) {
               _UseCollinerApproxMassReco = _UseCollinerApproxDiTauMassReco;
 	      _hDiTauDiJetReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(TheLeadDiJetVect,CalculateTheDiJet4Momentum(smearedTauMomentumVector.at(j),smearedTauMomentumVector.at(jj)).second).second.M(),isrgluon_weight  * pdfWeightVector.at(NpdfID));
             }
+            if (theLeadingJetIndex >= 0) {
+	      _hDiTauLeadingJetReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedJetMomentumVector.at(theLeadingJetIndex),CalculateTheDiJet4Momentum(smearedTauMomentumVector.at(j),smearedTauMomentumVector.at(jj)).second).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));
+            }
 	    _hTau1PtVsTau2Pt[i][NpdfID]->Fill(smearedTauMomentumVector.at(j).Pt(),smearedTauMomentumVector.at(jj).Pt(),isrgluon_weight  * pdfWeightVector.at(NpdfID));
 	    _hTau1Tau2DeltaR[i][NpdfID]->Fill(smearedTauMomentumVector.at(j).DeltaR(smearedTauMomentumVector.at(jj)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
 	    _hTau1Tau2DeltaPtDivSumPt[i][NpdfID]->Fill((smearedTauMomentumVector.at(j).Pt() - smearedTauMomentumVector.at(jj).Pt()) / (smearedTauMomentumVector.at(j).Pt() + smearedTauMomentumVector.at(jj).Pt()),isrgluon_weight  * pdfWeightVector.at(NpdfID));
@@ -1790,6 +1951,11 @@ void BSM3GAnalyzer::fillHistograms(unsigned int i) {
             _UseCollinerApproxMassReco = _UseCollinerApproxDiTauMassReco;
 	    if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(j),smearedTauMomentumVector.at(jj)).first) {_hDiTauReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(j),smearedTauMomentumVector.at(jj)).second.M(),isrgluon_weight  * pdfWeightVector.at(NpdfID));}
 	    else {_hDiTauNotReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(j),smearedTauMomentumVector.at(jj)).second.M(),isrgluon_weight  * pdfWeightVector.at(NpdfID));}
+
+            if( ( (Tau_nProngs->at(j) == 1) || (Tau_nProngs->at(j) == 3) ) && ( (Tau_nProngs->at(jj) == 1) || (Tau_nProngs->at(jj) == 3) ) ) {
+	      if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(j),smearedTauMomentumVector.at(jj)).first) {_hDiTauReconstructableMass_1or3prong[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(j),smearedTauMomentumVector.at(jj)).second.M(),isrgluon_weight  * pdfWeightVector.at(NpdfID));}
+            }
+
 	    _hDiTau_Tau1MetMt[i][NpdfID]->Fill(CalculateLeptonMetMt(smearedTauMomentumVector.at(j)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
 	    _hDiTau_Tau2MetMt[i][NpdfID]->Fill(CalculateLeptonMetMt(smearedTauMomentumVector.at(jj)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
 	    _hDiTauPZeta[i][NpdfID]->Fill(CalculatePZeta(smearedTauMomentumVector.at(j),smearedTauMomentumVector.at(jj)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
@@ -1824,6 +1990,26 @@ void BSM3GAnalyzer::fillHistograms(unsigned int i) {
             _UseCollinerApproxMassReco = _UseCollinerApproxMuon1Tau1MassReco;
 	    if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon1Tau1ReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
 	    else {_hMuon1Tau1NotReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+
+            if( (Tau_nProngs->at(tj) == 1) ) {
+	      if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon1Tau1ReconstructableMass_1prong[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            }
+            if( (Tau_nProngs->at(tj) == 2) ) {
+	      if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon1Tau1ReconstructableMass_2prong[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            }
+            if( (Tau_nProngs->at(tj) == 3) ) {
+	      if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon1Tau1ReconstructableMass_3prong[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            }
+            if( (Tau_nProngs->at(tj) == 1) || (Tau_nProngs->at(tj) == 3) ) {
+	      if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon1Tau1ReconstructableMass_1or3prong[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            }
+
+            if((Muon_charge->at(mj) * Tau_charge->at(tj)) < 0) {
+	      if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon1Tau1ReconstructableMass_OS[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            } else if((Muon_charge->at(mj) * Tau_charge->at(tj)) > 0) {
+	      if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon1Tau1ReconstructableMass_LS[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            } else { }
+
 	    _hMuon1Tau1_Muon1MetMt[i][NpdfID]->Fill(CalculateLeptonMetMt(smearedMuonMomentumVector.at(mj)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
 	    _hMuon1Tau1_Tau1MetMt[i][NpdfID]->Fill(CalculateLeptonMetMt(smearedTauMomentumVector.at(tj)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
             _hMuon1Tau1OSLS[i][NpdfID]->Fill(Muon_charge->at(mj) * Tau_charge->at(tj),isrgluon_weight  * pdfWeightVector.at(NpdfID));
@@ -1855,6 +2041,26 @@ void BSM3GAnalyzer::fillHistograms(unsigned int i) {
             _UseCollinerApproxMassReco = _UseCollinerApproxMuon1Tau2MassReco;
 	    if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon1Tau2ReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
 	    else {_hMuon1Tau2NotReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+
+            if( (Tau_nProngs->at(tj) == 1) ) {
+	      if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon1Tau2ReconstructableMass_1prong[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            }
+            if( (Tau_nProngs->at(tj) == 2) ) {
+	      if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon1Tau2ReconstructableMass_2prong[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            }
+            if( (Tau_nProngs->at(tj) == 3) ) {
+	      if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon1Tau2ReconstructableMass_3prong[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            }
+            if( (Tau_nProngs->at(tj) == 1) || (Tau_nProngs->at(tj) == 3) ) {
+	      if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon1Tau2ReconstructableMass_1or3prong[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            }
+
+            if((Muon_charge->at(mj) * Tau_charge->at(tj)) < 0) {
+	      if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon1Tau2ReconstructableMass_OS[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            } else if((Muon_charge->at(mj) * Tau_charge->at(tj)) > 0) {
+	      if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon1Tau2ReconstructableMass_LS[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            } else { }
+
 	    _hMuon1Tau2_Muon1MetMt[i][NpdfID]->Fill(CalculateLeptonMetMt(smearedMuonMomentumVector.at(mj)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
 	    _hMuon1Tau2_Tau2MetMt[i][NpdfID]->Fill(CalculateLeptonMetMt(smearedTauMomentumVector.at(tj)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
             _hMuon1Tau2OSLS[i][NpdfID]->Fill(Muon_charge->at(mj) * Tau_charge->at(tj),isrgluon_weight  * pdfWeightVector.at(NpdfID));
@@ -1886,6 +2092,26 @@ void BSM3GAnalyzer::fillHistograms(unsigned int i) {
             _UseCollinerApproxMassReco = _UseCollinerApproxMuon2Tau1MassReco;
 	    if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon2Tau1ReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
 	    else {_hMuon2Tau1NotReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+
+            if( (Tau_nProngs->at(tj) == 1) ) {
+	      if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon2Tau1ReconstructableMass_1prong[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            }
+            if( (Tau_nProngs->at(tj) == 2) ) {
+	      if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon2Tau1ReconstructableMass_2prong[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            }
+            if( (Tau_nProngs->at(tj) == 3) ) {
+	      if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon2Tau1ReconstructableMass_3prong[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            }
+            if( (Tau_nProngs->at(tj) == 1) || (Tau_nProngs->at(tj) == 3) ) {
+	      if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon2Tau1ReconstructableMass_1or3prong[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            }
+
+            if((Muon_charge->at(mj) * Tau_charge->at(tj)) < 0) {
+	      if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon2Tau1ReconstructableMass_OS[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            } else if((Muon_charge->at(mj) * Tau_charge->at(tj)) > 0) {
+	      if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon2Tau1ReconstructableMass_LS[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            } else { }
+
 	    _hMuon2Tau1_Muon2MetMt[i][NpdfID]->Fill(CalculateLeptonMetMt(smearedMuonMomentumVector.at(mj)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
 	    _hMuon2Tau1_Tau1MetMt[i][NpdfID]->Fill(CalculateLeptonMetMt(smearedTauMomentumVector.at(tj)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
             _hMuon2Tau1OSLS[i][NpdfID]->Fill(Muon_charge->at(mj) * Tau_charge->at(tj),isrgluon_weight  * pdfWeightVector.at(NpdfID));
@@ -1917,6 +2143,26 @@ void BSM3GAnalyzer::fillHistograms(unsigned int i) {
             _UseCollinerApproxMassReco = _UseCollinerApproxMuon2Tau2MassReco;
 	    if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon2Tau2ReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
 	    else {_hMuon2Tau2NotReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+
+            if( (Tau_nProngs->at(tj) == 1) ) {
+	      if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon2Tau2ReconstructableMass_1prong[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            }
+            if( (Tau_nProngs->at(tj) == 2) ) {
+	      if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon2Tau2ReconstructableMass_2prong[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            }
+            if( (Tau_nProngs->at(tj) == 3) ) {
+	      if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon2Tau2ReconstructableMass_3prong[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            }
+            if( (Tau_nProngs->at(tj) == 1) || (Tau_nProngs->at(tj) == 3) ) {
+	      if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon2Tau2ReconstructableMass_1or3prong[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            }
+
+            if((Muon_charge->at(mj) * Tau_charge->at(tj)) < 0) {
+	      if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon2Tau2ReconstructableMass_OS[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            } else if((Muon_charge->at(mj) * Tau_charge->at(tj)) > 0) {
+	      if(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).first) {_hMuon2Tau2ReconstructableMass_LS[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedTauMomentumVector.at(tj),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            } else { }
+
 	    _hMuon2Tau2_Muon2MetMt[i][NpdfID]->Fill(CalculateLeptonMetMt(smearedMuonMomentumVector.at(mj)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
 	    _hMuon2Tau2_Tau2MetMt[i][NpdfID]->Fill(CalculateLeptonMetMt(smearedTauMomentumVector.at(tj)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
             _hMuon2Tau2OSLS[i][NpdfID]->Fill(Muon_charge->at(mj) * Tau_charge->at(tj),isrgluon_weight  * pdfWeightVector.at(NpdfID));
@@ -1929,11 +2175,156 @@ void BSM3GAnalyzer::fillHistograms(unsigned int i) {
 	}
       }
 
-
+      for(int mj = 0; mj < Muon_pt->size(); mj++) {
+        for(int ej = 0; ej < patElectron_pt->size(); ej++) {
+	  if ((passRecoElectron1Cuts(ej)) && (passRecoMuon1Cuts(mj)) && (passElectron1Muon1TopologyCuts(mj,ej))) {
+            if ((theLeadingJetIndex >= 0) && (theSecondLeadingJetIndex >= 0)) {
+              TheLeadDiJetVect = CalculateTheDiJet4Momentum(smearedJetMomentumVector.at(theLeadingJetIndex),smearedJetMomentumVector.at(theSecondLeadingJetIndex)).second;
+	      _hElectron1Muon1_Electron1DiJetDeltaPhi[i][NpdfID]->Fill(abs(normalizedPhi(smearedElectronMomentumVector.at(ej).Phi() - TheLeadDiJetVect.Phi())),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	      _hElectron1Muon1_Muon1DiJetDeltaPhi[i][NpdfID]->Fill(abs(normalizedPhi(smearedMuonMomentumVector.at(mj).Phi() - TheLeadDiJetVect.Phi())),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+              _UseVectorSumOfVisProductsAndMetMassReco = "1";
+              _UseCollinerApproxMassReco = _UseCollinerApproxElectron1Muon1MassReco;
+	      _hElectron1Muon1DiJetReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(TheLeadDiJetVect,CalculateTheDiJet4Momentum(smearedMuonMomentumVector.at(mj),smearedElectronMomentumVector.at(ej)).second).second.M(),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+            }
+            _hElectron1Muon1_Muon1IsZmm[i][NpdfID]->Fill(isZmm(smearedMuonMomentumVector.at(mj)).first,isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hMuon1PtVsElectron1Pt[i][NpdfID]->Fill(smearedMuonMomentumVector.at(mj).Pt(),smearedElectronMomentumVector.at(ej).Pt(),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron1Muon1DeltaR[i][NpdfID]->Fill(smearedElectronMomentumVector.at(ej).DeltaR(smearedMuonMomentumVector.at(mj)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron1Muon1DeltaPtDivSumPt[i][NpdfID]->Fill((smearedMuonMomentumVector.at(mj).Pt() - smearedElectronMomentumVector.at(ej).Pt()) / (smearedElectronMomentumVector.at(ej).Pt() + smearedMuonMomentumVector.at(mj).Pt()),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron1Muon1DeltaPt[i][NpdfID]->Fill((smearedMuonMomentumVector.at(mj).Pt() - smearedElectronMomentumVector.at(ej).Pt()),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron1Muon1CosDphi[i][NpdfID]->Fill(cos(abs(normalizedPhi(smearedMuonMomentumVector.at(mj).Phi() - smearedElectronMomentumVector.at(ej).Phi()))),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron1Muon1_Muon1MetDeltaPhi[i][NpdfID]->Fill(abs(normalizedPhi(smearedMuonMomentumVector.at(mj).Phi() - theMETVector.Phi())),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hMuon1MetDeltaPhiVsElectron1Muon1CosDphi[i][NpdfID]->Fill(abs(normalizedPhi(smearedMuonMomentumVector.at(mj).Phi() - theMETVector.Phi())), cos(abs(normalizedPhi(smearedMuonMomentumVector.at(mj).Phi() - smearedElectronMomentumVector.at(ej).Phi()))),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron1Muon1_Electron1MetDeltaPhi[i][NpdfID]->Fill(abs(normalizedPhi(smearedElectronMomentumVector.at(ej).Phi() - theMETVector.Phi())),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+            _UseVectorSumOfVisProductsAndMetMassReco = _UseVectorSumOfElectron1Muon1ProductsAndMetMassReco;
+            _UseCollinerApproxMassReco = _UseCollinerApproxElectron1Muon1MassReco;
+	    if(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).first) {_hElectron1Muon1ReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+	    else {_hElectron1Muon1NotReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            if((Muon_charge->at(mj) * patElectron_charge->at(ej)) < 0) {
+	      if(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).first) {_hElectron1Muon1ReconstructableMass_OS[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            } else if((Muon_charge->at(mj) * patElectron_charge->at(ej)) > 0) {
+	      if(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).first) {_hElectron1Muon1ReconstructableMass_LS[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            } else { }
+	    _hElectron1Muon1_Muon1MetMt[i][NpdfID]->Fill(CalculateLeptonMetMt(smearedMuonMomentumVector.at(mj)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron1Muon1_Electron1MetMt[i][NpdfID]->Fill(CalculateLeptonMetMt(smearedElectronMomentumVector.at(ej)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+            _hElectron1Muon1OSLS[i][NpdfID]->Fill(Muon_charge->at(mj) * patElectron_charge->at(ej),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron1Muon1PZeta[i][NpdfID]->Fill(CalculatePZeta(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)),isrgluon_weight * pdfWeightVector.at(NpdfID));
+	    _hElectron1Muon1PZetaVis[i][NpdfID]->Fill(CalculatePZetaVis(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)),isrgluon_weight * pdfWeightVector.at(NpdfID));
+	    _hElectron1Muon1Zeta2D[i][NpdfID]->Fill(CalculatePZetaVis(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)),CalculatePZeta(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)),isrgluon_weight * pdfWeightVector.at(NpdfID));
+	    _hElectron1Muon1Zeta1D[i][NpdfID]->Fill((_Electron1Muon1PZetaCutCoefficient * CalculatePZeta(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj))) + 
+					       (_Electron1Muon1PZetaVisCutCoefficient * CalculatePZetaVis(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj))),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	  }
+	  if ((passRecoElectron1Cuts(ej)) && (passRecoMuon2Cuts(mj)) && (passElectron1Muon2TopologyCuts(mj,ej))) {
+            if ((theLeadingJetIndex >= 0) && (theSecondLeadingJetIndex >= 0)) {
+              TheLeadDiJetVect = CalculateTheDiJet4Momentum(smearedJetMomentumVector.at(theLeadingJetIndex),smearedJetMomentumVector.at(theSecondLeadingJetIndex)).second;
+	      _hElectron1Muon2_Electron1DiJetDeltaPhi[i][NpdfID]->Fill(abs(normalizedPhi(smearedElectronMomentumVector.at(ej).Phi() - TheLeadDiJetVect.Phi())),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	      _hElectron1Muon2_Muon2DiJetDeltaPhi[i][NpdfID]->Fill(abs(normalizedPhi(smearedMuonMomentumVector.at(mj).Phi() - TheLeadDiJetVect.Phi())),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+              _UseVectorSumOfVisProductsAndMetMassReco = "1";
+              _UseCollinerApproxMassReco = _UseCollinerApproxElectron1Muon2MassReco;
+	      _hElectron1Muon2DiJetReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(TheLeadDiJetVect,CalculateTheDiJet4Momentum(smearedMuonMomentumVector.at(mj),smearedElectronMomentumVector.at(ej)).second).second.M(),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+            }
+            _hElectron1Muon2_Muon2IsZmm[i][NpdfID]->Fill(isZmm(smearedMuonMomentumVector.at(mj)).first,isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hMuon2PtVsElectron1Pt[i][NpdfID]->Fill(smearedMuonMomentumVector.at(mj).Pt(),smearedElectronMomentumVector.at(ej).Pt(),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron1Muon2DeltaR[i][NpdfID]->Fill(smearedElectronMomentumVector.at(ej).DeltaR(smearedMuonMomentumVector.at(mj)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron1Muon2DeltaPtDivSumPt[i][NpdfID]->Fill((smearedMuonMomentumVector.at(mj).Pt() - smearedElectronMomentumVector.at(ej).Pt()) / (smearedElectronMomentumVector.at(ej).Pt() + smearedMuonMomentumVector.at(mj).Pt()),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron1Muon2DeltaPt[i][NpdfID]->Fill((smearedMuonMomentumVector.at(mj).Pt() - smearedElectronMomentumVector.at(ej).Pt()),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron1Muon2CosDphi[i][NpdfID]->Fill(cos(abs(normalizedPhi(smearedMuonMomentumVector.at(mj).Phi() - smearedElectronMomentumVector.at(ej).Phi()))),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron1Muon2_Muon2MetDeltaPhi[i][NpdfID]->Fill(abs(normalizedPhi(smearedMuonMomentumVector.at(mj).Phi() - theMETVector.Phi())),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hMuon2MetDeltaPhiVsElectron1Muon2CosDphi[i][NpdfID]->Fill(abs(normalizedPhi(smearedMuonMomentumVector.at(mj).Phi() - theMETVector.Phi())), cos(abs(normalizedPhi(smearedMuonMomentumVector.at(mj).Phi() - smearedElectronMomentumVector.at(ej).Phi()))),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron1Muon2_Electron1MetDeltaPhi[i][NpdfID]->Fill(abs(normalizedPhi(smearedElectronMomentumVector.at(ej).Phi() - theMETVector.Phi())),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+            _UseVectorSumOfVisProductsAndMetMassReco = _UseVectorSumOfElectron1Muon2ProductsAndMetMassReco;
+            _UseCollinerApproxMassReco = _UseCollinerApproxElectron1Muon2MassReco;
+	    if(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).first) {_hElectron1Muon2ReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+	    else {_hElectron1Muon2NotReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            if((Muon_charge->at(mj) * patElectron_charge->at(ej)) < 0) {
+	      if(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).first) {_hElectron1Muon2ReconstructableMass_OS[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            } else if((Muon_charge->at(mj) * patElectron_charge->at(ej)) > 0) {
+	      if(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).first) {_hElectron1Muon2ReconstructableMass_LS[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            } else { }
+	    _hElectron1Muon2_Muon2MetMt[i][NpdfID]->Fill(CalculateLeptonMetMt(smearedMuonMomentumVector.at(mj)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron1Muon2_Electron1MetMt[i][NpdfID]->Fill(CalculateLeptonMetMt(smearedElectronMomentumVector.at(ej)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+            _hElectron1Muon2OSLS[i][NpdfID]->Fill(Muon_charge->at(mj) * patElectron_charge->at(ej),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron1Muon2PZeta[i][NpdfID]->Fill(CalculatePZeta(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)),isrgluon_weight * pdfWeightVector.at(NpdfID));
+	    _hElectron1Muon2PZetaVis[i][NpdfID]->Fill(CalculatePZetaVis(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)),isrgluon_weight * pdfWeightVector.at(NpdfID));
+	    _hElectron1Muon2Zeta2D[i][NpdfID]->Fill(CalculatePZetaVis(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)),CalculatePZeta(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)),isrgluon_weight * pdfWeightVector.at(NpdfID));
+	    _hElectron1Muon2Zeta1D[i][NpdfID]->Fill((_Electron1Muon2PZetaCutCoefficient * CalculatePZeta(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj))) + 
+					       (_Electron1Muon2PZetaVisCutCoefficient * CalculatePZetaVis(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj))),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	  }
+	  if ((passRecoElectron2Cuts(ej)) && (passRecoMuon1Cuts(mj)) && (passElectron2Muon1TopologyCuts(mj,ej))) {
+            if ((theLeadingJetIndex >= 0) && (theSecondLeadingJetIndex >= 0)) {
+              TheLeadDiJetVect = CalculateTheDiJet4Momentum(smearedJetMomentumVector.at(theLeadingJetIndex),smearedJetMomentumVector.at(theSecondLeadingJetIndex)).second;
+	      _hElectron2Muon1_Electron2DiJetDeltaPhi[i][NpdfID]->Fill(abs(normalizedPhi(smearedElectronMomentumVector.at(ej).Phi() - TheLeadDiJetVect.Phi())),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	      _hElectron2Muon1_Muon1DiJetDeltaPhi[i][NpdfID]->Fill(abs(normalizedPhi(smearedMuonMomentumVector.at(mj).Phi() - TheLeadDiJetVect.Phi())),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+              _UseVectorSumOfVisProductsAndMetMassReco = "1";
+              _UseCollinerApproxMassReco = _UseCollinerApproxElectron2Muon1MassReco;
+	      _hElectron2Muon1DiJetReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(TheLeadDiJetVect,CalculateTheDiJet4Momentum(smearedMuonMomentumVector.at(mj),smearedElectronMomentumVector.at(ej)).second).second.M(),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+            }
+            _hElectron2Muon1_Muon1IsZmm[i][NpdfID]->Fill(isZmm(smearedMuonMomentumVector.at(mj)).first,isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hMuon1PtVsElectron2Pt[i][NpdfID]->Fill(smearedMuonMomentumVector.at(mj).Pt(),smearedElectronMomentumVector.at(ej).Pt(),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron2Muon1DeltaR[i][NpdfID]->Fill(smearedElectronMomentumVector.at(ej).DeltaR(smearedMuonMomentumVector.at(mj)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron2Muon1DeltaPtDivSumPt[i][NpdfID]->Fill((smearedMuonMomentumVector.at(mj).Pt() - smearedElectronMomentumVector.at(ej).Pt()) / (smearedElectronMomentumVector.at(ej).Pt() + smearedMuonMomentumVector.at(mj).Pt()),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron2Muon1DeltaPt[i][NpdfID]->Fill((smearedMuonMomentumVector.at(mj).Pt() - smearedElectronMomentumVector.at(ej).Pt()),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron2Muon1CosDphi[i][NpdfID]->Fill(cos(abs(normalizedPhi(smearedMuonMomentumVector.at(mj).Phi() - smearedElectronMomentumVector.at(ej).Phi()))),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron2Muon1_Muon1MetDeltaPhi[i][NpdfID]->Fill(abs(normalizedPhi(smearedMuonMomentumVector.at(mj).Phi() - theMETVector.Phi())),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hMuon1MetDeltaPhiVsElectron2Muon1CosDphi[i][NpdfID]->Fill(abs(normalizedPhi(smearedMuonMomentumVector.at(mj).Phi() - theMETVector.Phi())), cos(abs(normalizedPhi(smearedMuonMomentumVector.at(mj).Phi() - smearedElectronMomentumVector.at(ej).Phi()))),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron2Muon1_Electron2MetDeltaPhi[i][NpdfID]->Fill(abs(normalizedPhi(smearedElectronMomentumVector.at(ej).Phi() - theMETVector.Phi())),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+            _UseVectorSumOfVisProductsAndMetMassReco = _UseVectorSumOfElectron2Muon1ProductsAndMetMassReco;
+            _UseCollinerApproxMassReco = _UseCollinerApproxElectron2Muon1MassReco;
+	    if(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).first) {_hElectron2Muon1ReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+	    else {_hElectron2Muon1NotReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            if((Muon_charge->at(mj) * patElectron_charge->at(ej)) < 0) {
+	      if(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).first) {_hElectron2Muon1ReconstructableMass_OS[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            } else if((Muon_charge->at(mj) * patElectron_charge->at(ej)) > 0) {
+	      if(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).first) {_hElectron2Muon1ReconstructableMass_LS[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            } else { }
+	    _hElectron2Muon1_Muon1MetMt[i][NpdfID]->Fill(CalculateLeptonMetMt(smearedMuonMomentumVector.at(mj)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron2Muon1_Electron2MetMt[i][NpdfID]->Fill(CalculateLeptonMetMt(smearedElectronMomentumVector.at(ej)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+            _hElectron2Muon1OSLS[i][NpdfID]->Fill(Muon_charge->at(mj) * patElectron_charge->at(ej),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron2Muon1PZeta[i][NpdfID]->Fill(CalculatePZeta(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)),isrgluon_weight * pdfWeightVector.at(NpdfID));
+	    _hElectron2Muon1PZetaVis[i][NpdfID]->Fill(CalculatePZetaVis(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)),isrgluon_weight * pdfWeightVector.at(NpdfID));
+	    _hElectron2Muon1Zeta2D[i][NpdfID]->Fill(CalculatePZetaVis(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)),CalculatePZeta(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)),isrgluon_weight * pdfWeightVector.at(NpdfID));
+	    _hElectron2Muon1Zeta1D[i][NpdfID]->Fill((_Electron2Muon1PZetaCutCoefficient * CalculatePZeta(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj))) + 
+					       (_Electron2Muon1PZetaVisCutCoefficient * CalculatePZetaVis(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj))),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	  }
+	  if ((passRecoElectron2Cuts(ej)) && (passRecoMuon2Cuts(mj)) && (passElectron2Muon2TopologyCuts(mj,ej))) {
+            if ((theLeadingJetIndex >= 0) && (theSecondLeadingJetIndex >= 0)) {
+              TheLeadDiJetVect = CalculateTheDiJet4Momentum(smearedJetMomentumVector.at(theLeadingJetIndex),smearedJetMomentumVector.at(theSecondLeadingJetIndex)).second;
+	      _hElectron2Muon2_Electron2DiJetDeltaPhi[i][NpdfID]->Fill(abs(normalizedPhi(smearedElectronMomentumVector.at(ej).Phi() - TheLeadDiJetVect.Phi())),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	      _hElectron2Muon2_Muon2DiJetDeltaPhi[i][NpdfID]->Fill(abs(normalizedPhi(smearedMuonMomentumVector.at(mj).Phi() - TheLeadDiJetVect.Phi())),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+              _UseVectorSumOfVisProductsAndMetMassReco = "1";
+              _UseCollinerApproxMassReco = _UseCollinerApproxElectron2Muon2MassReco;
+	      _hElectron2Muon2DiJetReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(TheLeadDiJetVect,CalculateTheDiJet4Momentum(smearedMuonMomentumVector.at(mj),smearedElectronMomentumVector.at(ej)).second).second.M(),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+            }
+            _hElectron2Muon2_Muon2IsZmm[i][NpdfID]->Fill(isZmm(smearedMuonMomentumVector.at(mj)).first,isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hMuon2PtVsElectron2Pt[i][NpdfID]->Fill(smearedMuonMomentumVector.at(mj).Pt(),smearedElectronMomentumVector.at(ej).Pt(),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron2Muon2DeltaR[i][NpdfID]->Fill(smearedElectronMomentumVector.at(ej).DeltaR(smearedMuonMomentumVector.at(mj)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron2Muon2DeltaPtDivSumPt[i][NpdfID]->Fill((smearedMuonMomentumVector.at(mj).Pt() - smearedElectronMomentumVector.at(ej).Pt()) / (smearedElectronMomentumVector.at(ej).Pt() + smearedMuonMomentumVector.at(mj).Pt()),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron2Muon2DeltaPt[i][NpdfID]->Fill((smearedMuonMomentumVector.at(mj).Pt() - smearedElectronMomentumVector.at(ej).Pt()),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron2Muon2CosDphi[i][NpdfID]->Fill(cos(abs(normalizedPhi(smearedMuonMomentumVector.at(mj).Phi() - smearedElectronMomentumVector.at(ej).Phi()))),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron2Muon2_Muon2MetDeltaPhi[i][NpdfID]->Fill(abs(normalizedPhi(smearedMuonMomentumVector.at(mj).Phi() - theMETVector.Phi())),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hMuon2MetDeltaPhiVsElectron2Muon2CosDphi[i][NpdfID]->Fill(abs(normalizedPhi(smearedMuonMomentumVector.at(mj).Phi() - theMETVector.Phi())), cos(abs(normalizedPhi(smearedMuonMomentumVector.at(mj).Phi() - smearedElectronMomentumVector.at(ej).Phi()))),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron2Muon2_Electron2MetDeltaPhi[i][NpdfID]->Fill(abs(normalizedPhi(smearedElectronMomentumVector.at(ej).Phi() - theMETVector.Phi())),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+            _UseVectorSumOfVisProductsAndMetMassReco = _UseVectorSumOfElectron2Muon2ProductsAndMetMassReco;
+            _UseCollinerApproxMassReco = _UseCollinerApproxElectron2Muon2MassReco;
+	    if(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).first) {_hElectron2Muon2ReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+	    else {_hElectron2Muon2NotReconstructableMass[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            if((Muon_charge->at(mj) * patElectron_charge->at(ej)) < 0) {
+	      if(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).first) {_hElectron2Muon2ReconstructableMass_OS[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            } else if((Muon_charge->at(mj) * patElectron_charge->at(ej)) > 0) {
+	      if(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).first) {_hElectron2Muon2ReconstructableMass_LS[i][NpdfID]->Fill(CalculateTheDiTau4Momentum(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)).second.M(),isrgluon_weight * pdfWeightVector.at(NpdfID));}
+            } else { }
+	    _hElectron2Muon2_Muon2MetMt[i][NpdfID]->Fill(CalculateLeptonMetMt(smearedMuonMomentumVector.at(mj)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron2Muon2_Electron2MetMt[i][NpdfID]->Fill(CalculateLeptonMetMt(smearedElectronMomentumVector.at(ej)),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+            _hElectron2Muon2OSLS[i][NpdfID]->Fill(Muon_charge->at(mj) * patElectron_charge->at(ej),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+	    _hElectron2Muon2PZeta[i][NpdfID]->Fill(CalculatePZeta(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)),isrgluon_weight * pdfWeightVector.at(NpdfID));
+	    _hElectron2Muon2PZetaVis[i][NpdfID]->Fill(CalculatePZetaVis(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)),isrgluon_weight * pdfWeightVector.at(NpdfID));
+	    _hElectron2Muon2Zeta2D[i][NpdfID]->Fill(CalculatePZetaVis(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)),CalculatePZeta(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj)),isrgluon_weight * pdfWeightVector.at(NpdfID));
+	    _hElectron2Muon2Zeta1D[i][NpdfID]->Fill((_Electron2Muon2PZetaCutCoefficient * CalculatePZeta(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj))) + 
+					       (_Electron2Muon2PZetaVisCutCoefficient * CalculatePZetaVis(smearedElectronMomentumVector.at(ej),smearedMuonMomentumVector.at(mj))),isrgluon_weight  * pdfWeightVector.at(NpdfID));
+          }
+	}
+      }
     }
-
   }
- 
 }
 
 // ---------------
@@ -1982,6 +2373,7 @@ void BSM3GAnalyzer::bookHistograms(TFile * theOutFile, string mydirectory , unsi
       _hGenDiTauMass[i][NpdfCounter]                     = new TH1F(("GenDiTauMass_"+j.str()).c_str(),                   ("GenDiTauMass_"+j.str()).c_str(),    100, 0., 10000.);
       _hGenZprimeMass[i][NpdfCounter]                    = new TH1F(("GenZprimeMass_"+j.str()).c_str(),                  ("GenZprimeMass_"+j.str()).c_str(),    100, 0., 10000.);
       _hGenZprimeStatusCode[i][NpdfCounter]              = new TH1F(("GenZprimeStatusCode_"+j.str()).c_str(),            ("GenZprimeStatusCode_"+j.str()).c_str(),     100, 0., 100.);
+      _hGenZMass[i][NpdfCounter]                         = new TH1F(("GenZMass_"+j.str()).c_str(),                       ("GenZMass_"+j.str()).c_str(),    100, 0., 10000.);
       _hGenTauStatusCode[i][NpdfCounter]                 = new TH1F(("GenTauStatusCode_"+j.str()).c_str(),               ("GenTauStatusCode_"+j.str()).c_str(),     100, 0., 100.);
     }
 
@@ -2124,7 +2516,9 @@ void BSM3GAnalyzer::bookHistograms(TFile * theOutFile, string mydirectory , unsi
       _hDiTauZeta1D[i][NpdfCounter]            = new TH1F(("DiTauZeta1D_"+j.str()).c_str(),           ("DiTauZeta1D_"+j.str()).c_str(), 150, -300, 300);
       _hDiTauNotReconstructableMass[i][NpdfCounter]           = new TH1F(("DiTauNotReconstructableMass_"+j.str()).c_str(),           ("DiTauNotReconstructableMass_"+j.str()).c_str(), 600, 0, 1500);
       _hDiTauReconstructableMass[i][NpdfCounter]              = new TH1F(("DiTauReconstructableMass_"+j.str()).c_str(),              ("DiTauReconstructableMass_"+j.str()).c_str(), 600, 0, 1500);
+      _hDiTauReconstructableMass_1or3prong[i][NpdfCounter]    = new TH1F(("DiTauReconstructableMass_1or3prong_"+j.str()).c_str(),    ("DiTauReconstructableMass_1or3prong_"+j.str()).c_str(), 600, 0, 1500);
       _hDiTauDiJetReconstructableMass[i][NpdfCounter]         = new TH1F(("DiTauDiJetReconstructableMass_"+j.str()).c_str(),              ("DiTauDiJetReconstructableMass_"+j.str()).c_str(), 100, 0, 5000);
+      _hDiTauLeadingJetReconstructableMass[i][NpdfCounter]         = new TH1F(("DiTauLeadingJetReconstructableMass_"+j.str()).c_str(),              ("DiTauLeadingJetReconstructableMass_"+j.str()).c_str(), 100, 0, 5000);
       _hMuon1Tau1_Tau1DiJetDeltaPhi[i][NpdfCounter]          = new TH1F(("Muon1Tau1_Tau1DiJetDeltaPhi_"+j.str()).c_str(),          ("Muon1Tau1_Tau1DiJetDeltaPhi_"+j.str()).c_str(), 72, 0, +TMath::Pi());
       _hMuon1Tau1_Muon1DiJetDeltaPhi[i][NpdfCounter]         = new TH1F(("Muon1Tau1_Muon1DiJetDeltaPhi_"+j.str()).c_str(),         ("Muon1Tau1_Muon1DiJetDeltaPhi_"+j.str()).c_str(), 72, 0, +TMath::Pi());
       _hMuon1Tau1_Muon1IsZmm[i][NpdfCounter]           = new TH1F(("Muon1Tau1_Muon1IsZmm_"+j.str()).c_str(),               ("Muon1Tau1_Muon1IsZmm_"+j.str()).c_str(), 2, 0., 2.);
@@ -2141,6 +2535,12 @@ void BSM3GAnalyzer::bookHistograms(TFile * theOutFile, string mydirectory , unsi
       _hMuon1MetDeltaPhiVsMuon1Tau1CosDphi[i][NpdfCounter] = new TH2F(("Muon1MetDeltaPhiVsMuon1Tau1CosDphi_"+j.str()).c_str(), ("Muon1MetDeltaPhiVsMuon1Tau1CosDphi_"+j.str()).c_str(), 72, 0, +TMath::Pi(), 220, -1.1, 1.1);
       _hMuon1Tau1NotReconstructableMass[i][NpdfCounter]       = new TH1F(("Muon1Tau1NotReconstructableMass_"+j.str()).c_str(),       ("Muon1Tau1NotReconstructableMass_"+j.str()).c_str(), 600, 0, 1500);
       _hMuon1Tau1ReconstructableMass[i][NpdfCounter]          = new TH1F(("Muon1Tau1ReconstructableMass_"+j.str()).c_str(),          ("Muon1Tau1ReconstructableMass_"+j.str()).c_str(), 600, 0, 1500);
+      _hMuon1Tau1ReconstructableMass_1prong[i][NpdfCounter]   = new TH1F(("Muon1Tau1ReconstructableMass_1prong_"+j.str()).c_str(),          ("Muon1Tau1ReconstructableMass_1prong_"+j.str()).c_str(), 600, 0, 1500);
+      _hMuon1Tau1ReconstructableMass_2prong[i][NpdfCounter]   = new TH1F(("Muon1Tau1ReconstructableMass_2prong_"+j.str()).c_str(),          ("Muon1Tau1ReconstructableMass_2prong_"+j.str()).c_str(), 600, 0, 1500);
+      _hMuon1Tau1ReconstructableMass_3prong[i][NpdfCounter]   = new TH1F(("Muon1Tau1ReconstructableMass_3prong_"+j.str()).c_str(),          ("Muon1Tau1ReconstructableMass_3prong_"+j.str()).c_str(), 600, 0, 1500);
+      _hMuon1Tau1ReconstructableMass_1or3prong[i][NpdfCounter]   = new TH1F(("Muon1Tau1ReconstructableMass_1or3prong_"+j.str()).c_str(),          ("Muon1Tau1ReconstructableMass_1or3prong_"+j.str()).c_str(), 600, 0, 1500);
+      _hMuon1Tau1ReconstructableMass_OS[i][NpdfCounter]   = new TH1F(("Muon1Tau1ReconstructableMass_OS_"+j.str()).c_str(),          ("Muon1Tau1ReconstructableMass_OS_"+j.str()).c_str(), 600, 0, 1500);
+      _hMuon1Tau1ReconstructableMass_LS[i][NpdfCounter]   = new TH1F(("Muon1Tau1ReconstructableMass_LS_"+j.str()).c_str(),          ("Muon1Tau1ReconstructableMass_LS_"+j.str()).c_str(), 600, 0, 1500);
       _hMuon1Tau1PZeta[i][NpdfCounter]         = new TH1F(("Muon1Tau1PZeta_"+j.str()).c_str(),        ("Muon1Tau1PZeta_"+j.str()).c_str(), 200, -100, 100);
       _hMuon1Tau1PZetaVis[i][NpdfCounter]      = new TH1F(("Muon1Tau1PZetaVis_"+j.str()).c_str(),     ("Muon1Tau1PZetaVis_"+j.str()).c_str(), 100, 0, 100);
       _hMuon1Tau1Zeta2D[i][NpdfCounter]        = new TH2F(("Muon1Tau1Zeta2D_"+j.str()).c_str(),       ("Muon1Tau1Zeta2D_"+j.str()).c_str(), 100, 0, 100, 200, -100, 100);
@@ -2162,6 +2562,12 @@ void BSM3GAnalyzer::bookHistograms(TFile * theOutFile, string mydirectory , unsi
       _hMuon1MetDeltaPhiVsMuon1Tau2CosDphi[i][NpdfCounter] = new TH2F(("Muon1MetDeltaPhiVsMuon1Tau2CosDphi_"+j.str()).c_str(),("Muon1MetDeltaPhiVsMuon1Tau2CosDphi_"+j.str()).c_str(), 72, 0, +TMath::Pi(), 220, -1.1, 1.1);
       _hMuon1Tau2NotReconstructableMass[i][NpdfCounter]       = new TH1F(("Muon1Tau2NotReconstructableMass_"+j.str()).c_str(),("Muon1Tau2NotReconstructableMass_"+j.str()).c_str(), 600, 0, 1500);
       _hMuon1Tau2ReconstructableMass[i][NpdfCounter]          = new TH1F(("Muon1Tau2ReconstructableMass_"+j.str()).c_str(),("Muon1Tau2ReconstructableMass_"+j.str()).c_str(), 600, 0, 1500);
+      _hMuon1Tau2ReconstructableMass_1prong[i][NpdfCounter]   = new TH1F(("Muon1Tau2ReconstructableMass_1prong_"+j.str()).c_str(),          ("Muon1Tau2ReconstructableMass_1prong_"+j.str()).c_str(), 600, 0, 1500);
+      _hMuon1Tau2ReconstructableMass_2prong[i][NpdfCounter]   = new TH1F(("Muon1Tau2ReconstructableMass_2prong_"+j.str()).c_str(),          ("Muon1Tau2ReconstructableMass_2prong_"+j.str()).c_str(), 600, 0, 1500);
+      _hMuon1Tau2ReconstructableMass_3prong[i][NpdfCounter]   = new TH1F(("Muon1Tau2ReconstructableMass_3prong_"+j.str()).c_str(),          ("Muon1Tau2ReconstructableMass_3prong_"+j.str()).c_str(), 600, 0, 1500);
+      _hMuon1Tau2ReconstructableMass_1or3prong[i][NpdfCounter]   = new TH1F(("Muon1Tau2ReconstructableMass_1or3prong_"+j.str()).c_str(),    ("Muon1Tau2ReconstructableMass_1or3prong_"+j.str()).c_str(), 600, 0, 1500);
+      _hMuon1Tau2ReconstructableMass_OS[i][NpdfCounter]   = new TH1F(("Muon1Tau2ReconstructableMass_OS_"+j.str()).c_str(),          ("Muon1Tau2ReconstructableMass_OS_"+j.str()).c_str(), 600, 0, 1500);
+      _hMuon1Tau2ReconstructableMass_LS[i][NpdfCounter]   = new TH1F(("Muon1Tau2ReconstructableMass_LS_"+j.str()).c_str(),          ("Muon1Tau2ReconstructableMass_LS_"+j.str()).c_str(), 600, 0, 1500);
       _hMuon1Tau2PZeta[i][NpdfCounter]         = new TH1F(("Muon1Tau2PZeta_"+j.str()).c_str(),        ("Muon1Tau2PZeta_"+j.str()).c_str(), 200, -100, 100);
       _hMuon1Tau2PZetaVis[i][NpdfCounter]      = new TH1F(("Muon1Tau2PZetaVis_"+j.str()).c_str(),     ("Muon1Tau2PZetaVis_"+j.str()).c_str(), 100, 0, 100);
       _hMuon1Tau2Zeta2D[i][NpdfCounter]        = new TH2F(("Muon1Tau2Zeta2D_"+j.str()).c_str(),       ("Muon1Tau2Zeta2D_"+j.str()).c_str(), 100, 0, 100, 200,-100, 100);
@@ -2183,6 +2589,12 @@ void BSM3GAnalyzer::bookHistograms(TFile * theOutFile, string mydirectory , unsi
       _hMuon2MetDeltaPhiVsMuon2Tau1CosDphi[i][NpdfCounter] = new TH2F(("Muon2MetDeltaPhiVsMuon2Tau1CosDphi_"+j.str()).c_str(),("Muon2MetDeltaPhiVsMuon2Tau1CosDphi_"+j.str()).c_str(), 72, 0, +TMath::Pi(), 220, -1.1, 1.1);
       _hMuon2Tau1NotReconstructableMass[i][NpdfCounter]       = new TH1F(("Muon2Tau1NotReconstructableMass_"+j.str()).c_str(),("Muon2Tau1NotReconstructableMass_"+j.str()).c_str(), 600, 0, 1500);
       _hMuon2Tau1ReconstructableMass[i][NpdfCounter]          = new TH1F(("Muon2Tau1ReconstructableMass_"+j.str()).c_str(),("Muon2Tau1ReconstructableMass_"+j.str()).c_str(), 600, 0, 1500);
+      _hMuon2Tau1ReconstructableMass_1prong[i][NpdfCounter]   = new TH1F(("Muon2Tau1ReconstructableMass_1prong_"+j.str()).c_str(),          ("Muon2Tau1ReconstructableMass_1prong_"+j.str()).c_str(), 600, 0, 1500);
+      _hMuon2Tau1ReconstructableMass_2prong[i][NpdfCounter]   = new TH1F(("Muon2Tau1ReconstructableMass_2prong_"+j.str()).c_str(),          ("Muon2Tau1ReconstructableMass_2prong_"+j.str()).c_str(), 600, 0, 1500);
+      _hMuon2Tau1ReconstructableMass_3prong[i][NpdfCounter]   = new TH1F(("Muon2Tau1ReconstructableMass_3prong_"+j.str()).c_str(),          ("Muon2Tau1ReconstructableMass_3prong_"+j.str()).c_str(), 600, 0, 1500);
+      _hMuon2Tau1ReconstructableMass_1or3prong[i][NpdfCounter]   = new TH1F(("Muon2Tau1ReconstructableMass_1or3prong_"+j.str()).c_str(),    ("Muon2Tau1ReconstructableMass_1or3prong_"+j.str()).c_str(), 600, 0, 1500);
+      _hMuon2Tau1ReconstructableMass_OS[i][NpdfCounter]   = new TH1F(("Muon2Tau1ReconstructableMass_OS_"+j.str()).c_str(),          ("Muon2Tau1ReconstructableMass_OS_"+j.str()).c_str(), 600, 0, 1500);
+      _hMuon2Tau1ReconstructableMass_LS[i][NpdfCounter]   = new TH1F(("Muon2Tau1ReconstructableMass_LS_"+j.str()).c_str(),          ("Muon2Tau1ReconstructableMass_LS_"+j.str()).c_str(), 600, 0, 1500);
       _hMuon2Tau1PZeta[i][NpdfCounter]         = new TH1F(("Muon2Tau1PZeta_"+j.str()).c_str(),        ("Muon2Tau1PZeta_"+j.str()).c_str(), 200, -100, 100);
       _hMuon2Tau1PZetaVis[i][NpdfCounter]      = new TH1F(("Muon2Tau1PZetaVis_"+j.str()).c_str(),     ("Muon2Tau1PZetaVis_"+j.str()).c_str(), 100, 0, 100);
       _hMuon2Tau1Zeta2D[i][NpdfCounter]        = new TH2F(("Muon2Tau1Zeta2D_"+j.str()).c_str(),       ("Muon2Tau1Zeta2D_"+j.str()).c_str(), 100, 0, 100, 200,-100, 100);
@@ -2191,7 +2603,8 @@ void BSM3GAnalyzer::bookHistograms(TFile * theOutFile, string mydirectory , unsi
       _hMuon2Tau2_Tau2DiJetDeltaPhi[i][NpdfCounter]          = new TH1F(("Muon2Tau2_Tau2DiJetDeltaPhi_"+j.str()).c_str(),("Muon2Tau2_Tau2DiJetDeltaPhi_"+j.str()).c_str(), 72, 0, +TMath::Pi());
       _hMuon2Tau2_Muon2DiJetDeltaPhi[i][NpdfCounter]         = new TH1F(("Muon2Tau2_Muon2DiJetDeltaPhi_"+j.str()).c_str(),("Muon2Tau2_Muon2DiJetDeltaPhi_"+j.str()).c_str(), 72, 0, +TMath::Pi());
       _hMuon2Tau2_Muon2IsZmm[i][NpdfCounter]           = new TH1F(("Muon2Tau2_Muon2IsZmm_"+j.str()).c_str(),("Muon2Tau2_Muon2IsZmm_"+j.str()).c_str(), 2, 0., 2.);
-      _hMuon2PtVsTau2Pt[i][NpdfCounter]                = new TH2F(("Muon2PtVsTau2Pt_"+j.str()).c_str(),                    ("Muon2PtVsTau2Pt_"+j.str()).c_str(),100, 0, 500, 100, 0, 500);
+      _hMuon2PtVsTau2Pt[i][NpdfCounter]                = new TH2F(("Muon2PtVsTau2Pt_"+j.str()).c_str(),                    ("Muon2PtVsTau2Pt_"+j.str()).c_str(),
+100, 0, 500, 100, 0, 500);
       _hMuon2Tau2DeltaR[i][NpdfCounter]                = new TH1F(("Muon2Tau2DeltaR_"+j.str()).c_str(),                    ("Muon2Tau2DeltaR_"+j.str()).c_str(),100, 0, 5.);
       _hMuon2Tau2DeltaPtDivSumPt[i][NpdfCounter]       = new TH1F(("Muon2Tau2DeltaPtDivSumPt_"+j.str()).c_str(),("Muon2Tau2DeltaPtDivSumPt_"+j.str()).c_str(), 100, -5, 5.);
       _hMuon2Tau2DeltaPt[i][NpdfCounter]               = new TH1F(("Muon2Tau2DeltaPt_"+j.str()).c_str(),                   ("Muon2Tau2DeltaPt_"+j.str()).c_str(),100, 0, 1000);
@@ -2204,11 +2617,109 @@ void BSM3GAnalyzer::bookHistograms(TFile * theOutFile, string mydirectory , unsi
       _hMuon2MetDeltaPhiVsMuon2Tau2CosDphi[i][NpdfCounter] = new TH2F(("Muon2MetDeltaPhiVsMuon2Tau2CosDphi_"+j.str()).c_str(),("Muon2MetDeltaPhiVsMuon2Tau2CosDphi_"+j.str()).c_str(), 72, 0, +TMath::Pi(), 220, -1.1, 1.1);
       _hMuon2Tau2NotReconstructableMass[i][NpdfCounter]       = new TH1F(("Muon2Tau2NotReconstructableMass_"+j.str()).c_str(),("Muon2Tau2NotReconstructableMass_"+j.str()).c_str(), 600, 0, 1500);
       _hMuon2Tau2ReconstructableMass[i][NpdfCounter]          = new TH1F(("Muon2Tau2ReconstructableMass_"+j.str()).c_str(),("Muon2Tau2ReconstructableMass_"+j.str()).c_str(), 600, 0, 1500);
+      _hMuon2Tau2ReconstructableMass_1prong[i][NpdfCounter]   = new TH1F(("Muon2Tau2ReconstructableMass_1prong_"+j.str()).c_str(),          ("Muon2Tau2ReconstructableMass_1prong_"+j.str()).c_str(), 600, 0, 1500);
+      _hMuon2Tau2ReconstructableMass_2prong[i][NpdfCounter]   = new TH1F(("Muon2Tau2ReconstructableMass_2prong_"+j.str()).c_str(),          ("Muon2Tau2ReconstructableMass_2prong_"+j.str()).c_str(), 600, 0, 1500);
+      _hMuon2Tau2ReconstructableMass_3prong[i][NpdfCounter]   = new TH1F(("Muon2Tau2ReconstructableMass_3prong_"+j.str()).c_str(),          ("Muon2Tau2ReconstructableMass_3prong_"+j.str()).c_str(), 600, 0, 1500);
+      _hMuon2Tau2ReconstructableMass_1or3prong[i][NpdfCounter]   = new TH1F(("Muon2Tau2ReconstructableMass_1or3prong_"+j.str()).c_str(),    ("Muon2Tau2ReconstructableMass_1or3prong_"+j.str()).c_str(), 600, 0, 1500);
+      _hMuon2Tau2ReconstructableMass_OS[i][NpdfCounter]   = new TH1F(("Muon2Tau2ReconstructableMass_OS_"+j.str()).c_str(),          ("Muon2Tau2ReconstructableMass_OS_"+j.str()).c_str(), 600, 0, 1500);
+      _hMuon2Tau2ReconstructableMass_LS[i][NpdfCounter]   = new TH1F(("Muon2Tau2ReconstructableMass_LS_"+j.str()).c_str(),          ("Muon2Tau2ReconstructableMass_LS_"+j.str()).c_str(), 600, 0, 1500);
       _hMuon2Tau2PZeta[i][NpdfCounter]         = new TH1F(("Muon2Tau2PZeta_"+j.str()).c_str(),        ("Muon2Tau2PZeta_"+j.str()).c_str(), 200, -100, 100);
       _hMuon2Tau2PZetaVis[i][NpdfCounter]      = new TH1F(("Muon2Tau2PZetaVis_"+j.str()).c_str(),     ("Muon2Tau2PZetaVis_"+j.str()).c_str(), 100, 0, 100);
       _hMuon2Tau2Zeta2D[i][NpdfCounter]        = new TH2F(("Muon2Tau2Zeta2D_"+j.str()).c_str(),       ("Muon2Tau2Zeta2D_"+j.str()).c_str(), 100, 0, 100, 200,-100, 100);
       _hMuon2Tau2Zeta1D[i][NpdfCounter]        = new TH1F(("Muon2Tau2Zeta1D_"+j.str()).c_str(),       ("Muon2Tau2Zeta1D_"+j.str()).c_str(), 150, -300, 300);
       _hMuon2Tau2DiJetReconstructableMass[i][NpdfCounter]         = new TH1F(("Muon2Tau2DiJetReconstructableMass_"+j.str()).c_str(),("Muon2Tau2DiJetReconstructableMass_"+j.str()).c_str(), 100, 0, 5000);
+      _hElectron1Muon1_Electron1DiJetDeltaPhi[i][NpdfCounter]          = new TH1F(("Electron1Muon1_Electron1DiJetDeltaPhi_"+j.str()).c_str(),("Electron1Muon1_Electron1DiJetDeltaPhi_"+j.str()).c_str(), 72, 0, +TMath::Pi());
+      _hElectron1Muon1_Muon1DiJetDeltaPhi[i][NpdfCounter]         = new TH1F(("Electron1Muon1_Muon1DiJetDeltaPhi_"+j.str()).c_str(),("Electron1Muon1_Muon1DiJetDeltaPhi_"+j.str()).c_str(), 72, 0, +TMath::Pi());
+      _hElectron1Muon1_Muon1IsZmm[i][NpdfCounter]           = new TH1F(("Electron1Muon1_Muon1IsZmm_"+j.str()).c_str(),("Electron1Muon1_Muon1IsZmm_"+j.str()).c_str(), 2, 0., 2.);
+      _hMuon1PtVsElectron1Pt[i][NpdfCounter]                = new TH2F(("Muon1PtVsElectron1Pt_"+j.str()).c_str(),                    ("Muon1PtVsElectron1Pt_"+j.str()).c_str(), 100, 0, 500, 100, 0, 500);
+      _hElectron1Muon1DeltaR[i][NpdfCounter]                = new TH1F(("Electron1Muon1DeltaR_"+j.str()).c_str(),("Electron1Muon1DeltaR_"+j.str()).c_str(), 100, 0, 5.);
+      _hElectron1Muon1DeltaPtDivSumPt[i][NpdfCounter]       = new TH1F(("Electron1Muon1DeltaPtDivSumPt_"+j.str()).c_str(),("Electron1Muon1DeltaPtDivSumPt_"+j.str()).c_str(), 100, -5, 5.);
+      _hElectron1Muon1DeltaPt[i][NpdfCounter]               = new TH1F(("Electron1Muon1DeltaPt_"+j.str()).c_str(),("Electron1Muon1DeltaPt_"+j.str()).c_str(), 100, 0, 1000);
+      _hElectron1Muon1_Muon1MetMt[i][NpdfCounter]           = new TH1F(("Electron1Muon1_Muon1MetMt_"+j.str()).c_str(),("Electron1Muon1_Muon1MetMt_"+j.str()).c_str(), 100, 0, 500);
+      _hElectron1Muon1_Electron1MetMt[i][NpdfCounter]            = new TH1F(("Electron1Muon1_Electron1MetMt_"+j.str()).c_str(),("Electron1Muon1_Electron1MetMt_"+j.str()).c_str(), 100, 0, 500);
+      _hElectron1Muon1OSLS[i][NpdfCounter]                  = new TH1F(("Electron1Muon1OSLS_"+j.str()).c_str(),("Electron1Muon1OSLS_"+j.str()).c_str(), 20, -10, 10);
+      _hElectron1Muon1CosDphi[i][NpdfCounter]               = new TH1F(("Electron1Muon1CosDphi_"+j.str()).c_str(),("Electron1Muon1CosDphi_"+j.str()).c_str(), 220, -1.1, 1.1);
+      _hElectron1Muon1_Muon1MetDeltaPhi[i][NpdfCounter]     = new TH1F(("Electron1Muon1_Muon1MetDeltaPhi_"+j.str()).c_str(),("Electron1Muon1_Muon1MetDeltaPhi_"+j.str()).c_str(), 72, 0, +TMath::Pi());
+      _hElectron1Muon1_Electron1MetDeltaPhi[i][NpdfCounter]      = new TH1F(("Electron1Muon1_Electron1MetDeltaPhi_"+j.str()).c_str(),("Electron1Muon1_Electron1MetDeltaPhi_"+j.str()).c_str(), 72, 0, +TMath::Pi());
+      _hMuon1MetDeltaPhiVsElectron1Muon1CosDphi[i][NpdfCounter] = new TH2F(("Muon1MetDeltaPhiVsElectron1Muon1CosDphi_"+j.str()).c_str(),("Muon1MetDeltaPhiVsElectron1Muon1CosDphi_"+j.str()).c_str(), 72, 0, +TMath::Pi(), 220, -1.1, 1.1);
+      _hElectron1Muon1NotReconstructableMass[i][NpdfCounter]       = new TH1F(("Electron1Muon1NotReconstructableMass_"+j.str()).c_str(),("Electron1Muon1NotReconstructableMass_"+j.str()).c_str(), 600, 0, 1500);
+      _hElectron1Muon1ReconstructableMass[i][NpdfCounter]          = new TH1F(("Electron1Muon1ReconstructableMass_"+j.str()).c_str(),("Electron1Muon1ReconstructableMass_"+j.str()).c_str(), 600, 0, 1500);
+      _hElectron1Muon1ReconstructableMass_OS[i][NpdfCounter]   = new TH1F(("Electron1Muon1ReconstructableMass_OS_"+j.str()).c_str(),("Electron1Muon1ReconstructableMass_OS_"+j.str()).c_str(), 600, 0, 1500);
+      _hElectron1Muon1ReconstructableMass_LS[i][NpdfCounter]   = new TH1F(("Electron1Muon1ReconstructableMass_LS_"+j.str()).c_str(),("Electron1Muon1ReconstructableMass_LS_"+j.str()).c_str(), 600, 0, 1500);
+      _hElectron1Muon1PZeta[i][NpdfCounter]         = new TH1F(("Electron1Muon1PZeta_"+j.str()).c_str(),        ("Electron1Muon1PZeta_"+j.str()).c_str(), 200,-100,100);
+      _hElectron1Muon1PZetaVis[i][NpdfCounter]      = new TH1F(("Electron1Muon1PZetaVis_"+j.str()).c_str(),     ("Electron1Muon1PZetaVis_"+j.str()).c_str(), 100,0,100);
+      _hElectron1Muon1Zeta2D[i][NpdfCounter]        = new TH2F(("Electron1Muon1Zeta2D_"+j.str()).c_str(),       ("Electron1Muon1Zeta2D_"+j.str()).c_str(), 100, 0,100,200,-100, 100);
+      _hElectron1Muon1Zeta1D[i][NpdfCounter]        = new TH1F(("Electron1Muon1Zeta1D_"+j.str()).c_str(),       ("Electron1Muon1Zeta1D_"+j.str()).c_str(), 150,-300,300);
+      _hElectron1Muon1DiJetReconstructableMass[i][NpdfCounter]         = new TH1F(("Electron1Muon1DiJetReconstructableMass_"+j.str()).c_str(),("Electron1Muon1DiJetReconstructableMass_"+j.str()).c_str(), 100, 0, 5000);
+      _hElectron1Muon2_Electron1DiJetDeltaPhi[i][NpdfCounter]          = new TH1F(("Electron1Muon2_Electron1DiJetDeltaPhi_"+j.str()).c_str(),("Electron1Muon2_Electron1DiJetDeltaPhi_"+j.str()).c_str(), 72, 0, +TMath::Pi());
+      _hElectron1Muon2_Muon2DiJetDeltaPhi[i][NpdfCounter]         = new TH1F(("Electron1Muon2_Muon2DiJetDeltaPhi_"+j.str()).c_str(),("Electron1Muon2_Muon2DiJetDeltaPhi_"+j.str()).c_str(), 72, 0, +TMath::Pi());
+      _hElectron1Muon2_Muon2IsZmm[i][NpdfCounter]           = new TH1F(("Electron1Muon2_Muon2IsZmm_"+j.str()).c_str(),("Electron1Muon2_Muon2IsZmm_"+j.str()).c_str(), 2, 0., 2.);
+      _hMuon2PtVsElectron1Pt[i][NpdfCounter]                = new TH2F(("Muon2PtVsElectron1Pt_"+j.str()).c_str(),                    ("Muon2PtVsElectron1Pt_"+j.str()).c_str(), 100, 0, 500, 100, 0, 500);
+      _hElectron1Muon2DeltaR[i][NpdfCounter]                = new TH1F(("Electron1Muon2DeltaR_"+j.str()).c_str(),("Electron1Muon2DeltaR_"+j.str()).c_str(), 100, 0, 5.);
+      _hElectron1Muon2DeltaPtDivSumPt[i][NpdfCounter]       = new TH1F(("Electron1Muon2DeltaPtDivSumPt_"+j.str()).c_str(),("Electron1Muon2DeltaPtDivSumPt_"+j.str()).c_str(), 100, -5, 5.);
+      _hElectron1Muon2DeltaPt[i][NpdfCounter]               = new TH1F(("Electron1Muon2DeltaPt_"+j.str()).c_str(),("Electron1Muon2DeltaPt_"+j.str()).c_str(), 100, 0, 1000);
+      _hElectron1Muon2_Muon2MetMt[i][NpdfCounter]           = new TH1F(("Electron1Muon2_Muon2MetMt_"+j.str()).c_str(),("Electron1Muon2_Muon2MetMt_"+j.str()).c_str(), 100, 0, 500);
+      _hElectron1Muon2_Electron1MetMt[i][NpdfCounter]            = new TH1F(("Electron1Muon2_Electron1MetMt_"+j.str()).c_str(),("Electron1Muon2_Electron1MetMt_"+j.str()).c_str(), 100, 0, 500);
+      _hElectron1Muon2OSLS[i][NpdfCounter]                  = new TH1F(("Electron1Muon2OSLS_"+j.str()).c_str(),("Electron1Muon2OSLS_"+j.str()).c_str(), 20, -10, 10);
+      _hElectron1Muon2CosDphi[i][NpdfCounter]               = new TH1F(("Electron1Muon2CosDphi_"+j.str()).c_str(),("Electron1Muon2CosDphi_"+j.str()).c_str(), 220, -1.1, 1.1);
+      _hElectron1Muon2_Muon2MetDeltaPhi[i][NpdfCounter]     = new TH1F(("Electron1Muon2_Muon2MetDeltaPhi_"+j.str()).c_str(),("Electron1Muon2_Muon2MetDeltaPhi_"+j.str()).c_str(), 72, 0, +TMath::Pi());
+      _hElectron1Muon2_Electron1MetDeltaPhi[i][NpdfCounter]      = new TH1F(("Electron1Muon2_Electron1MetDeltaPhi_"+j.str()).c_str(),("Electron1Muon2_Electron1MetDeltaPhi_"+j.str()).c_str(), 72, 0, +TMath::Pi());
+      _hMuon2MetDeltaPhiVsElectron1Muon2CosDphi[i][NpdfCounter] = new TH2F(("Muon2MetDeltaPhiVsElectron1Muon2CosDphi_"+j.str()).c_str(),("Muon2MetDeltaPhiVsElectron1Muon2CosDphi_"+j.str()).c_str(), 72, 0, +TMath::Pi(), 220, -1.1, 1.1);
+      _hElectron1Muon2NotReconstructableMass[i][NpdfCounter]       = new TH1F(("Electron1Muon2NotReconstructableMass_"+j.str()).c_str(),("Electron1Muon2NotReconstructableMass_"+j.str()).c_str(), 600, 0, 1500);
+      _hElectron1Muon2ReconstructableMass[i][NpdfCounter]          = new TH1F(("Electron1Muon2ReconstructableMass_"+j.str()).c_str(),("Electron1Muon2ReconstructableMass_"+j.str()).c_str(), 600, 0, 1500);
+      _hElectron1Muon2ReconstructableMass_OS[i][NpdfCounter]   = new TH1F(("Electron1Muon2ReconstructableMass_OS_"+j.str()).c_str(),("Electron1Muon2ReconstructableMass_OS_"+j.str()).c_str(), 600, 0, 1500);
+      _hElectron1Muon2ReconstructableMass_LS[i][NpdfCounter]   = new TH1F(("Electron1Muon2ReconstructableMass_LS_"+j.str()).c_str(),("Electron1Muon2ReconstructableMass_LS_"+j.str()).c_str(), 600, 0, 1500);
+      _hElectron1Muon2PZeta[i][NpdfCounter]         = new TH1F(("Electron1Muon2PZeta_"+j.str()).c_str(),        ("Electron1Muon2PZeta_"+j.str()).c_str(), 200,-100,100);
+      _hElectron1Muon2PZetaVis[i][NpdfCounter]      = new TH1F(("Electron1Muon2PZetaVis_"+j.str()).c_str(),     ("Electron1Muon2PZetaVis_"+j.str()).c_str(), 100,0,100);
+      _hElectron1Muon2Zeta2D[i][NpdfCounter]        = new TH2F(("Electron1Muon2Zeta2D_"+j.str()).c_str(),       ("Electron1Muon2Zeta2D_"+j.str()).c_str(), 100, 0,100,200,-100, 100);
+      _hElectron1Muon2Zeta1D[i][NpdfCounter]        = new TH1F(("Electron1Muon2Zeta1D_"+j.str()).c_str(),       ("Electron1Muon2Zeta1D_"+j.str()).c_str(), 150,-300,300);
+      _hElectron1Muon2DiJetReconstructableMass[i][NpdfCounter]         = new TH1F(("Electron1Muon2DiJetReconstructableMass_"+j.str()).c_str(),("Electron1Muon2DiJetReconstructableMass_"+j.str()).c_str(), 100, 0, 5000);
+      _hElectron2Muon1_Electron2DiJetDeltaPhi[i][NpdfCounter]          = new TH1F(("Electron2Muon1_Electron2DiJetDeltaPhi_"+j.str()).c_str(),("Electron2Muon1_Electron2DiJetDeltaPhi_"+j.str()).c_str(), 72, 0, +TMath::Pi());
+      _hElectron2Muon1_Muon1DiJetDeltaPhi[i][NpdfCounter]         = new TH1F(("Electron2Muon1_Muon1DiJetDeltaPhi_"+j.str()).c_str(),("Electron2Muon1_Muon1DiJetDeltaPhi_"+j.str()).c_str(), 72, 0, +TMath::Pi());
+      _hElectron2Muon1_Muon1IsZmm[i][NpdfCounter]           = new TH1F(("Electron2Muon1_Muon1IsZmm_"+j.str()).c_str(),("Electron2Muon1_Muon1IsZmm_"+j.str()).c_str(), 2, 0., 2.);
+      _hMuon1PtVsElectron2Pt[i][NpdfCounter]                = new TH2F(("Muon1PtVsElectron2Pt_"+j.str()).c_str(),                    ("Muon1PtVsElectron2Pt_"+j.str()).c_str(), 100, 0, 500, 100, 0, 500);
+      _hElectron2Muon1DeltaR[i][NpdfCounter]                = new TH1F(("Electron2Muon1DeltaR_"+j.str()).c_str(),("Electron2Muon1DeltaR_"+j.str()).c_str(), 100, 0, 5.);
+      _hElectron2Muon1DeltaPtDivSumPt[i][NpdfCounter]       = new TH1F(("Electron2Muon1DeltaPtDivSumPt_"+j.str()).c_str(),("Electron2Muon1DeltaPtDivSumPt_"+j.str()).c_str(), 100, -5, 5.);
+      _hElectron2Muon1DeltaPt[i][NpdfCounter]               = new TH1F(("Electron2Muon1DeltaPt_"+j.str()).c_str(),("Electron2Muon1DeltaPt_"+j.str()).c_str(), 100, 0, 1000);
+      _hElectron2Muon1_Muon1MetMt[i][NpdfCounter]           = new TH1F(("Electron2Muon1_Muon1MetMt_"+j.str()).c_str(),("Electron2Muon1_Muon1MetMt_"+j.str()).c_str(), 100, 0, 500);
+      _hElectron2Muon1_Electron2MetMt[i][NpdfCounter]            = new TH1F(("Electron2Muon1_Electron2MetMt_"+j.str()).c_str(),("Electron2Muon1_Electron2MetMt_"+j.str()).c_str(), 100, 0, 500);
+      _hElectron2Muon1OSLS[i][NpdfCounter]                  = new TH1F(("Electron2Muon1OSLS_"+j.str()).c_str(),("Electron2Muon1OSLS_"+j.str()).c_str(), 20, -10, 10);
+      _hElectron2Muon1CosDphi[i][NpdfCounter]               = new TH1F(("Electron2Muon1CosDphi_"+j.str()).c_str(),("Electron2Muon1CosDphi_"+j.str()).c_str(), 220, -1.1, 1.1);
+      _hElectron2Muon1_Muon1MetDeltaPhi[i][NpdfCounter]     = new TH1F(("Electron2Muon1_Muon1MetDeltaPhi_"+j.str()).c_str(),("Electron2Muon1_Muon1MetDeltaPhi_"+j.str()).c_str(), 72, 0, +TMath::Pi());
+      _hElectron2Muon1_Electron2MetDeltaPhi[i][NpdfCounter]      = new TH1F(("Electron2Muon1_Electron2MetDeltaPhi_"+j.str()).c_str(),("Electron2Muon1_Electron2MetDeltaPhi_"+j.str()).c_str(), 72, 0, +TMath::Pi());
+      _hMuon1MetDeltaPhiVsElectron2Muon1CosDphi[i][NpdfCounter] = new TH2F(("Muon1MetDeltaPhiVsElectron2Muon1CosDphi_"+j.str()).c_str(),("Muon1MetDeltaPhiVsElectron2Muon1CosDphi_"+j.str()).c_str(), 72, 0, +TMath::Pi(), 220, -1.1, 1.1);
+      _hElectron2Muon1NotReconstructableMass[i][NpdfCounter]       = new TH1F(("Electron2Muon1NotReconstructableMass_"+j.str()).c_str(),("Electron2Muon1NotReconstructableMass_"+j.str()).c_str(), 600, 0, 1500);
+      _hElectron2Muon1ReconstructableMass[i][NpdfCounter]          = new TH1F(("Electron2Muon1ReconstructableMass_"+j.str()).c_str(),("Electron2Muon1ReconstructableMass_"+j.str()).c_str(), 600, 0, 1500);
+      _hElectron2Muon1ReconstructableMass_OS[i][NpdfCounter]   = new TH1F(("Electron2Muon1ReconstructableMass_OS_"+j.str()).c_str(),("Electron2Muon1ReconstructableMass_OS_"+j.str()).c_str(), 600, 0, 1500);
+      _hElectron2Muon1ReconstructableMass_LS[i][NpdfCounter]   = new TH1F(("Electron2Muon1ReconstructableMass_LS_"+j.str()).c_str(),("Electron2Muon1ReconstructableMass_LS_"+j.str()).c_str(), 600, 0, 1500);
+      _hElectron2Muon1PZeta[i][NpdfCounter]         = new TH1F(("Electron2Muon1PZeta_"+j.str()).c_str(),        ("Electron2Muon1PZeta_"+j.str()).c_str(), 200,-100,100);
+      _hElectron2Muon1PZetaVis[i][NpdfCounter]      = new TH1F(("Electron2Muon1PZetaVis_"+j.str()).c_str(),     ("Electron2Muon1PZetaVis_"+j.str()).c_str(), 100,0,100);
+      _hElectron2Muon1Zeta2D[i][NpdfCounter]        = new TH2F(("Electron2Muon1Zeta2D_"+j.str()).c_str(),       ("Electron2Muon1Zeta2D_"+j.str()).c_str(), 100, 0,100,200,-100, 100);
+      _hElectron2Muon1Zeta1D[i][NpdfCounter]        = new TH1F(("Electron2Muon1Zeta1D_"+j.str()).c_str(),       ("Electron2Muon1Zeta1D_"+j.str()).c_str(), 150,-300,300);
+      _hElectron2Muon1DiJetReconstructableMass[i][NpdfCounter]         = new TH1F(("Electron2Muon1DiJetReconstructableMass_"+j.str()).c_str(),("Electron2Muon1DiJetReconstructableMass_"+j.str()).c_str(), 100, 0, 5000);
+      _hElectron2Muon2_Electron2DiJetDeltaPhi[i][NpdfCounter]          = new TH1F(("Electron2Muon2_Electron2DiJetDeltaPhi_"+j.str()).c_str(),("Electron2Muon2_Electron2DiJetDeltaPhi_"+j.str()).c_str(), 72, 0, +TMath::Pi());
+      _hElectron2Muon2_Muon2DiJetDeltaPhi[i][NpdfCounter]         = new TH1F(("Electron2Muon2_Muon2DiJetDeltaPhi_"+j.str()).c_str(),("Electron2Muon2_Muon2DiJetDeltaPhi_"+j.str()).c_str(), 72, 0, +TMath::Pi());
+      _hElectron2Muon2_Muon2IsZmm[i][NpdfCounter]           = new TH1F(("Electron2Muon2_Muon2IsZmm_"+j.str()).c_str(),("Electron2Muon2_Muon2IsZmm_"+j.str()).c_str(), 2, 0., 2.);
+      _hMuon2PtVsElectron2Pt[i][NpdfCounter]                = new TH2F(("Muon2PtVsElectron2Pt_"+j.str()).c_str(),                    ("Muon2PtVsElectron2Pt_"+j.str()).c_str(), 100, 0, 500, 100, 0, 500);
+      _hElectron2Muon2DeltaR[i][NpdfCounter]                = new TH1F(("Electron2Muon2DeltaR_"+j.str()).c_str(),("Electron2Muon2DeltaR_"+j.str()).c_str(), 100, 0, 5.);
+      _hElectron2Muon2DeltaPtDivSumPt[i][NpdfCounter]       = new TH1F(("Electron2Muon2DeltaPtDivSumPt_"+j.str()).c_str(),("Electron2Muon2DeltaPtDivSumPt_"+j.str()).c_str(), 100, -5, 5.);
+      _hElectron2Muon2DeltaPt[i][NpdfCounter]               = new TH1F(("Electron2Muon2DeltaPt_"+j.str()).c_str(),("Electron2Muon2DeltaPt_"+j.str()).c_str(), 100, 0, 1000);
+      _hElectron2Muon2_Muon2MetMt[i][NpdfCounter]           = new TH1F(("Electron2Muon2_Muon2MetMt_"+j.str()).c_str(),("Electron2Muon2_Muon2MetMt_"+j.str()).c_str(), 100, 0, 500);
+      _hElectron2Muon2_Electron2MetMt[i][NpdfCounter]            = new TH1F(("Electron2Muon2_Electron2MetMt_"+j.str()).c_str(),("Electron2Muon2_Electron2MetMt_"+j.str()).c_str(), 100, 0, 500);
+      _hElectron2Muon2OSLS[i][NpdfCounter]                  = new TH1F(("Electron2Muon2OSLS_"+j.str()).c_str(),("Electron2Muon2OSLS_"+j.str()).c_str(), 20, -10, 10);
+      _hElectron2Muon2CosDphi[i][NpdfCounter]               = new TH1F(("Electron2Muon2CosDphi_"+j.str()).c_str(),("Electron2Muon2CosDphi_"+j.str()).c_str(), 220, -1.1, 1.1);
+      _hElectron2Muon2_Muon2MetDeltaPhi[i][NpdfCounter]     = new TH1F(("Electron2Muon2_Muon2MetDeltaPhi_"+j.str()).c_str(),("Electron2Muon2_Muon2MetDeltaPhi_"+j.str()).c_str(), 72, 0, +TMath::Pi());
+      _hElectron2Muon2_Electron2MetDeltaPhi[i][NpdfCounter]      = new TH1F(("Electron2Muon2_Electron2MetDeltaPhi_"+j.str()).c_str(),("Electron2Muon2_Electron2MetDeltaPhi_"+j.str()).c_str(), 72, 0, +TMath::Pi());
+      _hMuon2MetDeltaPhiVsElectron2Muon2CosDphi[i][NpdfCounter] = new TH2F(("Muon2MetDeltaPhiVsElectron2Muon2CosDphi_"+j.str()).c_str(),("Muon2MetDeltaPhiVsElectron2Muon2CosDphi_"+j.str()).c_str(), 72, 0, +TMath::Pi(), 220, -1.1, 1.1);
+      _hElectron2Muon2NotReconstructableMass[i][NpdfCounter]       = new TH1F(("Electron2Muon2NotReconstructableMass_"+j.str()).c_str(),("Electron2Muon2NotReconstructableMass_"+j.str()).c_str(), 600, 0, 1500);
+      _hElectron2Muon2ReconstructableMass[i][NpdfCounter]          = new TH1F(("Electron2Muon2ReconstructableMass_"+j.str()).c_str(),("Electron2Muon2ReconstructableMass_"+j.str()).c_str(), 600, 0, 1500);
+      _hElectron2Muon2ReconstructableMass_OS[i][NpdfCounter]   = new TH1F(("Electron2Muon2ReconstructableMass_OS_"+j.str()).c_str(),("Electron2Muon2ReconstructableMass_OS_"+j.str()).c_str(), 600, 0, 1500);
+      _hElectron2Muon2ReconstructableMass_LS[i][NpdfCounter]   = new TH1F(("Electron2Muon2ReconstructableMass_LS_"+j.str()).c_str(),("Electron2Muon2ReconstructableMass_LS_"+j.str()).c_str(), 600, 0, 1500);
+      _hElectron2Muon2PZeta[i][NpdfCounter]         = new TH1F(("Electron2Muon2PZeta_"+j.str()).c_str(),        ("Electron2Muon2PZeta_"+j.str()).c_str(), 200,-100,100);
+      _hElectron2Muon2PZetaVis[i][NpdfCounter]      = new TH1F(("Electron2Muon2PZetaVis_"+j.str()).c_str(),     ("Electron2Muon2PZetaVis_"+j.str()).c_str(), 100,0,100);
+      _hElectron2Muon2Zeta2D[i][NpdfCounter]        = new TH2F(("Electron2Muon2Zeta2D_"+j.str()).c_str(),       ("Electron2Muon2Zeta2D_"+j.str()).c_str(), 100, 0,100,200,-100, 100);
+      _hElectron2Muon2Zeta1D[i][NpdfCounter]        = new TH1F(("Electron2Muon2Zeta1D_"+j.str()).c_str(),       ("Electron2Muon2Zeta1D_"+j.str()).c_str(), 150,-300,300);
+      _hElectron2Muon2DiJetReconstructableMass[i][NpdfCounter]         = new TH1F(("Electron2Muon2DiJetReconstructableMass_"+j.str()).c_str(),("Electron2Muon2DiJetReconstructableMass_"+j.str()).c_str(), 100, 0, 5000);
     }
 
     j.str("");
@@ -2244,6 +2755,7 @@ void BSM3GAnalyzer::writeHistograms(TFile *theOutFile, string mydirectory , unsi
       _hGenDiTauMass[i][NpdfCounter]->Write();
       _hGenZprimeMass[i][NpdfCounter]->Write();
       _hGenZprimeStatusCode[i][NpdfCounter]->Write();
+      _hGenZMass[i][NpdfCounter]->Write();
       _hGenTauStatusCode[i][NpdfCounter]->Write();
     }
 
@@ -2386,7 +2898,10 @@ void BSM3GAnalyzer::writeHistograms(TFile *theOutFile, string mydirectory , unsi
       _hDiTauZeta1D[i][NpdfCounter]->Write();         
       _hDiTauNotReconstructableMass[i][NpdfCounter]->Write();
       _hDiTauReconstructableMass[i][NpdfCounter]->Write();   
+      _hDiTauReconstructableMass_1or3prong[i][NpdfCounter]->Write();   
       _hDiTauDiJetReconstructableMass[i][NpdfCounter]->Write();
+      _hDiTauLeadingJetReconstructableMass[i][NpdfCounter]->Write();
+
       _hMuon1Tau1_Tau1DiJetDeltaPhi[i][NpdfCounter]->Write();
       _hMuon1Tau1_Muon1DiJetDeltaPhi[i][NpdfCounter]->Write();
       _hMuon1Tau1_Muon1IsZmm[i][NpdfCounter]->Write();
@@ -2403,11 +2918,25 @@ void BSM3GAnalyzer::writeHistograms(TFile *theOutFile, string mydirectory , unsi
       _hMuon1MetDeltaPhiVsMuon1Tau1CosDphi[i][NpdfCounter]->Write();
       _hMuon1Tau1NotReconstructableMass[i][NpdfCounter]->Write();
       _hMuon1Tau1ReconstructableMass[i][NpdfCounter]->Write();
+      _hMuon1Tau1ReconstructableMass_1prong[i][NpdfCounter]->Write();
+      _hMuon1Tau1ReconstructableMass_2prong[i][NpdfCounter]->Write();
+      _hMuon1Tau1ReconstructableMass_3prong[i][NpdfCounter]->Write();
+      _hMuon1Tau1ReconstructableMass_1or3prong[i][NpdfCounter]->Write();
+      _hMuon1Tau1ReconstructableMass_OS[i][NpdfCounter]->Write();
+      _hMuon1Tau1ReconstructableMass_LS[i][NpdfCounter]->Write();
+      _hMuon2Tau1ReconstructableMass_OS[i][NpdfCounter]->Write();
+      _hMuon2Tau1ReconstructableMass_LS[i][NpdfCounter]->Write();
+      _hMuon1Tau2ReconstructableMass_OS[i][NpdfCounter]->Write();
+      _hMuon1Tau2ReconstructableMass_LS[i][NpdfCounter]->Write();
+      _hMuon2Tau2ReconstructableMass_OS[i][NpdfCounter]->Write();
+      _hMuon2Tau2ReconstructableMass_LS[i][NpdfCounter]->Write();
       _hMuon1Tau1PZeta[i][NpdfCounter]->Write();
       _hMuon1Tau1PZetaVis[i][NpdfCounter]->Write();
       _hMuon1Tau1Zeta2D[i][NpdfCounter]->Write();
       _hMuon1Tau1Zeta1D[i][NpdfCounter]->Write();
       _hMuon1Tau1DiJetReconstructableMass[i][NpdfCounter]->Write();
+
+
       _hMuon1Tau2_Tau2DiJetDeltaPhi[i][NpdfCounter]->Write();
       _hMuon1Tau2_Muon1DiJetDeltaPhi[i][NpdfCounter]->Write();
       _hMuon1Tau2_Muon1IsZmm[i][NpdfCounter]->Write();
@@ -2424,6 +2953,10 @@ void BSM3GAnalyzer::writeHistograms(TFile *theOutFile, string mydirectory , unsi
       _hMuon1MetDeltaPhiVsMuon1Tau2CosDphi[i][NpdfCounter]->Write();
       _hMuon1Tau2NotReconstructableMass[i][NpdfCounter]->Write();
       _hMuon1Tau2ReconstructableMass[i][NpdfCounter]->Write();
+      _hMuon1Tau2ReconstructableMass_1prong[i][NpdfCounter]->Write();
+      _hMuon1Tau2ReconstructableMass_2prong[i][NpdfCounter]->Write();
+      _hMuon1Tau2ReconstructableMass_3prong[i][NpdfCounter]->Write();
+      _hMuon1Tau2ReconstructableMass_1or3prong[i][NpdfCounter]->Write();
       _hMuon1Tau2PZeta[i][NpdfCounter]->Write();
       _hMuon1Tau2PZetaVis[i][NpdfCounter]->Write();
       _hMuon1Tau2Zeta2D[i][NpdfCounter]->Write();
@@ -2445,6 +2978,10 @@ void BSM3GAnalyzer::writeHistograms(TFile *theOutFile, string mydirectory , unsi
       _hMuon2MetDeltaPhiVsMuon2Tau1CosDphi[i][NpdfCounter]->Write();
       _hMuon2Tau1NotReconstructableMass[i][NpdfCounter]->Write();
       _hMuon2Tau1ReconstructableMass[i][NpdfCounter]->Write();
+      _hMuon2Tau1ReconstructableMass_1prong[i][NpdfCounter]->Write();
+      _hMuon2Tau1ReconstructableMass_2prong[i][NpdfCounter]->Write();
+      _hMuon2Tau1ReconstructableMass_3prong[i][NpdfCounter]->Write();
+      _hMuon2Tau1ReconstructableMass_1or3prong[i][NpdfCounter]->Write();
       _hMuon2Tau1PZeta[i][NpdfCounter]->Write();
       _hMuon2Tau1PZetaVis[i][NpdfCounter]->Write();
       _hMuon2Tau1Zeta2D[i][NpdfCounter]->Write();
@@ -2466,11 +3003,107 @@ void BSM3GAnalyzer::writeHistograms(TFile *theOutFile, string mydirectory , unsi
       _hMuon2MetDeltaPhiVsMuon2Tau2CosDphi[i][NpdfCounter]->Write();
       _hMuon2Tau2NotReconstructableMass[i][NpdfCounter]->Write();
       _hMuon2Tau2ReconstructableMass[i][NpdfCounter]->Write();
+      _hMuon2Tau2ReconstructableMass_1prong[i][NpdfCounter]->Write();
+      _hMuon2Tau2ReconstructableMass_2prong[i][NpdfCounter]->Write();
+      _hMuon2Tau2ReconstructableMass_3prong[i][NpdfCounter]->Write();
+      _hMuon2Tau2ReconstructableMass_1or3prong[i][NpdfCounter]->Write();
       _hMuon2Tau2PZeta[i][NpdfCounter]->Write();
       _hMuon2Tau2PZetaVis[i][NpdfCounter]->Write();
       _hMuon2Tau2Zeta2D[i][NpdfCounter]->Write();
       _hMuon2Tau2Zeta1D[i][NpdfCounter]->Write();
       _hMuon2Tau2DiJetReconstructableMass[i][NpdfCounter]->Write();
+      _hElectron1Muon1_Electron1DiJetDeltaPhi[i][NpdfCounter]->Write();
+      _hElectron1Muon1_Muon1DiJetDeltaPhi[i][NpdfCounter]->Write();
+      _hElectron1Muon1_Muon1IsZmm[i][NpdfCounter]->Write();
+      _hMuon1PtVsElectron1Pt[i][NpdfCounter]->Write();
+      _hElectron1Muon1DeltaR[i][NpdfCounter]->Write();
+      _hElectron1Muon1DeltaPtDivSumPt[i][NpdfCounter]->Write();
+      _hElectron1Muon1DeltaPt[i][NpdfCounter]->Write();
+      _hElectron1Muon1_Muon1MetMt[i][NpdfCounter]->Write();
+      _hElectron1Muon1_Electron1MetMt[i][NpdfCounter]->Write();
+      _hElectron1Muon1OSLS[i][NpdfCounter]->Write();
+      _hElectron1Muon1CosDphi[i][NpdfCounter]->Write();
+      _hElectron1Muon1_Muon1MetDeltaPhi[i][NpdfCounter]->Write();
+      _hElectron1Muon1_Electron1MetDeltaPhi[i][NpdfCounter]->Write();
+      _hMuon1MetDeltaPhiVsElectron1Muon1CosDphi[i][NpdfCounter]->Write();
+      _hElectron1Muon1NotReconstructableMass[i][NpdfCounter]->Write();
+      _hElectron1Muon1ReconstructableMass[i][NpdfCounter]->Write();
+      _hElectron1Muon1ReconstructableMass_OS[i][NpdfCounter]->Write();
+      _hElectron1Muon1ReconstructableMass_LS[i][NpdfCounter]->Write();
+      _hElectron1Muon1PZeta[i][NpdfCounter]->Write();
+      _hElectron1Muon1PZetaVis[i][NpdfCounter]->Write();
+      _hElectron1Muon1Zeta2D[i][NpdfCounter]->Write();
+      _hElectron1Muon1Zeta1D[i][NpdfCounter]->Write();
+      _hElectron1Muon1DiJetReconstructableMass[i][NpdfCounter]->Write();
+      _hElectron1Muon2_Electron1DiJetDeltaPhi[i][NpdfCounter]->Write();
+      _hElectron1Muon2_Muon2DiJetDeltaPhi[i][NpdfCounter]->Write();
+      _hElectron1Muon2_Muon2IsZmm[i][NpdfCounter]->Write();
+      _hMuon2PtVsElectron1Pt[i][NpdfCounter]->Write();
+      _hElectron1Muon2DeltaR[i][NpdfCounter]->Write();
+      _hElectron1Muon2DeltaPtDivSumPt[i][NpdfCounter]->Write();
+      _hElectron1Muon2DeltaPt[i][NpdfCounter]->Write();
+      _hElectron1Muon2_Muon2MetMt[i][NpdfCounter]->Write();
+      _hElectron1Muon2_Electron1MetMt[i][NpdfCounter]->Write();
+      _hElectron1Muon2OSLS[i][NpdfCounter]->Write();
+      _hElectron1Muon2CosDphi[i][NpdfCounter]->Write();
+      _hElectron1Muon2_Muon2MetDeltaPhi[i][NpdfCounter]->Write();
+      _hElectron1Muon2_Electron1MetDeltaPhi[i][NpdfCounter]->Write();
+      _hMuon2MetDeltaPhiVsElectron1Muon2CosDphi[i][NpdfCounter]->Write();
+      _hElectron1Muon2NotReconstructableMass[i][NpdfCounter]->Write();
+      _hElectron1Muon2ReconstructableMass[i][NpdfCounter]->Write();
+      _hElectron1Muon2ReconstructableMass_OS[i][NpdfCounter]->Write();
+      _hElectron1Muon2ReconstructableMass_LS[i][NpdfCounter]->Write();
+      _hElectron1Muon2PZeta[i][NpdfCounter]->Write();
+      _hElectron1Muon2PZetaVis[i][NpdfCounter]->Write();
+      _hElectron1Muon2Zeta2D[i][NpdfCounter]->Write();
+      _hElectron1Muon2Zeta1D[i][NpdfCounter]->Write();
+      _hElectron1Muon2DiJetReconstructableMass[i][NpdfCounter]->Write();
+      _hElectron2Muon1_Electron2DiJetDeltaPhi[i][NpdfCounter]->Write();
+      _hElectron2Muon1_Muon1DiJetDeltaPhi[i][NpdfCounter]->Write();
+      _hElectron2Muon1_Muon1IsZmm[i][NpdfCounter]->Write();
+      _hMuon1PtVsElectron2Pt[i][NpdfCounter]->Write();
+      _hElectron2Muon1DeltaR[i][NpdfCounter]->Write();
+      _hElectron2Muon1DeltaPtDivSumPt[i][NpdfCounter]->Write();
+      _hElectron2Muon1DeltaPt[i][NpdfCounter]->Write();
+      _hElectron2Muon1_Muon1MetMt[i][NpdfCounter]->Write();
+      _hElectron2Muon1_Electron2MetMt[i][NpdfCounter]->Write();
+      _hElectron2Muon1OSLS[i][NpdfCounter]->Write();
+      _hElectron2Muon1CosDphi[i][NpdfCounter]->Write();
+      _hElectron2Muon1_Muon1MetDeltaPhi[i][NpdfCounter]->Write();
+      _hElectron2Muon1_Electron2MetDeltaPhi[i][NpdfCounter]->Write();
+      _hMuon1MetDeltaPhiVsElectron2Muon1CosDphi[i][NpdfCounter]->Write();
+      _hElectron2Muon1NotReconstructableMass[i][NpdfCounter]->Write();
+      _hElectron2Muon1ReconstructableMass[i][NpdfCounter]->Write();
+      _hElectron2Muon1ReconstructableMass_OS[i][NpdfCounter]->Write();
+      _hElectron2Muon1ReconstructableMass_LS[i][NpdfCounter]->Write();
+      _hElectron2Muon1PZeta[i][NpdfCounter]->Write();
+      _hElectron2Muon1PZetaVis[i][NpdfCounter]->Write();
+      _hElectron2Muon1Zeta2D[i][NpdfCounter]->Write();
+      _hElectron2Muon1Zeta1D[i][NpdfCounter]->Write();
+      _hElectron2Muon1DiJetReconstructableMass[i][NpdfCounter]->Write();
+      _hElectron2Muon2_Electron2DiJetDeltaPhi[i][NpdfCounter]->Write();
+      _hElectron2Muon2_Muon2DiJetDeltaPhi[i][NpdfCounter]->Write();
+      _hElectron2Muon2_Muon2IsZmm[i][NpdfCounter]->Write();
+      _hMuon2PtVsElectron2Pt[i][NpdfCounter]->Write();
+      _hElectron2Muon2DeltaR[i][NpdfCounter]->Write();
+      _hElectron2Muon2DeltaPtDivSumPt[i][NpdfCounter]->Write();
+      _hElectron2Muon2DeltaPt[i][NpdfCounter]->Write();
+      _hElectron2Muon2_Muon2MetMt[i][NpdfCounter]->Write();
+      _hElectron2Muon2_Electron2MetMt[i][NpdfCounter]->Write();
+      _hElectron2Muon2OSLS[i][NpdfCounter]->Write();
+      _hElectron2Muon2CosDphi[i][NpdfCounter]->Write();
+      _hElectron2Muon2_Muon2MetDeltaPhi[i][NpdfCounter]->Write();
+      _hElectron2Muon2_Electron2MetDeltaPhi[i][NpdfCounter]->Write();
+      _hMuon2MetDeltaPhiVsElectron2Muon2CosDphi[i][NpdfCounter]->Write();
+      _hElectron2Muon2NotReconstructableMass[i][NpdfCounter]->Write();
+      _hElectron2Muon2ReconstructableMass[i][NpdfCounter]->Write();
+      _hElectron2Muon2ReconstructableMass_OS[i][NpdfCounter]->Write();
+      _hElectron2Muon2ReconstructableMass_LS[i][NpdfCounter]->Write();
+      _hElectron2Muon2PZeta[i][NpdfCounter]->Write();
+      _hElectron2Muon2PZetaVis[i][NpdfCounter]->Write();
+      _hElectron2Muon2Zeta2D[i][NpdfCounter]->Write();
+      _hElectron2Muon2Zeta1D[i][NpdfCounter]->Write();
+      _hElectron2Muon2DiJetReconstructableMass[i][NpdfCounter]->Write();
     }
 
   }
@@ -2605,7 +3238,12 @@ int BSM3GAnalyzer::ExtractNumberOfGoodGenZs() {
   int nGenZ = 0;
   if(isData == "0") {
     for(int j = 0; j < Gen_pt->size(); j++) {
-      if((abs(Gen_pdg_id->at(j)) == 23) && (Gen_status->at(j) == 2)) {nGenZ++;}
+      if((abs(Gen_pdg_id->at(j)) == 23) && (Gen_status->at(j) != 22)) {
+        TLorentzVector genObjt1;
+        genObjt1.SetPtEtaPhiE(Gen_pt->at(j), Gen_eta->at(j), Gen_phi->at(j), Gen_energy->at(j));
+        if( (genObjt1.M() >= _GenZmassMinCut) && (genObjt1.M() < _GenZmassMaxCut) ) {nGenZ++;}
+      }
+//      if((abs(Gen_pdg_id->at(j)) == 23) && (Gen_status->at(j) == 2)) {nGenZ++;}
     }
   }
   return nGenZ;
@@ -2803,6 +3441,10 @@ bool BSM3GAnalyzer::passRecoTau1Cuts(int nobj) {
       if (Tau_byMediumIsolationMva3oldDMwLT->at(nobj) < 0.5) {return false;}
     } else if(_RecoTau1DiscrByMaxIsolation == "byTightIsolationMva3oldDMwLT") {
       if (Tau_byTightIsolationMva3oldDMwLT->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau1DiscrByMaxIsolation == "byCombinedIsolationDeltaBetaCorrRaw3Hits_5p0GeV") {
+      if (Tau_byCombinedIsolationDeltaBetaCorrRaw3Hits->at(nobj) > 5.0) {return false;}
+    } else if(_RecoTau1DiscrByMaxIsolation == "byCombinedIsolationDeltaBetaCorrRaw3Hits_2p5GeV") {
+      if (Tau_byCombinedIsolationDeltaBetaCorrRaw3Hits->at(nobj) > 2.5) {return false;}
     } else { }
 
     //--- min isolation requirement
@@ -2826,6 +3468,8 @@ bool BSM3GAnalyzer::passRecoTau1Cuts(int nobj) {
         if (Tau_byMediumIsolationMva3oldDMwLT->at(nobj) > 0.5) {return false;}
       } else if(_RecoTau1DiscrByMinIsolation == "byTightIsolationMva3oldDMwLT") {
         if (Tau_byTightIsolationMva3oldDMwLT->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau1DiscrByMinIsolation == "byCombinedIsolationDeltaBetaCorrRaw3Hits_2p5GeV") {
+        if (Tau_byCombinedIsolationDeltaBetaCorrRaw3Hits->at(nobj) < 2.5) {return false;}
       } else { }
     }
 
@@ -2961,6 +3605,10 @@ bool BSM3GAnalyzer::passRecoTau2Cuts(int nobj) {
       if (Tau_byMediumIsolationMva3oldDMwLT->at(nobj) < 0.5) {return false;}
     } else if(_RecoTau2DiscrByMaxIsolation == "byTightIsolationMva3oldDMwLT") {
       if (Tau_byTightIsolationMva3oldDMwLT->at(nobj) < 0.5) {return false;}
+    } else if(_RecoTau2DiscrByMaxIsolation == "byCombinedIsolationDeltaBetaCorrRaw3Hits_5p0GeV") {
+      if (Tau_byCombinedIsolationDeltaBetaCorrRaw3Hits->at(nobj) > 5.0) {return false;}
+    } else if(_RecoTau2DiscrByMaxIsolation == "byCombinedIsolationDeltaBetaCorrRaw3Hits_2p5GeV") {
+      if (Tau_byCombinedIsolationDeltaBetaCorrRaw3Hits->at(nobj) > 2.5) {return false;}
     } else { }
 
     //--- min isolation requirement
@@ -2984,6 +3632,8 @@ bool BSM3GAnalyzer::passRecoTau2Cuts(int nobj) {
         if (Tau_byMediumIsolationMva3oldDMwLT->at(nobj) > 0.5) {return false;}
       } else if(_RecoTau2DiscrByMinIsolation == "byTightIsolationMva3oldDMwLT") {
         if (Tau_byTightIsolationMva3oldDMwLT->at(nobj) > 0.5) {return false;}
+      } else if(_RecoTau2DiscrByMinIsolation == "byCombinedIsolationDeltaBetaCorrRaw3Hits_2p5GeV") {
+        if (Tau_byCombinedIsolationDeltaBetaCorrRaw3Hits->at(nobj) < 2.5) {return false;}
       } else { }
     }
 
@@ -4185,6 +4835,170 @@ bool BSM3GAnalyzer::passElectron2Tau2TopologyCuts(int nobjT, int nobjE) {
   return true;
 }
 
+bool BSM3GAnalyzer::passElectron1Muon1TopologyCuts(int nobjM, int nobjE) {
+  // ----Separation cut between electron and muon (remove overlaps)
+  if (_DoElectron1Muon1DiscrByDeltaR == "1") { if(smearedMuonMomentumVector.at(nobjM).DeltaR(smearedElectronMomentumVector.at(nobjE)) < _Electron1Muon1DeltaRCut) {return false;} }
+  // ----Opposite sign - Like sign requirement
+  if (_Electron1Muon1DiscrByOSLSType == "OS") {
+    if((patElectron_charge->at(nobjE) * Muon_charge->at(nobjM)) >= 0) {return false;}
+  } else if (_Electron1Muon1DiscrByOSLSType == "LS") {
+    if((patElectron_charge->at(nobjE) * Muon_charge->at(nobjM)) <= 0) {return false;}
+  } else {}
+  // ----Require both legs to be almost back-to-back in phi
+  if (_DoElectron1Muon1DiscrByCosDphi == "1") {
+    if(cos(abs(normalizedPhi(smearedMuonMomentumVector.at(nobjM).Phi() - smearedElectronMomentumVector.at(nobjE).Phi()))) > _Electron1Muon1CosDphiMaxCut) {return false;}
+    if(cos(abs(normalizedPhi(smearedMuonMomentumVector.at(nobjM).Phi() - smearedElectronMomentumVector.at(nobjE).Phi()))) < _Electron1Muon1CosDphiMinCut) {return false;}
+  }
+  // ----Mass window requirement
+  if (_DoDiscrByElectron1Muon1MassReco == "1") {
+    _UseVectorSumOfVisProductsAndMetMassReco = _UseVectorSumOfElectron1Muon1ProductsAndMetMassReco;
+    _UseCollinerApproxMassReco = _UseCollinerApproxElectron1Muon1MassReco;
+    if( (CalculateTheDiTau4Momentum(smearedMuonMomentumVector.at(nobjM),smearedElectronMomentumVector.at(nobjE)).second.M() < _Electron1Muon1MassMinCut) || (CalculateTheDiTau4Momentum(smearedMuonMomentumVector.at(nobjM),smearedElectronMomentumVector.at(nobjE)).second.M() > _Electron1Muon1MassMaxCut) ) {return false;}
+  }
+  // ----Zeta requirement
+  if (_DoElectron1Muon1DiscrByCDFzeta2D == "1") {
+    if( ((_Electron1Muon1PZetaCutCoefficient * CalculatePZeta(smearedMuonMomentumVector.at(nobjM),smearedElectronMomentumVector.at(nobjE))) + 
+         (_Electron1Muon1PZetaVisCutCoefficient * CalculatePZetaVis(smearedMuonMomentumVector.at(nobjM),smearedElectronMomentumVector.at(nobjE)))) < _Electron1Muon1CDFzeta2DMinCutValue )
+      {return false;}
+    if( ((_Electron1Muon1PZetaCutCoefficient * CalculatePZeta(smearedMuonMomentumVector.at(nobjM),smearedElectronMomentumVector.at(nobjE))) + 
+         (_Electron1Muon1PZetaVisCutCoefficient * CalculatePZetaVis(smearedMuonMomentumVector.at(nobjM),smearedElectronMomentumVector.at(nobjE)))) > _Electron1Muon1CDFzeta2DMaxCutValue )
+      {return false;}
+  }
+  // ----Missing transverse energy requirement
+  if (_DoElectron1Muon1DiscrByDeltaPtDivSumPt == "1") {
+    if ( ((smearedMuonMomentumVector.at(nobjM).Pt() - smearedElectronMomentumVector.at(nobjE).Pt()) / (smearedMuonMomentumVector.at(nobjM).Pt() + smearedElectronMomentumVector.at(nobjE).Pt())) < _Electron1Muon1DeltaPtDivSumPtMinCutValue ) {return false;}
+    if ( ((smearedMuonMomentumVector.at(nobjM).Pt() - smearedElectronMomentumVector.at(nobjE).Pt()) / (smearedMuonMomentumVector.at(nobjM).Pt() + smearedElectronMomentumVector.at(nobjE).Pt())) > _Electron1Muon1DeltaPtDivSumPtMaxCutValue ) {return false;}
+  }
+  if (_DoElectron1Muon1DiscrByDeltaPt == "1") {
+    if ( ((smearedMuonMomentumVector.at(nobjM).Pt() - smearedElectronMomentumVector.at(nobjE).Pt())) < _Electron1Muon1DeltaPtMinCutValue ) {return false;}
+    if ( ((smearedMuonMomentumVector.at(nobjM).Pt() - smearedElectronMomentumVector.at(nobjE).Pt())) > _Electron1Muon1DeltaPtMaxCutValue ) {return false;}
+  }
+  return true;
+}
+
+bool BSM3GAnalyzer::passElectron1Muon2TopologyCuts(int nobjM, int nobjE) {
+  // ----Separation cut between electron and muon (remove overlaps)
+  if (_DoElectron1Muon2DiscrByDeltaR == "1") { if(smearedMuonMomentumVector.at(nobjM).DeltaR(smearedElectronMomentumVector.at(nobjE)) < _Electron1Muon2DeltaRCut) {return false;} }
+  // ----Opposite sign - Like sign requirement
+  if (_Electron1Muon2DiscrByOSLSType == "OS") {
+    if((patElectron_charge->at(nobjE) * Muon_charge->at(nobjM)) >= 0) {return false;}
+  } else if (_Electron1Muon2DiscrByOSLSType == "LS") {
+    if((patElectron_charge->at(nobjE) * Muon_charge->at(nobjM)) <= 0) {return false;}
+  } else {}
+  // ----Require both legs to be almost back-to-back in phi
+  if (_DoElectron1Muon2DiscrByCosDphi == "1") {
+    if(cos(abs(normalizedPhi(smearedMuonMomentumVector.at(nobjM).Phi() - smearedElectronMomentumVector.at(nobjE).Phi()))) > _Electron1Muon2CosDphiMaxCut) {return false;}
+    if(cos(abs(normalizedPhi(smearedMuonMomentumVector.at(nobjM).Phi() - smearedElectronMomentumVector.at(nobjE).Phi()))) < _Electron1Muon2CosDphiMinCut) {return false;}
+  }
+  // ----Mass window requirement
+  if (_DoDiscrByElectron1Muon2MassReco == "1") {
+    _UseVectorSumOfVisProductsAndMetMassReco = _UseVectorSumOfElectron1Muon2ProductsAndMetMassReco;
+    _UseCollinerApproxMassReco = _UseCollinerApproxElectron1Muon2MassReco;
+    if( (CalculateTheDiTau4Momentum(smearedMuonMomentumVector.at(nobjM),smearedElectronMomentumVector.at(nobjE)).second.M() < _Electron1Muon2MassMinCut) || (CalculateTheDiTau4Momentum(smearedMuonMomentumVector.at(nobjM),smearedElectronMomentumVector.at(nobjE)).second.M() > _Electron1Muon2MassMaxCut) ) {return false;}
+  }
+  // ----Zeta requirement
+  if (_DoElectron1Muon2DiscrByCDFzeta2D == "1") {
+    if( ((_Electron1Muon2PZetaCutCoefficient * CalculatePZeta(smearedMuonMomentumVector.at(nobjM),smearedElectronMomentumVector.at(nobjE))) + 
+         (_Electron1Muon2PZetaVisCutCoefficient * CalculatePZetaVis(smearedMuonMomentumVector.at(nobjM),smearedElectronMomentumVector.at(nobjE)))) < _Electron1Muon2CDFzeta2DMinCutValue )
+      {return false;}
+    if( ((_Electron1Muon2PZetaCutCoefficient * CalculatePZeta(smearedMuonMomentumVector.at(nobjM),smearedElectronMomentumVector.at(nobjE))) + 
+         (_Electron1Muon2PZetaVisCutCoefficient * CalculatePZetaVis(smearedMuonMomentumVector.at(nobjM),smearedElectronMomentumVector.at(nobjE)))) > _Electron1Muon2CDFzeta2DMaxCutValue )
+      {return false;}
+  }
+  // ----Missing transverse energy requirement
+  if (_DoElectron1Muon2DiscrByDeltaPtDivSumPt == "1") {
+    if ( ((smearedMuonMomentumVector.at(nobjM).Pt() - smearedElectronMomentumVector.at(nobjE).Pt()) / (smearedMuonMomentumVector.at(nobjM).Pt() + smearedElectronMomentumVector.at(nobjE).Pt())) < _Electron1Muon2DeltaPtDivSumPtMinCutValue ) {return false;}
+    if ( ((smearedMuonMomentumVector.at(nobjM).Pt() - smearedElectronMomentumVector.at(nobjE).Pt()) / (smearedMuonMomentumVector.at(nobjM).Pt() + smearedElectronMomentumVector.at(nobjE).Pt())) > _Electron1Muon2DeltaPtDivSumPtMaxCutValue ) {return false;}
+  }
+  if (_DoElectron1Muon2DiscrByDeltaPt == "1") {
+    if ( ((smearedMuonMomentumVector.at(nobjM).Pt() - smearedElectronMomentumVector.at(nobjE).Pt())) < _Electron1Muon2DeltaPtMinCutValue ) {return false;}
+    if ( ((smearedMuonMomentumVector.at(nobjM).Pt() - smearedElectronMomentumVector.at(nobjE).Pt())) > _Electron1Muon2DeltaPtMaxCutValue ) {return false;}
+  }
+  return true;
+}
+
+bool BSM3GAnalyzer::passElectron2Muon1TopologyCuts(int nobjM, int nobjE) {
+  // ----Separation cut between electron and muon (remove overlaps)
+  if (_DoElectron2Muon1DiscrByDeltaR == "1") { if(smearedMuonMomentumVector.at(nobjM).DeltaR(smearedElectronMomentumVector.at(nobjE)) < _Electron2Muon1DeltaRCut) {return false;} }
+  // ----Opposite sign - Like sign requirement
+  if (_Electron2Muon1DiscrByOSLSType == "OS") {
+    if((patElectron_charge->at(nobjE) * Muon_charge->at(nobjM)) >= 0) {return false;}
+  } else if (_Electron2Muon1DiscrByOSLSType == "LS") {
+    if((patElectron_charge->at(nobjE) * Muon_charge->at(nobjM)) <= 0) {return false;}
+  } else {}
+  // ----Require both legs to be almost back-to-back in phi
+  if (_DoElectron2Muon1DiscrByCosDphi == "1") {
+    if(cos(abs(normalizedPhi(smearedMuonMomentumVector.at(nobjM).Phi() - smearedElectronMomentumVector.at(nobjE).Phi()))) > _Electron2Muon1CosDphiMaxCut) {return false;}
+    if(cos(abs(normalizedPhi(smearedMuonMomentumVector.at(nobjM).Phi() - smearedElectronMomentumVector.at(nobjE).Phi()))) < _Electron2Muon1CosDphiMinCut) {return false;}
+  }
+  // ----Mass window requirement
+  if (_DoDiscrByElectron2Muon1MassReco == "1") {
+    _UseVectorSumOfVisProductsAndMetMassReco = _UseVectorSumOfElectron2Muon1ProductsAndMetMassReco;
+    _UseCollinerApproxMassReco = _UseCollinerApproxElectron2Muon1MassReco;
+    if( (CalculateTheDiTau4Momentum(smearedMuonMomentumVector.at(nobjM),smearedElectronMomentumVector.at(nobjE)).second.M() < _Electron2Muon1MassMinCut) || (CalculateTheDiTau4Momentum(smearedMuonMomentumVector.at(nobjM),smearedElectronMomentumVector.at(nobjE)).second.M() > _Electron2Muon1MassMaxCut) ) {return false;}
+  }
+  // ----Zeta requirement
+  if (_DoElectron2Muon1DiscrByCDFzeta2D == "1") {
+    if( ((_Electron2Muon1PZetaCutCoefficient * CalculatePZeta(smearedMuonMomentumVector.at(nobjM),smearedElectronMomentumVector.at(nobjE))) + 
+         (_Electron2Muon1PZetaVisCutCoefficient * CalculatePZetaVis(smearedMuonMomentumVector.at(nobjM),smearedElectronMomentumVector.at(nobjE)))) < _Electron2Muon1CDFzeta2DMinCutValue )
+      {return false;}
+    if( ((_Electron2Muon1PZetaCutCoefficient * CalculatePZeta(smearedMuonMomentumVector.at(nobjM),smearedElectronMomentumVector.at(nobjE))) + 
+         (_Electron2Muon1PZetaVisCutCoefficient * CalculatePZetaVis(smearedMuonMomentumVector.at(nobjM),smearedElectronMomentumVector.at(nobjE)))) > _Electron2Muon1CDFzeta2DMaxCutValue )
+      {return false;}
+  }
+  // ----Missing transverse energy requirement
+  if (_DoElectron2Muon1DiscrByDeltaPtDivSumPt == "1") {
+    if ( ((smearedMuonMomentumVector.at(nobjM).Pt() - smearedElectronMomentumVector.at(nobjE).Pt()) / (smearedMuonMomentumVector.at(nobjM).Pt() + smearedElectronMomentumVector.at(nobjE).Pt())) < _Electron2Muon1DeltaPtDivSumPtMinCutValue ) {return false;}
+    if ( ((smearedMuonMomentumVector.at(nobjM).Pt() - smearedElectronMomentumVector.at(nobjE).Pt()) / (smearedMuonMomentumVector.at(nobjM).Pt() + smearedElectronMomentumVector.at(nobjE).Pt())) > _Electron2Muon1DeltaPtDivSumPtMaxCutValue ) {return false;}
+  }
+  if (_DoElectron2Muon1DiscrByDeltaPt == "1") {
+    if ( ((smearedMuonMomentumVector.at(nobjM).Pt() - smearedElectronMomentumVector.at(nobjE).Pt())) < _Electron2Muon1DeltaPtMinCutValue ) {return false;}
+    if ( ((smearedMuonMomentumVector.at(nobjM).Pt() - smearedElectronMomentumVector.at(nobjE).Pt())) > _Electron2Muon1DeltaPtMaxCutValue ) {return false;}
+  }
+  return true;
+}
+
+bool BSM3GAnalyzer::passElectron2Muon2TopologyCuts(int nobjM, int nobjE) {
+  // ----Separation cut between electron and muon (remove overlaps)
+  if (_DoElectron2Muon2DiscrByDeltaR == "1") { if(smearedMuonMomentumVector.at(nobjM).DeltaR(smearedElectronMomentumVector.at(nobjE)) < _Electron2Muon2DeltaRCut) {return false;} }
+  // ----Opposite sign - Like sign requirement
+  if (_Electron2Muon2DiscrByOSLSType == "OS") {
+    if((patElectron_charge->at(nobjE) * Muon_charge->at(nobjM)) >= 0) {return false;}
+  } else if (_Electron2Muon2DiscrByOSLSType == "LS") {
+    if((patElectron_charge->at(nobjE) * Muon_charge->at(nobjM)) <= 0) {return false;}
+  } else {}
+  // ----Require both legs to be almost back-to-back in phi
+  if (_DoElectron2Muon2DiscrByCosDphi == "1") {
+    if(cos(abs(normalizedPhi(smearedMuonMomentumVector.at(nobjM).Phi() - smearedElectronMomentumVector.at(nobjE).Phi()))) > _Electron2Muon2CosDphiMaxCut) {return false;}
+    if(cos(abs(normalizedPhi(smearedMuonMomentumVector.at(nobjM).Phi() - smearedElectronMomentumVector.at(nobjE).Phi()))) < _Electron2Muon2CosDphiMinCut) {return false;}
+  }
+  // ----Mass window requirement
+  if (_DoDiscrByElectron2Muon2MassReco == "1") {
+    _UseVectorSumOfVisProductsAndMetMassReco = _UseVectorSumOfElectron2Muon2ProductsAndMetMassReco;
+    _UseCollinerApproxMassReco = _UseCollinerApproxElectron2Muon2MassReco;
+    if( (CalculateTheDiTau4Momentum(smearedMuonMomentumVector.at(nobjM),smearedElectronMomentumVector.at(nobjE)).second.M() < _Electron2Muon2MassMinCut) || (CalculateTheDiTau4Momentum(smearedMuonMomentumVector.at(nobjM),smearedElectronMomentumVector.at(nobjE)).second.M() > _Electron2Muon2MassMaxCut) ) {return false;}
+  }
+  // ----Zeta requirement
+  if (_DoElectron2Muon2DiscrByCDFzeta2D == "1") {
+    if( ((_Electron2Muon2PZetaCutCoefficient * CalculatePZeta(smearedMuonMomentumVector.at(nobjM),smearedElectronMomentumVector.at(nobjE))) + 
+         (_Electron2Muon2PZetaVisCutCoefficient * CalculatePZetaVis(smearedMuonMomentumVector.at(nobjM),smearedElectronMomentumVector.at(nobjE)))) < _Electron2Muon2CDFzeta2DMinCutValue )
+      {return false;}
+    if( ((_Electron2Muon2PZetaCutCoefficient * CalculatePZeta(smearedMuonMomentumVector.at(nobjM),smearedElectronMomentumVector.at(nobjE))) + 
+         (_Electron2Muon2PZetaVisCutCoefficient * CalculatePZetaVis(smearedMuonMomentumVector.at(nobjM),smearedElectronMomentumVector.at(nobjE)))) > _Electron2Muon2CDFzeta2DMaxCutValue )
+      {return false;}
+  }
+  // ----Missing transverse energy requirement
+  if (_DoElectron2Muon2DiscrByDeltaPtDivSumPt == "1") {
+    if ( ((smearedMuonMomentumVector.at(nobjM).Pt() - smearedElectronMomentumVector.at(nobjE).Pt()) / (smearedMuonMomentumVector.at(nobjM).Pt() + smearedElectronMomentumVector.at(nobjE).Pt())) < _Electron2Muon2DeltaPtDivSumPtMinCutValue ) {return false;}
+    if ( ((smearedMuonMomentumVector.at(nobjM).Pt() - smearedElectronMomentumVector.at(nobjE).Pt()) / (smearedMuonMomentumVector.at(nobjM).Pt() + smearedElectronMomentumVector.at(nobjE).Pt())) > _Electron2Muon2DeltaPtDivSumPtMaxCutValue ) {return false;}
+  }
+  if (_DoElectron2Muon2DiscrByDeltaPt == "1") {
+    if ( ((smearedMuonMomentumVector.at(nobjM).Pt() - smearedElectronMomentumVector.at(nobjE).Pt())) < _Electron2Muon2DeltaPtMinCutValue ) {return false;}
+    if ( ((smearedMuonMomentumVector.at(nobjM).Pt() - smearedElectronMomentumVector.at(nobjE).Pt())) > _Electron2Muon2DeltaPtMaxCutValue ) {return false;}
+  }
+  return true;
+}
+
 pair<bool, pair<float, float> > BSM3GAnalyzer::isZmm(TLorentzVector theObject) {
   pair<bool, pair<float, float> > theOutPutPair;
   bool eventIsZmm = false;
@@ -4545,6 +5359,7 @@ void BSM3GAnalyzer::setBranchAddress(TTree* BOOM) {
   Tau_againstElectronMVATightMVA5 = 0;
   Tau_nProngs = 0;
   Tau_puCorrPtSum = 0;
+  Tau_byCombinedIsolationDeltaBetaCorrRaw3Hits = 0;
   Tau_byLooseCombinedIsolationDeltaBetaCorr3Hits = 0;
   Tau_byMediumCombinedIsolationDeltaBetaCorr3Hits = 0;
   Tau_byTightCombinedIsolationDeltaBetaCorr3Hits = 0;
@@ -4591,6 +5406,7 @@ void BSM3GAnalyzer::setBranchAddress(TTree* BOOM) {
   Gen_status = 0;
   Gen_BmotherIndex = 0;
   nTruePUInteractions = 0;
+  weightevt = 0;
   bestVertices = 0;
 
   //---Set branch addresses and branch pointers
@@ -4606,6 +5422,7 @@ void BSM3GAnalyzer::setBranchAddress(TTree* BOOM) {
   BOOM->SetBranchAddress("Gen_status", &Gen_status, &b_Gen_status);
   BOOM->SetBranchAddress("Gen_BmotherIndex", &Gen_BmotherIndex, &b_Gen_BmotherIndex);
   BOOM->SetBranchAddress("nTruePUInteractions", &nTruePUInteractions, &b_nTruePUInteractions);
+  BOOM->SetBranchAddress("weightevt", &weightevt, &b_weightevt);
   BOOM->SetBranchAddress("bestVertices", &bestVertices, &b_bestVertices);
   BOOM->SetBranchAddress("Muon_pt", &Muon_pt, &b_Muon_pt);
   BOOM->SetBranchAddress("Muon_eta", &Muon_eta, &b_Muon_eta);
@@ -4645,6 +5462,7 @@ void BSM3GAnalyzer::setBranchAddress(TTree* BOOM) {
   BOOM->SetBranchAddress("Tau_againstElectronMVATightMVA5", &Tau_againstElectronMVATightMVA5, &b_Tau_againstElectronMVATightMVA5);
   BOOM->SetBranchAddress("Tau_nProngs", &Tau_nProngs, &b_Tau_nProngs);
   BOOM->SetBranchAddress("Tau_puCorrPtSum", &Tau_puCorrPtSum, &b_Tau_puCorrPtSum);
+  BOOM->SetBranchAddress("Tau_byCombinedIsolationDeltaBetaCorrRaw3Hits", &Tau_byCombinedIsolationDeltaBetaCorrRaw3Hits, &b_Tau_byCombinedIsolationDeltaBetaCorrRaw3Hits);
   BOOM->SetBranchAddress("Tau_byLooseCombinedIsolationDeltaBetaCorr3Hits", &Tau_byLooseCombinedIsolationDeltaBetaCorr3Hits, &b_Tau_byLooseCombinedIsolationDeltaBetaCorr3Hits);
   BOOM->SetBranchAddress("Tau_byMediumCombinedIsolationDeltaBetaCorr3Hits", &Tau_byMediumCombinedIsolationDeltaBetaCorr3Hits, &b_Tau_byMediumCombinedIsolationDeltaBetaCorr3Hits);
   BOOM->SetBranchAddress("Tau_byTightCombinedIsolationDeltaBetaCorr3Hits", &Tau_byTightCombinedIsolationDeltaBetaCorr3Hits, &b_Tau_byTightCombinedIsolationDeltaBetaCorr3Hits);
