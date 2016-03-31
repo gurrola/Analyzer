@@ -807,6 +807,7 @@ void BSM3GAnalyzer::getInputs() {
   _FillGenHists                      = params->GetValue ("FillGenHists", "string");
   _FillRecoTauHists                  = params->GetValue ("FillRecoTauHists", "string");
   _FillRecoMuonHists                 = params->GetValue ("FillRecoMuonHists", "string");
+  _FillRecoElectronHists             = params->GetValue ("FillRecoElectronHists", "string");
   _FillRecoJetHists                  = params->GetValue ("FillRecoJetHists", "string");
   _FillTopologyHists                 = params->GetValue ("FillTopologyHists", "string");
 
@@ -1750,6 +1751,52 @@ void BSM3GAnalyzer::fillHistograms(unsigned int i) {
       }
     }
 
+    // ------Reco Electron Histograms
+    if (_FillRecoElectronHists == "1") {
+      int nElectrons = 0;
+      double leadingelectronpt = 0;
+      double leadingelectroneta = 0;
+      for(int j = 0; j < patElectron_pt->size(); j++) {
+	if (!passRecoElectron1Cuts(j)) continue;
+        if(smearedElectronMomentumVector.at(j).Pt() >= leadingelectronpt) {
+          leadingelectronpt = smearedElectronMomentumVector.at(j).Pt();
+          leadingelectroneta = smearedElectronMomentumVector.at(j).Eta();
+        }
+        _hElectron1Energy[i][NpdfID]->Fill(smearedElectronMomentumVector.at(j).Energy(),isrgluon_weight * pdfWeightVector.at(NpdfID));
+	_hElectron1Pt[i][NpdfID]->Fill(smearedElectronMomentumVector.at(j).Pt(),isrgluon_weight * pdfWeightVector.at(NpdfID));
+	_hElectron1Eta[i][NpdfID]->Fill(smearedElectronMomentumVector.at(j).Eta(),isrgluon_weight * pdfWeightVector.at(NpdfID));
+	_hElectron1Phi[i][NpdfID]->Fill(smearedElectronMomentumVector.at(j).Phi(),isrgluon_weight * pdfWeightVector.at(NpdfID));
+        _hElectron1MetMt[i][NpdfID]->Fill(CalculateLeptonMetMt(smearedElectronMomentumVector.at(j)),isrgluon_weight * pdfWeightVector.at(NpdfID));
+	nElectrons++;
+      }
+      _hNElectron1[i][NpdfID]->Fill(nElectrons,isrgluon_weight * pdfWeightVector.at(NpdfID));
+      if(nElectrons > 0) {
+        _hFirstLeadingElectron1Pt[i][NpdfID]->Fill(leadingelectronpt,isrgluon_weight * pdfWeightVector.at(NpdfID));
+        _hFirstLeadingElectron1Eta[i][NpdfID]->Fill(leadingelectroneta,isrgluon_weight * pdfWeightVector.at(NpdfID));
+      }
+      nElectrons = 0;
+      leadingelectronpt = 0;
+      leadingelectroneta = 0;
+      for(int j = 0; j < patElectron_pt->size(); j++) {
+        if (!passRecoElectron2Cuts(j)) continue;
+        if(smearedElectronMomentumVector.at(j).Pt() >= leadingelectronpt) {
+          leadingelectronpt = smearedElectronMomentumVector.at(j).Pt();
+          leadingelectroneta = smearedElectronMomentumVector.at(j).Eta();
+        }
+        _hElectron2Energy[i][NpdfID]->Fill(smearedElectronMomentumVector.at(j).Energy(),isrgluon_weight * pdfWeightVector.at(NpdfID));
+        _hElectron2Pt[i][NpdfID]->Fill(smearedElectronMomentumVector.at(j).Pt(),isrgluon_weight * pdfWeightVector.at(NpdfID));
+        _hElectron2Eta[i][NpdfID]->Fill(smearedElectronMomentumVector.at(j).Eta(),isrgluon_weight * pdfWeightVector.at(NpdfID));
+        _hElectron2Phi[i][NpdfID]->Fill(smearedElectronMomentumVector.at(j).Phi(),isrgluon_weight * pdfWeightVector.at(NpdfID));
+        _hElectron2MetMt[i][NpdfID]->Fill(CalculateLeptonMetMt(smearedElectronMomentumVector.at(j)),isrgluon_weight * pdfWeightVector.at(NpdfID));
+        nElectrons++;
+      }
+      _hNElectron2[i][NpdfID]->Fill(nElectrons,isrgluon_weight * pdfWeightVector.at(NpdfID));
+      if(nElectrons > 0) {
+        _hFirstLeadingElectron2Pt[i][NpdfID]->Fill(leadingelectronpt,isrgluon_weight * pdfWeightVector.at(NpdfID));
+        _hFirstLeadingElectron2Eta[i][NpdfID]->Fill(leadingelectroneta,isrgluon_weight * pdfWeightVector.at(NpdfID));
+      }
+    }
+
     // ------Reco Jet Histograms
     if (_FillRecoJetHists == "1") {
 
@@ -2419,6 +2466,25 @@ void BSM3GAnalyzer::bookHistograms(TFile * theOutFile, string mydirectory , unsi
       _hMuon2MetMt[i][NpdfCounter]                   = new TH1F(("Muon2MetMt_"+j.str()).c_str(),       ("Muon2MetMt_"+j.str()).c_str(), 100, 0, 500);
     }
 
+    if (_FillRecoElectronHists == "1") {
+      _hNElectron1[i][NpdfCounter]                       = new TH1F(("NElectron1_"+j.str()).c_str(),                   ("NElectron1_"+j.str()).c_str(), 20, 0., 20.);
+      _hElectron1Energy[i][NpdfCounter]                  = new TH1F(("Electron1Energy_"+j.str()).c_str(),              ("Electron1Energy_"+j.str()).c_str(), 2000, 0., 5000.);
+      _hElectron1Pt[i][NpdfCounter]                      = new TH1F(("Electron1Pt_"+j.str()).c_str(),                  ("Electron1Pt_"+j.str()).c_str(),  2000, 0., 5000.);
+      _hElectron1Eta[i][NpdfCounter]                     = new TH1F(("Electron1Eta_"+j.str()).c_str(),                 ("Electron1Eta_"+j.str()).c_str(), 72, -3.6, +3.6);
+      _hFirstLeadingElectron1Pt[i][NpdfCounter]          = new TH1F(("FirstLeadingElectron1Pt_"+j.str()).c_str(),      ("FirstLeadingElectron1Pt_"+j.str()).c_str(),  400, 0., 1000.);
+      _hFirstLeadingElectron1Eta[i][NpdfCounter]         = new TH1F(("FirstLeadingElectron1Eta_"+j.str()).c_str(),     ("FirstLeadingElectron1Eta_"+j.str()).c_str(), 144, -7.2, +7.2);
+      _hElectron1Phi[i][NpdfCounter]                     = new TH1F(("Electron1Phi_"+j.str()).c_str(),                 ("Electron1Phi_"+j.str()).c_str(), 36, -TMath::Pi(), +TMath::Pi());
+      _hElectron1MetMt[i][NpdfCounter]                   = new TH1F(("Electron1MetMt_"+j.str()).c_str(),       ("Electron1MetMt_"+j.str()).c_str(), 100, 0, 500);
+      _hNElectron2[i][NpdfCounter]                       = new TH1F(("NElectron2_"+j.str()).c_str(),                   ("NElectron2_"+j.str()).c_str(), 20, 0., 20.);
+      _hElectron2Energy[i][NpdfCounter]                  = new TH1F(("Electron2Energy_"+j.str()).c_str(),              ("Electron2Energy_"+j.str()).c_str(), 2000, 0., 5000.);
+      _hElectron2Pt[i][NpdfCounter]                      = new TH1F(("Electron2Pt_"+j.str()).c_str(),                  ("Electron2Pt_"+j.str()).c_str(),  2000, 0., 5000.);
+      _hElectron2Eta[i][NpdfCounter]                     = new TH1F(("Electron2Eta_"+j.str()).c_str(),                 ("Electron2Eta_"+j.str()).c_str(), 72, -3.6, +3.6);
+      _hFirstLeadingElectron2Pt[i][NpdfCounter]          = new TH1F(("FirstLeadingElectron2Pt_"+j.str()).c_str(),      ("FirstLeadingElectron2Pt_"+j.str()).c_str(),  400, 0., 1000.);
+      _hFirstLeadingElectron2Eta[i][NpdfCounter]         = new TH1F(("FirstLeadingElectron2Eta_"+j.str()).c_str(),     ("FirstLeadingElectron2Eta_"+j.str()).c_str(), 144, -7.2, +7.2);
+      _hElectron2Phi[i][NpdfCounter]                     = new TH1F(("Electron2Phi_"+j.str()).c_str(),                 ("Electron2Phi_"+j.str()).c_str(), 36, -TMath::Pi(), +TMath::Pi());
+      _hElectron2MetMt[i][NpdfCounter]                   = new TH1F(("Electron2MetMt_"+j.str()).c_str(),       ("Electron2MetMt_"+j.str()).c_str(), 100, 0, 500);
+    }
+
     if (_FillRecoJetHists == "1") {
       _hNJet1[i][NpdfCounter]            = new TH1F(("NJet1_"+j.str()).c_str(),           ("NJet1_"+j.str()).c_str(), 20, 0., 20.);
       _hNJet2[i][NpdfCounter]            = new TH1F(("NJet2_"+j.str()).c_str(),           ("NJet2_"+j.str()).c_str(), 20, 0., 20.);
@@ -2799,6 +2865,25 @@ void BSM3GAnalyzer::writeHistograms(TFile *theOutFile, string mydirectory , unsi
       _hFirstLeadingMuon2Eta[i][NpdfCounter]->Write();
       _hMuon2Phi[i][NpdfCounter]->Write();            
       _hMuon2MetMt[i][NpdfCounter]->Write();          
+    }
+
+    if (_FillRecoElectronHists == "1") {
+      _hNElectron1[i][NpdfCounter]->Write();     
+      _hElectron1Energy[i][NpdfCounter]->Write();
+      _hElectron1Pt[i][NpdfCounter]->Write();    
+      _hElectron1Eta[i][NpdfCounter]->Write();   
+      _hFirstLeadingElectron1Pt[i][NpdfCounter]->Write();
+      _hFirstLeadingElectron1Eta[i][NpdfCounter]->Write();
+      _hElectron1Phi[i][NpdfCounter]->Write();            
+      _hElectron1MetMt[i][NpdfCounter]->Write();          
+      _hNElectron2[i][NpdfCounter]->Write();     
+      _hElectron2Energy[i][NpdfCounter]->Write();
+      _hElectron2Pt[i][NpdfCounter]->Write();    
+      _hElectron2Eta[i][NpdfCounter]->Write();   
+      _hFirstLeadingElectron2Pt[i][NpdfCounter]->Write();
+      _hFirstLeadingElectron2Eta[i][NpdfCounter]->Write();
+      _hElectron2Phi[i][NpdfCounter]->Write();            
+      _hElectron2MetMt[i][NpdfCounter]->Write();          
     }
 
     if (_FillRecoJetHists == "1") {

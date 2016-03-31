@@ -744,6 +744,7 @@ FillRecoVertexHists 1
 FillGenHists 1
 FillRecoTauHists 1
 FillRecoMuonHists 1
+FillRecoElectronHists 1
 FillRecoJetHists 1
 FillTopologyHists 1
 ApplyGenWeight 0

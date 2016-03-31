@@ -149,6 +149,7 @@ private:
   string _FillGenHists;
   string _FillRecoTauHists;      
   string _FillRecoMuonHists;     
+  string _FillRecoElectronHists;     
   string _FillRecoJetHists;    
   string _FillTopologyHists;     
 
@@ -217,6 +218,24 @@ private:
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hMuon2MetMt;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hFirstLeadingMuon2Pt;
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hFirstLeadingMuon2Eta;
+
+  //-----reconstruction level electron histograms
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hNElectron1;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Energy;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Pt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Eta;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1Phi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron1MetMt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hFirstLeadingElectron1Pt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hFirstLeadingElectron1Eta;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hNElectron2;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Energy;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Pt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Eta;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2Phi;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hElectron2MetMt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hFirstLeadingElectron2Pt;
+  std::map< unsigned int, std::map<unsigned int, TH1*>> _hFirstLeadingElectron2Eta;
 
   //-----reconstruction level jet histograms
   std::map< unsigned int, std::map<unsigned int, TH1*>> _hNJet1;
